@@ -3,8 +3,8 @@ async function farmadocInit(el){
     method: "GET",
     mode: "no-cors",
     referrerPolicy: "origin-when-cross-origin",
-  }).then(res=>{
-    return res.json();
+  }).then(result=>{
+    return result.json();
   })
 
   let minimizeid = btoa(Math.random().toString()).substring(10,20)
