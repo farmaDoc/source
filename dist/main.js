@@ -4,8 +4,6 @@ async function farmadocInit(el){
     mode: "cors",
     referrerPolicy: "origin-when-cross-origin",
     headers: {
-      'Access-Control-Allow-Origin': "*",
-      'Access-Control-Allow-Headers': "Content-Type",
       'Content-Type': 'application/json'
     },
   }).then(res=>{
