@@ -4,7 +4,7 @@ async function farmadocInit(el){
     mode: "no-cors",
     referrerPolicy: "origin-when-cross-origin",
   }).then(res=>{
-    return res.json()
+    return res
   })
 
   let minimizeid = btoa(Math.random().toString()).substring(10,20)
