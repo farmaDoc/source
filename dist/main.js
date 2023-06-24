@@ -3,7 +3,8 @@ async function farmadocInit(el){
     method: "GET",
     mode: "cors",
     headers:{
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      'Access-Control-Allow-Origin': '*'
     }
   }).then(res=>{
     return res.json()
