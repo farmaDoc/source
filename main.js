@@ -1,10 +1,12 @@
 async function farmadocInit(el){
-  let result = await fetch("https://source.farmadoc.it/functions/main.js?key="+el, {
+  let result = await fetch("http://127.0.0.1:8080/.netlify/functions/main?key="+el, {
     method: "GET",
-    mode: "no-cors",
-    referrerPolicy: "origin-when-cross-origin",
+    mode: "cors",
+    headers:{
+      "Content-Type": "application/json"
+    }
   }).then(res=>{
-    return res.json();
+    return res.json()
   })
 
   let minimizeid = btoa(Math.random().toString()).substring(10,20)
