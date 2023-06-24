@@ -3,8 +3,10 @@ async function farmadocInit(el){
     method: "GET",
     mode: "cors",
     headers: {
-      'Access-Control-Allow-Origin': "*",
-      'Access-Control-Allow-Headers': "Content-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+      "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
       'Content-Type': 'application/json'
     },
   }).then(res=>{
