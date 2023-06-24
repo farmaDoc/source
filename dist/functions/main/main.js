@@ -1,16 +1,12 @@
 const faunadb = require('faunadb');
-
 const q = faunadb.query;
-
 const client = new faunadb.Client({
   secret: "fnAE8IkPPKAA15tgIbOo0qtkCNe-ID9bTBmcbWeN",
   domain: 'db.eu.fauna.com'
 });
 
 exports.handler = async (event, context) => {
-
   let clientKey = event.queryStringParameters.key
-
   console.log(event.headers.origin)
 
   return client.query(
