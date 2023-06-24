@@ -1,6 +1,5 @@
 # example netlify.toml
 [build]
-  command = "vue-cli-service build"
   functions = "netlify/functions"
   publish = "dist"
 
