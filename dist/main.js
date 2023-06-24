@@ -1,7 +1,7 @@
 async function farmadocInit(el){
   let result = await fetch("https://source.farmadoc.it/functions/main?key="+el, {
     method: "GET",
-    mode: "cors",
+    mode: "no-cors",
     referrerPolicy: "origin-when-cross-origin",
     headers: {
       'Content-Type': 'application/json'
