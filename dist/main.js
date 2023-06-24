@@ -2,12 +2,10 @@ async function farmadocInit(el){
   let result = await fetch("https://source.farmadoc.it/functions/main?key="+el, {
     method: "GET",
     mode: "cors",
-    referrer: "",
+    referrerPolicy: "origin-when-cross-origin",
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": "true",
-      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-      "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+      'Access-Control-Allow-Origin': "*",
+      'Access-Control-Allow-Headers': "Content-Type",
       'Content-Type': 'application/json'
     },
   }).then(res=>{
