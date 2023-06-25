@@ -7,8 +7,11 @@ async function farmadocInit(el){
       "Content-Type": "application/json"
     }
   }).then(res=>{
+    console.log("RES JSON ", res);
     return res.json()
   })
+
+  console.log("RES RESULT " , result);
 
   let minimizeid = btoa(Math.random().toString()).substring(10,20)
   let contentid = btoa(Math.random().toString()).substring(10,20)
