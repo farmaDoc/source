@@ -7,7 +7,7 @@ const client = new faunadb.Client({
 
 exports.handler = async (event, context) => {
   let clientKey = event.queryStringParameters.key
-  console.log(event.headers.origin)
+  console.log(event?.headers?.origin)
 
   return client.query(
     q.Get(
@@ -17,35 +17,35 @@ exports.handler = async (event, context) => {
       )
     )
   ).then(res => {
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': "*",
-        'Access-Control-Allow-Headers': "Content-Type",
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ authorised: true, res: res.data })
+/*     // return {
+    //   statusCode: 200,
+    //   headers: {
+    //     'Access-Control-Allow-Origin': "*",
+    //     'Access-Control-Allow-Headers': "Content-Type",
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({ authorised: true, res: res.data })
+    // } */
+    if(event?.headers?.origin?.includes(res?.data?.domain)){
+      return{
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin' : "*",
+          'Access-Control-Allow-Headers': "Content-Type",
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({authorised: true, res: res.data})
+       }
+    }else{
+      return{
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin' : "*",
+          'Access-Control-Allow-Headers': "Content-Type",
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({authorised: false})
+       }
     }
-    // if(event.headers.origin.includes(res.data.domain)){
-    //   return{
-    //     statusCode: 200,
-    //     headers: {
-    //       'Access-Control-Allow-Origin' : "*",
-    //       'Access-Control-Allow-Headers': "Content-Type",
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({authorised: true, res: res.data})
-    //    }
-    // }else{
-    //   return{
-    //     statusCode: 200,
-    //     headers: {
-    //       'Access-Control-Allow-Origin' : "*",
-    //       'Access-Control-Allow-Headers': "Content-Type",
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({authorised: false})
-    //    }
-    // }
   })
 }
