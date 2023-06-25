@@ -1,3 +1,6 @@
+import $ from "jquery";
+export default 
+
 async function farmadocInit(el) {
   let result;
   $.ajax({
