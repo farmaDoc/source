@@ -1,29 +1,15 @@
-import $ from "jquery";
-export default 
-
 async function farmadocInit(el) {
-  let result;
-  $.ajax({
-    url: "https://source.farmadoc.it/.netlify/functions/main?key=" + el,
-    type: 'GET',
-    headers: {
+  let result = await fetch("https://source.farmadoc.it/.netlify/functions/main?key="+el, {
+    method: "GET",
+    mode: "cors",
+    headers:{
       "Content-Type": "application/json"
     }
-  }).then(res => {
-    result = JSON.parse(res)
-  }).catch(err => {
-    console.error(err)
+  }).then(res=>{
+    resultTemp = res.json();
+    console.log(resultTemp);
+    return resultTemp;
   })
-  // let result = await fetch("https://source.farmadoc.it/.netlify/functions/main?key="+el, {
-  //   method: "GET",
-  //   mode: "cors",
-  //   headers:{
-  //     "Content-Type": "application/json"
-  //   }
-  // }).then(res=>{
-  //   console.log(res);
-  //   return res.json();
-  // })
 
   let minimizeid = btoa(Math.random().toString()).substring(10, 20)
   let contentid = btoa(Math.random().toString()).substring(10, 20)
