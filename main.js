@@ -1,5 +1,5 @@
 async function farmadocInit(el){
-  let result = await fetch("http://source.farmadoc.it/.netlify/functions/main?key="+el, {
+  let result = await fetch("https://source.farmadoc.it/.netlify/functions/main?key="+el, {
     method: "GET",
     mode: "no-cors",
     headers:{
