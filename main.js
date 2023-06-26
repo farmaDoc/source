@@ -1,15 +1,35 @@
 async function farmadocInit(el) {
-  let result = await fetch("http://localhost:8888/.netlify/functions/main?key="+el, {
+  let result = await fetch("http://localhost:8888/.netlify/functions/checkIn?key=" + el, {
     method: "GET",
     mode: "cors",
-    headers:{
+    headers: {
       "Content-Type": "application/json"
     }
-  }).then(res=>{
+  }).then(res => {
     resultTemp = res.json();
     console.log(resultTemp);
     return resultTemp;
-  })
+  }).catch((error) => {
+    console.log(error)
+  });
+
+  console.log("RESULT ", result);
+
+  let intents = await fetch("http://localhost:8888/.netlify/functions/intents?createdBy=" + result?.res?.id, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(res => {
+    resultTemp = res.json();
+    return resultTemp;
+  }).catch((error) => {
+    console.log(error)
+  });
+
+  intents = intents.res;
+  console.log("INTENTI ", intents);
 
   let minimizeid = btoa(Math.random().toString()).substring(10, 20)
   let contentid = btoa(Math.random().toString()).substring(10, 20)
@@ -33,15 +53,12 @@ async function farmadocInit(el) {
     '        <div style="all: unset; width: 100%">' +
     '            <div id="' + chatid + '" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">' +
     '' +
-    '                <div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
-    '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
-    '                        ciao' +
-    '                    </span>' +
-    '                </div>' +
-    '' +
     '                <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
     '                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
     '                        Ciao!' +
+    '                    </span><br />' +
+    '                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
+    '                        Come posso aiutarti?' +
     '                    </span>' +
     '                    ' +
     '                </div>' +
@@ -62,7 +79,6 @@ async function farmadocInit(el) {
     '    </div>'
 
   document.body.insertAdjacentHTML('beforeend', modal)
-
   let toggle = true
 
   document.getElementById(minimizeid).addEventListener("click", function () {
@@ -76,28 +92,397 @@ async function farmadocInit(el) {
     }
   })
 
-  if (result.authorised) {
+  const submitted = (msg) => {
+    console.log("MESSAGGIO INSERITO: " + msg)
+  };
 
-    document.getElementById(sendid).addEventListener("click", function () {
-      let msgsend = '                <div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
+  const chatResponder = (msg) => {
+    const { NeuralNetwork } = window.bot;
+    const natural = window.natural;
+    var tokenizer = new natural.WordTokenizer()
+
+    function getMsg() {
+      let cache = JSON.parse(JSON.stringify(root.getData())).length
+      return new Promise((resolve, reject) => {
+        function check() {
+          setTimeout(() => {
+            if (cache != JSON.parse(JSON.stringify(root.getData())).length) {
+              if (root.getData()[root.getData().length - 1].image) {
+                root.addRes("Grazie!", false)
+              } else {
+                if (root.getData()[root.getData().length - 1].sender == "user") {
+                  cache = JSON.parse(JSON.stringify(root.getData())).length
+                  resolve(root.getData()[root.getData().length - 1].msg)
+                }
+              }
+            }
+            check()
+          }, 1000);
+        }
+        check()
+      })
+    }
+
+    /* IMPOSTO GLI INTENTI */
+
+    let defaultIntents = intents
+
+    function createCorpus(input) {
+      return new Promise((resolve, reject) => {
+        let corpus = []
+        try {
+          input.forEach((el, index) => {
+            el.phrases.forEach(phrase => {
+              let tokens = tokenizer.tokenize(phrase)
+              let doc = {
+                input: {},
+                output: { [el.id]: 1 }
+              }
+              tokens.forEach(tok => {
+                doc.input[natural.PorterStemmerIt.stem(tok)] = 1
+              })
+              corpus.push(doc)
+            })
+            if (index = input.length) {
+              resolve(corpus)
+            }
+          })
+        } catch (err) {
+          reject(err)
+        }
+      })
+    }
+    // end createCorpus
+
+    function detectIntent(input, intents) {
+      return new Promise((resolve, reject) => {
+        const net = new NeuralNetwork();
+
+        createCorpus(intents).then(corpus => {
+
+          net.train(corpus);
+          let tokens = tokenizer.tokenize(input)          //tokenize input
+
+          //create corpus from input
+          let transformedInput = []
+          tokens.forEach(token => {
+            transformedInput[natural.PorterStemmerIt.stem(token)] = 1
+          })
+
+          let result = net.run(transformedInput)                //analyze input
+
+          //transform result
+          let objres = []
+          Object.keys(result).forEach(key => {
+            objdoc = {
+              intent: key,
+              probability: result[key]
+            }
+            objres.push(objdoc)
+          })
+
+          //get best match
+          let vals = objres.map(a => a.probability)
+          let maxval = Math.max(...vals)
+
+          //return best match
+          if (maxval > 0.6) {
+            let matchingId = objres.find(item => item.probability == maxval).intent
+            let matchDoc = intents.find(item => item.id == matchingId)
+            resolve(matchDoc)
+          } else {
+            if (sessionData.lastOptions.length > 0) {
+              sessionData.lastOptions.forEach((branch, index) => {
+                branch.forEach((option, optionIndex) => {
+                  if (natural.PorterStemmerIt.stem(input.toLowerCase()).includes(natural.PorterStemmerIt.stem(option))) {
+                    let oldBranch = sessionData.lastBranch
+                    oldBranch[index] = option
+
+                    remediesList = defaultIntents.find(element => element.id == sessionData.lastId).remedies
+                    remediesList.forEach(remedy => {
+                      if (JSON.stringify(remedy.suitableFor.sort()) == JSON.stringify(oldBranch.sort())) {
+                        root.addRes(remedy.items, true)
+                        reject("ignore")
+                      }
+                    })
+                  } else {
+                    if (optionIndex == branch.length - 1 && index == sessionData.lastOptions.length - 1) {
+                      reject("no matches")
+                    }
+                  }
+                })
+              })
+            } else {
+              reject("no matches")
+            }
+          }
+        })
+      })
+    }
+    // end detectIntent
+
+    function selectBranch(branch, lastRes) {
+      return new Promise((resolve, reject) => {
+        root.addOptions(branch.options)
+        root.addRes(branch.question, false)
+        let soFar = []
+        if (lastRes) {
+          soFar = lastRes
+        }
+
+        let branchIntents = [
+          { input: { per: 1, favor: 1, cancell: 1 }, output: { cancel: 1 } },
+          { input: { cancell: 1, per: 1, favor: 1 }, output: { cancel: 1 } },
+          { input: { annullal: 1 }, output: { cancel: 1 } },
+          { input: { annull: 1 }, output: { cancel: 1 } },
+          { input: { cancell: 1, quell: 1 }, output: { cancel: 1 } },
+          { input: { cancellal: 1 }, output: { cancel: 1 } },
+          { input: { cancell: 1 }, output: { cancel: 1 } },
+          { input: { salt: 1 }, output: { cancel: 1 } },
+          { input: { saltal: 1 }, output: { cancel: 1 } },
+          { input: { diment: 1 }, output: { cancel: 1 } },
+          { input: { dimentical: 1 }, output: { cancel: 1 } },
+          { input: { lasc: 1 }, output: { cancel: 1 } },
+          { input: { lasc: 1, perd: 1 }, output: { cancel: 1 } },
+          { input: { lascial: 1 }, output: { cancel: 1 } },
+          { input: { salt: 1 }, output: { cancel: 1 } },
+          { input: { ferm: 1 }, output: { cancel: 1 } },
+          { input: { no: 1, cancell: 1 }, output: { cancel: 1 } },
+          { input: { chiud: 1, la: 1, ricerc: 1 }, output: { cancel: 1 } },
+          { input: { cos: 1, intend: 1 }, output: { clarify: 1 } },
+          { input: { cos: 1, vuol: 1, dir: 1 }, output: { clarify: 1 } },
+          { input: { qual: 1, la: 1, different: 1 }, output: { clarify: 1 } },
+          { input: { cos: 1, camb: 1 }, output: { clarify: 1 } },
+          { input: { non: 1, lo: 1, so: 1 }, output: { clarify: 1 } },
+          { input: { non: 1, ho: 1, ide: 1 }, output: { clarify: 1 } },
+          { input: { non: 1, cap: 1 }, output: { clarify: 1 } },
+          { input: { non: 1, saprei: 1 }, output: { clarify: 1 } },
+          { input: { che: 1, different: 1, c: 1 }, output: { clarify: 1 } }
+        ]
+
+        branch.options.forEach((phrase) => {
+          let tokens = tokenizer.tokenize(phrase)
+          let doc = {
+            input: {},
+            output: { [phrase]: 1 }
+          }
+          tokens.forEach(tok => {
+            doc.input[natural.PorterStemmerIt.stem(tok)] = 1
+          })
+          branchIntents.push(doc)
+        })
+
+        const net = new NeuralNetwork();
+        net.train(branchIntents);
+
+        //ask question
+        function askBranches() {
+          getMsg().then(input => {
+            let tokens = tokenizer.tokenize(input)        //tokenize input
+            //create corpus from input
+            let transformedInput = []
+            tokens.forEach(token => {
+              transformedInput[natural.PorterStemmerIt.stem(token)] = 1
+            })
+            let result = net.run(transformedInput)                //analyze input
+            //transform result
+            let objres = []
+            Object.keys(result).forEach(key => {
+              objdoc = {
+                intent: key,
+                probability: result[key]
+              }
+              objres.push(objdoc)
+            })
+
+            //get best match
+            let vals = objres.map(a => a.probability)
+            let maxval = Math.max(...vals)
+
+            //return best match
+            if (maxval > 0.7) {
+              let finalres = objres.find(item => item.probability == maxval)
+              if (branch.options.includes(finalres.intent)) {
+                soFar.push(finalres.intent)
+                resolve(soFar)
+              } else {
+                if (finalres.intent == "clarify") {
+                  root.addRes(branch.explaination, false)
+                  askBranches()
+                }
+                if (finalres.intent == "cancel") {
+                  root.addOptions([])
+                  root.addRes("Ok.", false)
+                  reject()
+                }
+              }
+            } else {
+              root.addRes("non ho capito, " + branch.question, false)
+              askBranches()
+            }
+          })
+        }
+        askBranches()
+      })
+    }
+    // end selectBranch
+
+    function ask(intents) {
+      localStorage.setItem("Farmacia", JSON.stringify(root.getMessages()));
+      getMsg().then(input => {
+        detectIntent(input, intents).then(res => {
+          if (res.confusedBot) {
+            sessionData.confusionStage++
+          } else {
+            sessionData.confusionStage = 0
+          }
+          if (res.branches) {
+            if (res.branches.length > 0) {
+              sessionData.lastOptions = []
+              function selectBranches(branches) {
+                var result = Promise.resolve();
+                branches.forEach(branch => {
+                  sessionData.lastOptions.push(branch.options)
+                  result = result.then((lastRes) => selectBranch(branch, lastRes));
+                });
+                return result;
+              }
+              document.getElementById("inputrow").classList.add("animate__slideInDown")
+              setTimeout(() => {
+                document.getElementById("inputrow").classList.remove("animate__slideInDown")
+              }, 1000);
+              selectBranches(res.branches).then(branchSelection => {
+                sessionData.lastBranch = branchSelection
+                res.remedies.forEach((remedyOption) => {
+                  if (JSON.stringify(remedyOption.suitableFor.sort()) == JSON.stringify(branchSelection.sort())) {
+                    root.addOptions([])
+                    document.getElementById("inputrow").classList.add("animate__slideInUp")
+                    setTimeout(() => {
+                      document.getElementById("inputrow").classList.remove("animate__slideInUp")
+                    }, 1000);
+                    root.addRes(remedyOption.items, true)
+                    let followupSuggestions = []
+                    remedyOption.followUp.forEach(followupitem => {
+                      followupSuggestions.push(defaultIntents.find(element => element.intent == followupitem.intent).desc)
+                    })
+                    root.addOptions(followupSuggestions)
+                    ask(defaultIntents)
+                  }
+                })
+              }).catch(err => {
+                ask(defaultIntents)
+              })
+            } else {
+              root.addRes(res.remedies[0].items, true)
+              ask(defaultIntents)
+            }
+          } else {
+            sessionData.lastOptions = []
+            if (res.category == "follow-up") {
+
+              let lastIntent = defaultIntents.find(element => element.id == sessionData.lastId)
+              if (lastIntent.branches.length > 0) {
+                let lastRemedy = lastIntent.remedies.find(intentElement => JSON.stringify(intentElement.suitableFor.sort()) == JSON.stringify(sessionData.lastBranch.sort()))
+                let followUp = lastRemedy.followUp.find(remedyElement => remedyElement.intent == res.intent)
+
+                if (followUp) {
+                  root.addRes(followUp.response, false)
+                } else {
+                  root.addRes("Non ho informazioni in merito.", false)
+                }
+              }
+
+            } else {
+              root.addOptions([])
+            }
+            if (res.category != "conferma" && res.category != "intercalare" && res.category != "sintomo") {
+              if (res.defaultResponse.length > 0) {
+                root.addRes(res.defaultResponse[0], false)
+              }
+            }
+            if (res.endConversation) {
+              console.log("END")
+              root.addRes("Grazie per avermi usato! Puoi contattare la farmacia al <a href='tel:1234567891'>1234567891</a>", false)
+            } else {
+              ask(defaultIntents)
+            }
+          }
+          if (res.category != "follow-up") {
+            sessionData.lastId = res.id
+          }
+        }).catch(err => {
+          console.log(err)
+          if (err != "ignore") {
+            root.addOptions([])
+            sessionData.confusionStage++
+            let confusedPhrases = [
+              "Potresti essere più specifico?",
+              "Scusami, non ho capito, potresti rifare la domanda?",
+              "Non ho capito :("
+            ]
+            if (sessionData.confusionStage > 3) {
+              sessionData.confusionStage = 0
+              root.addRes("Purtroppo sto avendo difficoltà a capire le tue domande, se il problema persiste ti consiglio di lasciare un feedback a test@test.com", false)
+            } else {
+              root.addRes(confusedPhrases[sessionData.lastIndex], false)
+            }
+            if (sessionData.lastIndex < 2) {
+              sessionData.lastIndex++
+            } else {
+              sessionData.lastIndex = 0
+            }
+          }
+          ask(defaultIntents)
+        })
+      })
+    }
+    // end ask
+
+    let root = modal;
+    
+    if(localStorage.getItem("Farmacia")){
+      JSON.parse(localStorage.getItem("Farmacia")).forEach(el=>{
+      root.addMsg(el)
+    })
+    }
+    root.addRes("Buogniorno, come posso esserti utile?",false)
+
+    ask(defaultIntents)
+  }
+
+  if (result.authorised) {
+    let elSendid = document.getElementById(sendid);
+
+    elSendid.addEventListener("click", function () {
+      let msgsend = '<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
         '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
         document.getElementById(msgid).value +
         '                    </span>' +
         '                </div>'
-      document.getElementById(msgid).value = ""
+      
       document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
+
+      submitted(document.getElementById(msgid).value);
+      document.getElementById(msgid).value = ""
     })
 
     document.getElementById(msgid).addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
-        let msgsend = '                <div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
+        let msgsend = '<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
           '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
           document.getElementById(msgid).value +
           '                    </span>' +
           '                </div>'
         document.getElementById(msgid).value = ""
         document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
+
+        submitted(document.getElementById(msgid).value);
+
+        chatResponder();
+
+        document.getElementById(msgid).value = ""
       }
+
     })
     if (!result.res.activeSub) {
       document.getElementById(chatid).style.alignItems = "center"
