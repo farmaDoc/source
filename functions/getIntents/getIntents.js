@@ -6,12 +6,11 @@ const client = new faunadb.Client({
 });
 
 exports.handler = async (event, context) => {
-  let userId = event.queryStringParameters.createdBy
-  let system = 'system';
+  let param = event.queryStringParameters.createdBy
 
   return client.query(
     q.Map(
-      q.Paginate(q.Match(q.Index('allIntents'),userId)),
+      q.Paginate(q.Match(q.Index('allIntents'),param)),
       q.Lambda(x => q.Get(x))
     )
   ).then(res => {
