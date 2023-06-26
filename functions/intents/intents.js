@@ -11,7 +11,7 @@ exports.handler = async (event, context) => {
 
   return client.query(
     q.Map(
-      q.Paginate(q.Match(q.Index('allIntents'),system)),
+      q.Paginate(q.Match(q.Index('allIntents'),userId)),
       q.Lambda(x => q.Get(x))
     )
   ).then(res => {
