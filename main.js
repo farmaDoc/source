@@ -13,7 +13,7 @@ async function farmadocInit(el) {
 
   console.log("RESULT ", result);
 
-  let intents = await fetch("http://localhost:8888/.netlify/functions/intents?createdBy=" + result?.res?.id, {
+  let usrIntents = await fetch("http://localhost:8888/.netlify/functions/getIntents?createdBy=" + result?.res?.id, {
     method: "GET",
     mode: "cors",
     headers: {
@@ -26,7 +26,28 @@ async function farmadocInit(el) {
     console.log(error)
   });
 
-  intents = intents.res;
+  usrIntents = usrIntents.res;
+  console.log("USR INTENTS ", usrIntents)
+
+  let sysIntents = await fetch("http://localhost:8888/.netlify/functions/getIntents?createdBy=system", {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(res => {
+    resultTemp = res.json();
+    return resultTemp;
+  }).catch((error) => {
+    console.log(error)
+  });
+
+  sysIntents = sysIntents.res;
+  console.log("SYS INTENTS ", sysIntents)
+
+  let intents = sysIntents.concat(usrIntents);
+  console.log("GLOBAL INTENTS", intents)
+  console.log("GLOBAL INTENTS length ", intents.length)
 
   let minimizeid = btoa(Math.random().toString()).substring(10, 20)
   let contentid = btoa(Math.random().toString()).substring(10, 20)
@@ -414,6 +435,16 @@ async function farmadocInit(el) {
         //   sessionData.lastId = res.id
         // }
         console.log(res.data.rems[0]);
+        let answer =           `
+        <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
+        <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+        ${res.data.rems[0]}
+        </span>
+        </div>
+        `
+
+        document.getElementById(chatid).insertAdjacentHTML('afterbegin', answer);
+
         ask(defaultIntents)
       }).catch(err => {
         console.log(err)
