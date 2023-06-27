@@ -76,7 +76,7 @@ async function farmadocInit(el) {
     '                <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
     '                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
     '                        Ciao!' +
-    '                    </span>' +
+    '                    </span><br />' +
     '                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
     '                        Come posso esserti utile?' +
     '                    </span>' +
