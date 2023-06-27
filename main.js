@@ -13,7 +13,7 @@ async function farmadocInit(el) {
 
   console.log("RESULT ", result);
 
-  let usrIntents = await fetch("http://localhost:8888/.netlify/functions/getIntents?createdBy=" + result?.res?.id, {
+  let usrIntents = await fetch("https://source.farmadoc.it/.netlify/functions/getIntents?createdBy=" + result?.res?.id, {
     method: "GET",
     mode: "cors",
     headers: {
@@ -29,7 +29,7 @@ async function farmadocInit(el) {
   usrIntents = usrIntents.res;
   console.log("USR INTENTS ", usrIntents)
 
-  let sysIntents = await fetch("http://localhost:8888/.netlify/functions/getIntents?createdBy=system", {
+  let sysIntents = await fetch("https://source.farmadoc.it/.netlify/functions/getIntents?createdBy=system", {
     method: "GET",
     mode: "cors",
     headers: {
@@ -97,9 +97,7 @@ async function farmadocInit(el) {
     '            </div>' +
     '        </div>' +
     '        </span>' +
-    '    </div>' +
-    '<script src="https://source.farmadoc.it/bundle.js"></script>' +
-    '<script src="https://source.farmadoc.it/bundle.js"></script>'
+    '    </div>' 
 
   document.body.insertAdjacentHTML('beforeend', modal)
 
