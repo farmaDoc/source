@@ -50,7 +50,6 @@ const Stemmer = function () {
 }
 
 const PorterStemmer = new Stemmer()
-module.exports = PorterStemmer
 
 function isVowel (letter) {
   return (letter === 'a' || letter === 'e' || letter === 'i' || letter === 'o' || letter === 'u' || letter === 'à' ||

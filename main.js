@@ -11,6 +11,23 @@ async function farmadocInit(el) {
     return resultTemp;
   })
 
+  console.log("RESULT ", result);
+
+  let intents = await fetch("http://localhost:8888/.netlify/functions/intents?createdBy=" + result?.res?.id, {
+    method: "GET",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(res => {
+    resultTemp = res.json();
+    return resultTemp;
+  }).catch((error) => {
+    console.log(error)
+  });
+
+  intents = intents.res;
+
   let minimizeid = btoa(Math.random().toString()).substring(10, 20)
   let contentid = btoa(Math.random().toString()).substring(10, 20)
   let minimizeel = btoa(Math.random().toString()).substring(10, 20)
@@ -59,7 +76,9 @@ async function farmadocInit(el) {
     '            </div>' +
     '        </div>' +
     '        </span>' +
-    '    </div>'
+    '    </div>' +
+    '<script src="https://source.farmadoc.it/bundle.js"></script>' +
+    '<script src="https://source.farmadoc.it/bundle.js"></script>'
 
   document.body.insertAdjacentHTML('beforeend', modal)
 
@@ -76,14 +95,389 @@ async function farmadocInit(el) {
     }
   })
 
-  if (result.authorised) {
 
+  // +++++++++++++++++++++++++++++++++ //
+  // BASIC FUNCTIONS                   //
+
+  const { NeuralNetwork } = window.bot;
+
+  const natural = window.natural;
+  var tokenizer = new natural.WordTokenizer();
+
+  let root = [];
+
+  function getMsg() {
+    let cache = root.length
+    return new Promise((resolve, reject) => {
+      function check() {
+        setTimeout(() => {
+          if (cache != root.length) {
+            resolve(root[root.length - 1].msg)
+          }
+          check()
+        }, 1000);
+      }
+      check()
+    })
+  }
+
+  let sessionData = {
+    lastId: "",
+    lastIndex: 0,
+    confusionStage: 0,
+    lastBranch: [],
+    lastOptions: []
+  }
+
+  let defaultIntents = intents;
+
+  function createCorpus(input) {
+    return new Promise((resolve, reject) => {
+      let corpus = []
+      try {
+        input.forEach((el, index) => {
+          el.data?.phrases?.forEach(phrase => {
+            let tokens = tokenizer.tokenize(phrase.value)
+            let doc = {
+              input: {},
+              output: { [el?.ref["@ref"].id]: 1 }
+            }
+            tokens.forEach(tok => {
+              doc.input[natural.PorterStemmerIt.stem(tok)] = 1
+            })
+            corpus.push(doc)
+          })
+          if (index = input.length) {
+            resolve(corpus)
+          }
+        })
+      } catch (err) {
+        reject(err)
+      }
+    })
+  }
+
+  function detectIntent(input, intents) {
+    return new Promise((resolve, reject) => {
+      const net = new NeuralNetwork();
+      createCorpus(intents).then(corpus => {
+        net.train(corpus);
+        let tokens = tokenizer.tokenize(input)          //tokenize input
+        //create corpus from input
+        let transformedInput = []
+        tokens.forEach(token => {
+          transformedInput[natural.PorterStemmerIt.stem(token)] = 1
+        })
+
+        let result = net.run(transformedInput)                //analyze input
+
+        //transform result
+        let objres = []
+        Object.keys(result).forEach(key => {
+          objdoc = {
+            intent: key,
+            probability: result[key]
+          }
+          objres.push(objdoc)
+        })
+
+        //get best match
+        let vals = objres.map(a => a.probability)
+        let maxval = Math.max(...vals)
+
+        //return best match
+        if (maxval > 0.6) {
+          let matchingId = objres.find(item => item.probability == maxval).intent
+          let matchDoc = intents.find(item => item.ref["@ref"].id == matchingId)
+          resolve(matchDoc)
+        } else {
+          if (sessionData.lastOptions.length > 0) {
+            sessionData.lastOptions.forEach((branch, index) => {
+              branch.forEach((option, optionIndex) => {
+                if (natural.PorterStemmerIt.stem(input.toLowerCase()).includes(natural.PorterStemmerIt.stem(option))) {
+                  let oldBranch = sessionData.lastBranch
+                  oldBranch[index] = option
+
+                  remediesList = defaultIntents.find(element => element.id == sessionData.lastId).remedies
+                  remediesList.forEach(remedy => {
+                    if (JSON.stringify(remedy.suitableFor.sort()) == JSON.stringify(oldBranch.sort())) {
+                      addRes(remedy.items, true)
+                      reject("ignore")
+                    }
+                  })
+                } else {
+                  if (optionIndex == branch.length - 1 && index == sessionData.lastOptions.length - 1) {
+                    reject("no matches")
+                  }
+                }
+              })
+            })
+          } else {
+            reject("no matches")
+          }
+        }
+      })
+    })
+  }
+
+  function selectBranch(branch, lastRes) {
+    return new Promise((resolve, reject) => {
+      root.addOptions(branch.options)
+      addRes(branch.question, false)
+      let soFar = []
+      if (lastRes) {
+        soFar = lastRes
+      }
+
+      let branchIntents = [
+        { input: { per: 1, favor: 1, cancell: 1 }, output: { cancel: 1 } },
+        { input: { cancell: 1, per: 1, favor: 1 }, output: { cancel: 1 } },
+        { input: { annullal: 1 }, output: { cancel: 1 } },
+        { input: { annull: 1 }, output: { cancel: 1 } },
+        { input: { cancell: 1, quell: 1 }, output: { cancel: 1 } },
+        { input: { cancellal: 1 }, output: { cancel: 1 } },
+        { input: { cancell: 1 }, output: { cancel: 1 } },
+        { input: { salt: 1 }, output: { cancel: 1 } },
+        { input: { saltal: 1 }, output: { cancel: 1 } },
+        { input: { diment: 1 }, output: { cancel: 1 } },
+        { input: { dimentical: 1 }, output: { cancel: 1 } },
+        { input: { lasc: 1 }, output: { cancel: 1 } },
+        { input: { lasc: 1, perd: 1 }, output: { cancel: 1 } },
+        { input: { lascial: 1 }, output: { cancel: 1 } },
+        { input: { salt: 1 }, output: { cancel: 1 } },
+        { input: { ferm: 1 }, output: { cancel: 1 } },
+        { input: { no: 1, cancell: 1 }, output: { cancel: 1 } },
+        { input: { chiud: 1, la: 1, ricerc: 1 }, output: { cancel: 1 } },
+        { input: { cos: 1, intend: 1 }, output: { clarify: 1 } },
+        { input: { cos: 1, vuol: 1, dir: 1 }, output: { clarify: 1 } },
+        { input: { qual: 1, la: 1, different: 1 }, output: { clarify: 1 } },
+        { input: { cos: 1, camb: 1 }, output: { clarify: 1 } },
+        { input: { non: 1, lo: 1, so: 1 }, output: { clarify: 1 } },
+        { input: { non: 1, ho: 1, ide: 1 }, output: { clarify: 1 } },
+        { input: { non: 1, cap: 1 }, output: { clarify: 1 } },
+        { input: { non: 1, saprei: 1 }, output: { clarify: 1 } },
+        { input: { che: 1, different: 1, c: 1 }, output: { clarify: 1 } }
+      ]
+
+      branch.options.forEach((phrase) => {
+        let tokens = tokenizer.tokenize(phrase)
+        let doc = {
+          input: {},
+          output: { [phrase]: 1 }
+        }
+        tokens.forEach(tok => {
+          doc.input[natural.PorterStemmerIt.stem(tok)] = 1
+        })
+        branchIntents.push(doc)
+      })
+
+      const net = new NeuralNetwork();
+      net.train(branchIntents);
+
+      //ask question
+      function askBranches() {
+        getMsg().then(input => {
+
+          let tokens = tokenizer.tokenize(input)        //tokenize input
+
+          //create corpus from input
+          let transformedInput = []
+          tokens.forEach(token => {
+            transformedInput[natural.PorterStemmerIt.stem(token)] = 1
+          })
+
+          let result = net.run(transformedInput)                //analyze input
+
+          //transform result
+          let objres = []
+          Object.keys(result).forEach(key => {
+            objdoc = {
+              intent: key,
+              probability: result[key]
+            }
+            objres.push(objdoc)
+          })
+
+          //get best match
+          let vals = objres.map(a => a.probability)
+          let maxval = Math.max(...vals)
+
+          //return best match
+          if (maxval > 0.7) {
+            let finalres = objres.find(item => item.probability == maxval)
+            if (branch.options.includes(finalres.intent)) {
+              soFar.push(finalres.intent)
+              resolve(soFar)
+            } else {
+              if (finalres.intent == "clarify") {
+                addRes(branch.explaination, false)
+                askBranches()
+              }
+              if (finalres.intent == "cancel") {
+                root.addOptions([])
+                addRes("Ok.", false)
+                reject()
+              }
+            }
+          } else {
+            addRes("non ho capito, " + branch.question, false)
+            askBranches()
+          }
+        })
+      }
+      askBranches()
+    })
+  }
+
+  function ask(intents) {
+    localStorage.setItem("Farmacia", JSON.stringify(root));
+    getMsg().then(input => {
+      detectIntent(input, intents).then(res => {
+        /* if (res.confusedBot) {
+          sessionData.confusionStage++
+        } else {
+          sessionData.confusionStage = 0
+        }
+        if (res.branches) {
+          if (res.branches.length > 0) {
+            sessionData.lastOptions = []
+            function selectBranches(branches) {
+              var result = Promise.resolve();
+              branches.forEach(branch => {
+                sessionData.lastOptions.push(branch.options)
+                result = result.then((lastRes) => selectBranch(branch, lastRes));
+              });
+              return result;
+            }
+            document.getElementById("inputrow").classList.add("animate__slideInDown")
+            setTimeout(() => {
+              document.getElementById("inputrow").classList.remove("animate__slideInDown")
+            }, 1000);
+            selectBranches(res.branches).then(branchSelection => {
+              sessionData.lastBranch = branchSelection
+              res.remedies.forEach((remedyOption) => {
+                if (JSON.stringify(remedyOption.suitableFor.sort()) == JSON.stringify(branchSelection.sort())) {
+                  root.addOptions([])
+                  document.getElementById("inputrow").classList.add("animate__slideInUp")
+                  setTimeout(() => {
+                    document.getElementById("inputrow").classList.remove("animate__slideInUp")
+                  }, 1000);
+                  addRes(remedyOption.items, true)
+                  let followupSuggestions = []
+                  remedyOption.followUp.forEach(followupitem => {
+                    followupSuggestions.push(defaultIntents.find(element => element.intent == followupitem.intent).desc)
+                  })
+                  root.addOptions(followupSuggestions)
+                  ask(defaultIntents)
+                }
+              })
+            }).catch(err => {
+              ask(defaultIntents)
+            })
+          } else {
+            addRes(res.remedies[0].items, true)
+            ask(defaultIntents)
+          }
+        } else {
+          sessionData.lastOptions = []
+          if (res.category == "follow-up") {
+
+            let lastIntent = defaultIntents.find(element => element.id == sessionData.lastId)
+            if (lastIntent.branches.length > 0) {
+              let lastRemedy = lastIntent.remedies.find(intentElement => JSON.stringify(intentElement.suitableFor.sort()) == JSON.stringify(sessionData.lastBranch.sort()))
+              let followUp = lastRemedy.followUp.find(remedyElement => remedyElement.intent == res.intent)
+
+              if (followUp) {
+                addRes(followUp.response, false)
+              } else {
+                addRes("Non ho informazioni in merito.", false)
+              }
+            }
+
+          } else {
+            root.addOptions([])
+          }
+          if (res.category != "conferma" && res.category != "intercalare" && res.category != "sintomo") {
+            if (res.defaultResponse.length > 0) {
+              addRes(res.defaultResponse[0], false)
+            }
+          }
+          if (res.endConversation) {
+            console.log("END")
+            addRes("Grazie per avermi usato! Puoi contattare la farmacia al <a href='tel:1234567891'>1234567891</a>", false)
+          } else {
+            ask(defaultIntents)
+          }
+
+        } */
+        // if (res.category != "follow-up") {
+        //   sessionData.lastId = res.id
+        // }
+        console.log(res.data.rems[0]);
+        ask(defaultIntents)
+      }).catch(err => {
+        console.log(err)
+        if (err != "ignore") {
+          root = [];
+          sessionData.confusionStage++
+          let confusedPhrases = [
+            "Potresti essere più specifico?",
+            "Scusami, non ho capito, potresti rifare la domanda?",
+            "Non ho capito :("
+          ]
+          if (sessionData.confusionStage > 3) {
+            sessionData.confusionStage = 0
+            addRes("Purtroppo sto avendo difficoltà a capire le tue domande, se il problema persiste ti consiglio di lasciare un feedback a test@test.com", false)
+          } else {
+            addRes(confusedPhrases[sessionData.lastIndex], false)
+          }
+          if (sessionData.lastIndex < 2) {
+            sessionData.lastIndex++
+          } else {
+            sessionData.lastIndex = 0
+          }
+        }
+        ask(defaultIntents)
+      })
+    })
+  }
+
+  ask(defaultIntents);
+
+  // ********************************* //
+
+
+  const chatResponder = (msg) => {
+    console.log(intents);
+    console.log("MESSAGGIO INSERITO: " + msg);
+
+    let newdoc = {
+      msg,
+      sender: "user"
+    }
+
+    root.push(newdoc)
+    console.log(root)
+
+  } // end chatResponder
+
+  const addRes = (messaggio, status) => {
+    console.log("ADD-RES: ", messaggio);
+    console.log("ADD-RES STATUS: ", status);
+  }
+
+  if (result.authorised) {
     document.getElementById(sendid).addEventListener("click", function () {
-      let msgsend = '                <div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
+
+      let msgsend = '<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
         '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
         document.getElementById(msgid).value +
         '                    </span>' +
         '                </div>'
+
+      document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
+
+      chatResponder(document.getElementById(msgid).value);
       document.getElementById(msgid).value = ""
       document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
     })
@@ -95,8 +489,10 @@ async function farmadocInit(el) {
           document.getElementById(msgid).value +
           '                    </span>' +
           '                </div>'
-        document.getElementById(msgid).value = ""
         document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
+
+        chatResponder(document.getElementById(msgid).value);
+        document.getElementById(msgid).value = ""
       }
     })
     if (!result.res.activeSub) {
