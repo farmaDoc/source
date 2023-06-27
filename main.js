@@ -1,15 +1,17 @@
 async function farmadocInit(el) {
-  let result = await fetch("https://source.farmadoc.it/.netlify/functions/main?key="+el, {
+  let result = await fetch("https://source.farmadoc.it/.netlify/functions/checkIn?key=" + el, {
     method: "GET",
     mode: "cors",
-    headers:{
+    headers: {
       "Content-Type": "application/json"
     }
-  }).then(res=>{
+  }).then(res => {
     resultTemp = res.json();
     console.log(resultTemp);
     return resultTemp;
-  })
+  }).catch((error) => {
+    console.log(error)
+  });
 
   console.log("RESULT ", result);
 
