@@ -96,7 +96,7 @@ async function farmadocInit(el) {
     '            </div>' +
     '        </div>' +
     '        </span>' +
-    '    </div>' 
+    '    </div>'
 
   document.body.insertAdjacentHTML('beforeend', modal)
 
@@ -112,7 +112,6 @@ async function farmadocInit(el) {
       document.getElementById(minimizeel).innerHTML = "—"
     }
   })
-
 
   // +++++++++++++++++++++++++++++++++ //
   // BASIC FUNCTIONS                   //
@@ -130,7 +129,9 @@ async function farmadocInit(el) {
       function check() {
         setTimeout(() => {
           if (cache != root.length) {
-            resolve(root[root.length - 1].msg)
+            if (root[root.length - 1]?.msg) {
+              resolve(root[root.length - 1].msg)
+            }
           }
           check()
         }, 1000);
@@ -351,7 +352,7 @@ async function farmadocInit(el) {
     localStorage.setItem("Farmacia", JSON.stringify(root));
     getMsg().then(input => {
       detectIntent(input, intents).then(res => {
-        /* if (res.confusedBot) {
+        if (res.confusedBot) {
           sessionData.confusionStage++
         } else {
           sessionData.confusionStage = 0
@@ -413,10 +414,10 @@ async function farmadocInit(el) {
             }
 
           } else {
-            root.addOptions([])
+            root = [];
           }
           if (res.category != "conferma" && res.category != "intercalare" && res.category != "sintomo") {
-            if (res.defaultResponse.length > 0) {
+            if (res?.defaultResponse?.length > 0) {
               addRes(res.defaultResponse[0], false)
             }
           }
@@ -427,22 +428,24 @@ async function farmadocInit(el) {
             ask(defaultIntents)
           }
 
-        } */
+        }
         // if (res.category != "follow-up") {
         //   sessionData.lastId = res.id
         // }
-        console.log(res.data.rems[0]);
-        let answer =           `
-        <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
-        <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
-        ${res.data.rems[0]}
-        </span>
-        </div>
-        `
 
-        document.getElementById(chatid).insertAdjacentHTML('afterbegin', answer);
+        const remedy = () => {
+          if (typeof res?.data?.rems[0] === 'string') {
+            return res.data.rems[0];
+          } else if (res.data?.rems[0]?.type === 'prodotto') {
+            return `Il prodotto consigliato è ${res.data.rems[0].name}`;
+          } else {
+            return 'Purtroppo non ho un rimedio da consigliare :(';
+          }
+        }
 
+        addRes(remedy(), false)
         ask(defaultIntents)
+
       }).catch(err => {
         console.log(err)
         if (err != "ignore") {
@@ -455,7 +458,7 @@ async function farmadocInit(el) {
           ]
           if (sessionData.confusionStage > 3) {
             sessionData.confusionStage = 0
-            addRes("Purtroppo sto avendo difficoltà a capire le tue domande, se il problema persiste ti consiglio di lasciare un feedback a test@test.com", false)
+            addRes("Purtroppo sto avendo difficoltà a capire le tue domande, se il problema persiste ti consiglio di lasciare un feedback a info@farmadoc.it", false)
           } else {
             addRes(confusedPhrases[sessionData.lastIndex], false)
           }
@@ -490,8 +493,14 @@ async function farmadocInit(el) {
   } // end chatResponder
 
   const addRes = (messaggio, status) => {
-    console.log("ADD-RES: ", messaggio);
-    console.log("ADD-RES STATUS: ", status);
+    let answer = `
+    <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
+    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+    ${messaggio}
+    </span>
+    </div>
+    `
+    document.getElementById(chatid).insertAdjacentHTML('afterbegin', answer)
   }
 
   if (result.authorised) {

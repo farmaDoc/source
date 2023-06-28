@@ -3,7 +3,7 @@ const faunadb = require('faunadb');
 const q = faunadb.query;
 
 const client = new faunadb.Client({
-  secret: "fnAE8IkPPKAA15tgIbOo0qtkCNe-ID9bTBmcbWeN",
+  secret: process.env.FAUNA_SECRET,
   domain: 'db.eu.fauna.com'
 });
 
