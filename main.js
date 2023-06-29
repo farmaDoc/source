@@ -427,7 +427,7 @@ async function farmadocInit(el) {
         }
 
         async function getDrugsInfo(id) {
-          const respo = await fetch("https://app.farmadoc.it/.netlify/functions/getDrugs?id=" + id, {
+          const respo = await fetch("https://source.farmadoc.it/.netlify/functions/getDrugs?id=" + id, {
             method: "GET",
             mode: "cors",
             headers: {
