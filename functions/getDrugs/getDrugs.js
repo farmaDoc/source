@@ -6,13 +6,10 @@ const client = new faunadb.Client({
 });
 
 exports.handler = async (event, context) => {
-  let param = event.queryStringParameters.createdBy
+  let ID = event.queryStringParameters.id;
 
   return client.query(
-    q.Map(
-      q.Paginate(q.Match(q.Index('allIntents'),param), { size: 200 }),
-      q.Lambda(x => q.Get(x))
-    )
+    q.Get(q.Ref(q.Collection("drugs"), ID))
   ).then(res => {
     return {
       statusCode: 200,
@@ -21,7 +18,7 @@ exports.handler = async (event, context) => {
         'Access-Control-Allow-Headers': "Content-Type",
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({res: res.data})
+      body: JSON.stringify({remedy: res.data})
     }
   })
 }
