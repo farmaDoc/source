@@ -6,9 +6,7 @@ async function farmadocInit(el) {
       "Content-Type": "application/json"
     }
   }).then(res => {
-    resultTemp = res.json();
-    console.log(resultTemp);
-    return resultTemp;
+    return res.json();
   }).catch((error) => {
     console.log(error)
   });
@@ -22,8 +20,7 @@ async function farmadocInit(el) {
       "Content-Type": "application/json"
     }
   }).then(res => {
-    resultTemp = res.json();
-    return resultTemp;
+    return res.json();
   }).catch((error) => {
     console.log(error)
   });
@@ -38,8 +35,7 @@ async function farmadocInit(el) {
       "Content-Type": "application/json"
     }
   }).then(res => {
-    resultTemp = res.json();
-    return resultTemp;
+    return res.json();
   }).catch((error) => {
     console.log(error)
   });
@@ -429,22 +425,31 @@ async function farmadocInit(el) {
           }
 
         }
-        // if (res.category != "follow-up") {
-        //   sessionData.lastId = res.id
-        // }
 
-        const remedy = () => {
-          if (typeof res?.data?.rems[0] === 'string') {
-            return res.data.rems[0];
-          } else if (res.data?.rems[0]?.type === 'prodotto') {
-            return `Il prodotto consigliato è ${res.data.rems[0].name}`;
-          } else {
-            return 'Purtroppo non ho un rimedio da consigliare :(';
-          }
+        async function getDrugsInfo(id) {
+          const respo = await fetch("https://app.farmadoc.it/.netlify/functions/getDrugs?id=" + id, {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          })
+          const drug = await respo.json();
+          return drug;
         }
 
-        addRes(remedy(), false)
-        ask(defaultIntents)
+        let regex = /^[0-9]{0,25}$/;
+        if (res?.data?.rems[0] !== undefined && !regex.test(res?.data?.rems[0])) {
+          addRes(res.data.rems[0], false)
+          ask(defaultIntents)
+        } else if (res?.data?.rems[0] !== undefined && regex.test(res?.data?.rems[0])) {
+          getDrugsInfo(res?.data?.rems[0]).then(respDrug => {
+            addRes(`Il farmaco suggerito in questo caso è ${respDrug?.remedy?.name}`, true)
+            ask(defaultIntents)
+          });
+        } else {
+          return 'Purtroppo non ho un rimedio da consigliare :(';
+        }
 
       }).catch(err => {
         console.log(err)
@@ -477,7 +482,6 @@ async function farmadocInit(el) {
 
   // ********************************* //
 
-
   const chatResponder = (msg) => {
     console.log(intents);
     console.log("MESSAGGIO INSERITO: " + msg);
@@ -486,9 +490,7 @@ async function farmadocInit(el) {
       msg,
       sender: "user"
     }
-
     root.push(newdoc)
-    console.log(root)
 
   } // end chatResponder
 
@@ -512,11 +514,11 @@ async function farmadocInit(el) {
         '                    </span>' +
         '                </div>'
 
-      document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
-
-      chatResponder(document.getElementById(msgid).value);
-      document.getElementById(msgid).value = ""
-      document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
+      if (document.getElementById(msgid).value !== '') {
+        document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
+        chatResponder(document.getElementById(msgid).value);
+        document.getElementById(msgid).value = ""
+      }
     })
 
     document.getElementById(msgid).addEventListener('keypress', function (e) {
@@ -526,10 +528,12 @@ async function farmadocInit(el) {
           document.getElementById(msgid).value +
           '                    </span>' +
           '                </div>'
-        document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
 
-        chatResponder(document.getElementById(msgid).value);
-        document.getElementById(msgid).value = ""
+        if (document.getElementById(msgid).value !== '') {
+          document.getElementById(chatid).insertAdjacentHTML('afterbegin', msgsend)
+          chatResponder(document.getElementById(msgid).value);
+          document.getElementById(msgid).value = ""
+        }
       }
     })
     if (!result.res.activeSub) {
