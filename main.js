@@ -3,7 +3,7 @@ async function farmadocInit(el) {
   let opzioni = [];
   let domandaBranch;
   let rimedi = [];
-  let dirams = [];
+  let geTdirams = [];
   let tempDiramsData = [];
   let risposteBranch = [];
   let lastDomanda = false;
@@ -306,6 +306,11 @@ async function farmadocInit(el) {
   document.addEventListener("click", function (e) {
     const target = e.target.closest(".pulsanteDiram");
     if (target) {
+      let padre = target.parentElement;
+      for (const child of padre.children) {
+        child.disabled = true;
+      }
+
       const checkRimedioDiram = () => {
         tempDiramsData = [];
         domandaBranch = "";
@@ -314,7 +319,12 @@ async function farmadocInit(el) {
         rimedioTrovato = rimediSimple.filter(
           (x) => x[0] === risposteBranch.toString()
         );
-        rimedioFound = rimedioTrovato[0][1];
+
+        let rimedioFound;
+
+        if (rimedioTrovato.length) {
+          rimedioFound = rimedioTrovato[0][1];
+        }
 
         if (rimedioFound) {
           getDrugsInfo(rimedioFound).then((respDrug) => {
@@ -363,8 +373,8 @@ async function farmadocInit(el) {
       detectIntent(input, intents)
         .then((res) => {
           rimedi = res?.data?.rems;
-          dirams = res?.data?.dirams;
-          tempDiramsData = dirams;
+          geTdirams = res?.data?.dirams;
+          tempDiramsData = geTdirams;
 
           if (tempDiramsData.length > 1) {
             domandaBranch = tempDiramsData[0].domanda;
