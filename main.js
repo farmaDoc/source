@@ -272,114 +272,6 @@ async function farmadocInit(el) {
     });
   }
 
-  function selectBranch(branch, lastRes) {
-    return new Promise((resolve, reject) => {
-      root.push(branch.options);
-      addRes(branch.question, false);
-      let soFar = [];
-      if (lastRes) {
-        soFar = lastRes;
-      }
-
-      let branchIntents = [
-        { input: { per: 1, favor: 1, cancell: 1 }, output: { cancel: 1 } },
-        { input: { cancell: 1, per: 1, favor: 1 }, output: { cancel: 1 } },
-        { input: { annullal: 1 }, output: { cancel: 1 } },
-        { input: { annull: 1 }, output: { cancel: 1 } },
-        { input: { cancell: 1, quell: 1 }, output: { cancel: 1 } },
-        { input: { cancellal: 1 }, output: { cancel: 1 } },
-        { input: { cancell: 1 }, output: { cancel: 1 } },
-        { input: { salt: 1 }, output: { cancel: 1 } },
-        { input: { saltal: 1 }, output: { cancel: 1 } },
-        { input: { diment: 1 }, output: { cancel: 1 } },
-        { input: { dimentical: 1 }, output: { cancel: 1 } },
-        { input: { lasc: 1 }, output: { cancel: 1 } },
-        { input: { lasc: 1, perd: 1 }, output: { cancel: 1 } },
-        { input: { lascial: 1 }, output: { cancel: 1 } },
-        { input: { salt: 1 }, output: { cancel: 1 } },
-        { input: { ferm: 1 }, output: { cancel: 1 } },
-        { input: { no: 1, cancell: 1 }, output: { cancel: 1 } },
-        { input: { chiud: 1, la: 1, ricerc: 1 }, output: { cancel: 1 } },
-        { input: { cos: 1, intend: 1 }, output: { clarify: 1 } },
-        { input: { cos: 1, vuol: 1, dir: 1 }, output: { clarify: 1 } },
-        { input: { qual: 1, la: 1, different: 1 }, output: { clarify: 1 } },
-        { input: { cos: 1, camb: 1 }, output: { clarify: 1 } },
-        { input: { non: 1, lo: 1, so: 1 }, output: { clarify: 1 } },
-        { input: { non: 1, ho: 1, ide: 1 }, output: { clarify: 1 } },
-        { input: { non: 1, cap: 1 }, output: { clarify: 1 } },
-        { input: { non: 1, saprei: 1 }, output: { clarify: 1 } },
-        { input: { che: 1, different: 1, c: 1 }, output: { clarify: 1 } },
-      ];
-
-      branch.options.forEach((phrase) => {
-        let tokens = tokenizer.tokenize(phrase);
-        let doc = {
-          input: {},
-          output: { [phrase]: 1 },
-        };
-        tokens.forEach((tok) => {
-          doc.input[natural.PorterStemmerIt.stem(tok)] = 1;
-        });
-        branchIntents.push(doc);
-      });
-
-      const net = new NeuralNetwork();
-      net.train(branchIntents);
-
-      //ask question
-      function askBranches() {
-        getMsg().then((input) => {
-          let tokens = tokenizer.tokenize(input); //tokenize input
-
-          //create corpus from input
-          let transformedInput = [];
-          tokens.forEach((token) => {
-            transformedInput[natural.PorterStemmerIt.stem(token)] = 1;
-          });
-
-          let result = net.run(transformedInput); //analyze input
-
-          //transform result
-          let objres = [];
-          Object.keys(result).forEach((key) => {
-            objdoc = {
-              intent: key,
-              probability: result[key],
-            };
-            objres.push(objdoc);
-          });
-
-          //get best match
-          let vals = objres.map((a) => a.probability);
-          let maxval = Math.max(...vals);
-
-          //return best match
-          if (maxval > 0.7) {
-            let finalres = objres.find((item) => item.probability == maxval);
-            if (branch.options.includes(finalres.intent)) {
-              soFar.push(finalres.intent);
-              resolve(soFar);
-            } else {
-              if (finalres.intent == "clarify") {
-                addRes(branch.explanation, false);
-                askBranches();
-              }
-              if (finalres.intent == "cancel") {
-                root = [];
-                addRes("Ok.", false);
-                reject();
-              }
-            }
-          } else {
-            addRes("non ho capito, " + branch.question, false);
-            askBranches();
-          }
-        });
-      }
-      askBranches();
-    });
-  }
-
   const calculateQty = (qty) => {
     if (qty >= 3) {
       return { status: "green", msg: "Attualmente disponibile" };
@@ -474,13 +366,22 @@ async function farmadocInit(el) {
           dirams = res?.data?.dirams;
           tempDiramsData = dirams;
 
-          if (tempDiramsData.length !== 0) {
+          if (tempDiramsData.length > 1) {
             domandaBranch = tempDiramsData[0].domanda;
             opzioni = [];
             tempDiramsData[0].opz?.map((x) => opzioni.push(x.value));
             printDomanda(domandaBranch);
             tempDiramsData.shift();
             domandaBranch = tempDiramsData[0].domanda;
+          } else if (tempDiramsData.length === 1) {
+            domandaBranch = tempDiramsData[0].domanda;
+            opzioni = [];
+            tempDiramsData[0].opz?.map((x) => opzioni.push(x.value));
+            printDomanda(domandaBranch);
+            tempDiramsData.shift();
+            domandaBranch = tempDiramsData[0]?.domanda;
+          } else if (tempDiramsData.length === 0 && rimedi.length > 0) {
+            lastDomanda === true;
           }
 
           if (res.confusedBot) {
