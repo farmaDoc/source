@@ -3,8 +3,8 @@ async function farmadocInit(el) {
   let opzioni = [];
   let domandaBranch;
   let rimedi = [];
-  let geTdirams = [];
   let tempDiramsData = [];
+  let diramCount = 0;
   let risposteBranch = [];
   let lastDomanda = false;
 
@@ -310,10 +310,8 @@ async function farmadocInit(el) {
       for (const child of padre.children) {
         child.disabled = true;
       }
-      const checkRimedioDiram = () => {
-        tempDiramsData = [];
-        domandaBranch = "";
 
+      const checkRimedioDiram = () => {
         rimediSimple = rimedi.map((x) => [x.for.toString(), x.res]);
         rimedioTrovato = rimediSimple.filter(
           (x) => x[0] === risposteBranch.toString()
@@ -341,6 +339,9 @@ async function farmadocInit(el) {
           risposteBranch = [];
           opzioni = [];
           lastDomanda = false;
+          domandaBranch = "";
+          diramCount = 0;
+          document.getElementById(msgid).disabled = false;
         }
       };
 
@@ -348,15 +349,15 @@ async function farmadocInit(el) {
         let resp = target.dataset.value;
         risposteBranch.push(resp);
         opzioni = [];
-        tempDiramsData[0]?.opz?.map((x) => opzioni.push(x.value));
+        tempDiramsData[diramCount]?.opz?.map((x) => opzioni.push(x.value));
       }
 
       if (domandaBranch === undefined) {
         checkRimedioDiram();
       } else {
         printDomanda(domandaBranch);
-        tempDiramsData.shift();
-        domandaBranch = tempDiramsData[0]?.domanda;
+        diramCount++;
+        domandaBranch = tempDiramsData[diramCount]?.domanda;
         domandaBranch === undefined
           ? (lastDomanda = true)
           : (lastDomanda = false);
@@ -372,23 +373,22 @@ async function farmadocInit(el) {
       detectIntent(input, intents)
         .then((res) => {
           rimedi = res?.data?.rems;
-          geTdirams = res?.data?.dirams;
-          tempDiramsData = geTdirams;
+          tempDiramsData = res?.data?.dirams;
 
           if (tempDiramsData.length > 1) {
-            domandaBranch = tempDiramsData[0].domanda;
+            domandaBranch = tempDiramsData[diramCount].domanda;
             opzioni = [];
-            tempDiramsData[0].opz?.map((x) => opzioni.push(x.value));
+            tempDiramsData[diramCount].opz?.map((x) => opzioni.push(x.value));
             printDomanda(domandaBranch);
-            tempDiramsData.shift();
-            domandaBranch = tempDiramsData[0].domanda;
+            diramCount++;
+            domandaBranch = tempDiramsData[diramCount].domanda;
           } else if (tempDiramsData.length === 1) {
-            domandaBranch = tempDiramsData[0].domanda;
+            domandaBranch = tempDiramsData[diramCount].domanda;
             opzioni = [];
-            tempDiramsData[0].opz?.map((x) => opzioni.push(x.value));
+            tempDiramsData[diramCount].opz?.map((x) => opzioni.push(x.value));
             printDomanda(domandaBranch);
-            tempDiramsData.shift();
-            domandaBranch = tempDiramsData[0]?.domanda;
+            diramCount++;
+            domandaBranch = tempDiramsData[diramCount]?.domanda;
           } else if (tempDiramsData.length === 0 && rimedi.length > 0) {
             lastDomanda === true;
           }
@@ -450,6 +450,7 @@ async function farmadocInit(el) {
               sessionData.lastIndex = 0;
             }
           }
+          ask(defaultIntents);
         });
     });
   }
@@ -487,6 +488,7 @@ async function farmadocInit(el) {
   };
 
   const printDomanda = (domanda) => {
+    document.getElementById(msgid).disabled = true;
     let printOpzioni = opzioni.map((x) => {
       return `<button class="pulsanteDiram" data-value="${x}" style="border: none;background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">${x}</button>`;
     });
