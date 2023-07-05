@@ -3,8 +3,8 @@ async function farmadocInit(el) {
   let opzioni = [];
   let domandaBranch;
   let rimedi = [];
-  let geTdirams = [];
   let tempDiramsData = [];
+  let diramCount = 0;
   let risposteBranch = [];
   let lastDomanda = false;
 
@@ -312,9 +312,6 @@ async function farmadocInit(el) {
       }
 
       const checkRimedioDiram = () => {
-        tempDiramsData = [];
-        domandaBranch = "";
-
         rimediSimple = rimedi.map((x) => [x.for.toString(), x.res]);
         rimedioTrovato = rimediSimple.filter(
           (x) => x[0] === risposteBranch.toString()
@@ -342,6 +339,8 @@ async function farmadocInit(el) {
           risposteBranch = [];
           opzioni = [];
           lastDomanda = false;
+          domandaBranch = "";
+          diramCount = 0;
         }
       };
 
@@ -349,15 +348,15 @@ async function farmadocInit(el) {
         let resp = target.dataset.value;
         risposteBranch.push(resp);
         opzioni = [];
-        tempDiramsData[0]?.opz?.map((x) => opzioni.push(x.value));
+        tempDiramsData[diramCount]?.opz?.map((x) => opzioni.push(x.value));
       }
 
       if (domandaBranch === undefined) {
         checkRimedioDiram();
       } else {
         printDomanda(domandaBranch);
-        tempDiramsData.shift();
-        domandaBranch = tempDiramsData[0]?.domanda;
+        diramCount++;
+        domandaBranch = tempDiramsData[diramCount]?.domanda;
         domandaBranch === undefined
           ? (lastDomanda = true)
           : (lastDomanda = false);
@@ -368,28 +367,26 @@ async function farmadocInit(el) {
   function ask(intents) {
     opzioni = [];
     risposteBranch = [];
-    localStorage.setItem("Farmacia", JSON.stringify(root));
     getMsg().then((input) => {
       detectIntent(input, intents)
         .then((res) => {
           rimedi = res?.data?.rems;
-          geTdirams = res?.data?.dirams;
-          tempDiramsData = geTdirams;
+          tempDiramsData = res?.data?.dirams;
 
           if (tempDiramsData.length > 1) {
-            domandaBranch = tempDiramsData[0].domanda;
+            domandaBranch = tempDiramsData[diramCount].domanda;
             opzioni = [];
-            tempDiramsData[0].opz?.map((x) => opzioni.push(x.value));
+            tempDiramsData[diramCount].opz?.map((x) => opzioni.push(x.value));
             printDomanda(domandaBranch);
-            tempDiramsData.shift();
-            domandaBranch = tempDiramsData[0].domanda;
+            diramCount++;
+            domandaBranch = tempDiramsData[diramCount].domanda;
           } else if (tempDiramsData.length === 1) {
-            domandaBranch = tempDiramsData[0].domanda;
+            domandaBranch = tempDiramsData[diramCount].domanda;
             opzioni = [];
-            tempDiramsData[0].opz?.map((x) => opzioni.push(x.value));
+            tempDiramsData[diramCount].opz?.map((x) => opzioni.push(x.value));
             printDomanda(domandaBranch);
-            tempDiramsData.shift();
-            domandaBranch = tempDiramsData[0]?.domanda;
+            diramCount++;
+            domandaBranch = tempDiramsData[diramCount]?.domanda;
           } else if (tempDiramsData.length === 0 && rimedi.length > 0) {
             lastDomanda === true;
           }
