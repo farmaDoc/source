@@ -341,6 +341,7 @@ async function farmadocInit(el) {
           lastDomanda = false;
           domandaBranch = "";
           diramCount = 0;
+          document.getElementById(msgid).disabled = false;
         }
       };
 
@@ -367,6 +368,7 @@ async function farmadocInit(el) {
   function ask(intents) {
     opzioni = [];
     risposteBranch = [];
+    localStorage.setItem("Farmacia", JSON.stringify(root));
     getMsg().then((input) => {
       detectIntent(input, intents)
         .then((res) => {
@@ -448,6 +450,7 @@ async function farmadocInit(el) {
               sessionData.lastIndex = 0;
             }
           }
+          ask(defaultIntents);
         });
     });
   }
@@ -485,6 +488,7 @@ async function farmadocInit(el) {
   };
 
   const printDomanda = (domanda) => {
+    document.getElementById(msgid).disabled = true;
     let printOpzioni = opzioni.map((x) => {
       return `<button class="pulsanteDiram" data-value="${x}" style="border: none;background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">${x}</button>`;
     });
