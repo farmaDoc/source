@@ -312,30 +312,34 @@ async function farmadocInit(el) {
       }
 
       const checkRimedioDiram = () => {
-        rimediSimple = rimedi.map((x) => [x.for.toString(), x.res]);
-        rimedioTrovato = rimediSimple.filter(
-          (x) => x[0] === risposteBranch.toString()
-        );
+        rimediSimple = rimedi.map(x => ({ remFor: x.for.toString(), prodotto: x.res, note: x.note }));
+        rimedioTrovato = rimediSimple.filter((x) => x.remFor === risposteBranch.toString());
 
         let rimedioFound;
 
         if (rimedioTrovato.length) {
-          rimedioFound = rimedioTrovato[0][1];
+          rimedioFound = { prodTrov: rimedioTrovato[0].prodotto, rispNota: rimedioTrovato[0].note };
         }
 
-        if (rimedioFound) {
-          getDrugsInfo(rimedioFound).then((respDrug) => {
-            let qtyBar = {
-              msg: calculateQty(respDrug?.remedy?.qty).msg,
-              color: calculateQty(respDrug?.remedy?.qty).status,
-            };
-            addRes(
-              `Il farmaco suggerito in questo caso è ${respDrug?.remedy?.name}`,
-              true,
-              null
-            );
-            addRes(qtyBar.msg, true, qtyBar.color);
-          });
+        if (rimedioFound !== {}) {
+          if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
+            getDrugsInfo(rimedioFound.prodTrov).then((respDrug) => {
+              let qtyBar = {
+                msg: calculateQty(respDrug?.remedy?.qty).msg,
+                color: calculateQty(respDrug?.remedy?.qty).status,
+              };
+              addRes(
+                `Il farmaco suggerito in questo caso è ${respDrug?.remedy?.name}`,
+                true,
+                null
+              );
+              addRes(qtyBar.msg, true, qtyBar.color);
+            });
+          }
+          if (rimedioFound.rispNota && rimedioFound.rispNota !== '') {
+            addRes(rimedioFound.rispNota, true, null);
+          }
+
           risposteBranch = [];
           opzioni = [];
           lastDomanda = false;
@@ -490,8 +494,8 @@ async function farmadocInit(el) {
   const printDomanda = (domanda) => {
     document.getElementById(msgid).disabled = true;
     let printOpzioni = opzioni.map((x) => {
-      return `<button class="pulsanteDiram" data-value="${x}" style="border: none;background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">${x}</button>`;
-    });
+      return `<button class="pulsanteDiram" data-value="${x}" style="cursor: pointer; margin-right: 10px; border: none; background-color: #b9b9b9; padding: 15px; border-radius: 10px; display: inline-block; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">${x}</button>`;
+    }).join(' ');
 
     let question = `
       <div style="all: unset; display: block; text-align: left; width: 100%; position: relative; box-sizing: border-box; margin-top: 10px">
@@ -501,7 +505,7 @@ async function farmadocInit(el) {
       </div>
       `;
     let pulsanti = `
-      <div id="pulsanti">${printOpzioni}</div>
+      <div id="pulsanti" style="display: flex; justify-content:flex-end">${printOpzioni}</div>
     `;
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", question);
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", pulsanti);
