@@ -83,10 +83,10 @@ async function farmadocInit(el) {
   let modal = `
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
           <div style="all: unset; width: 100%">
-            <div style="width: calc(100% - 90px); padding: 20px; display: inline-block; box-sizing: border-box;">
+            <div style="width: calc(90% - 40px); padding: 20px; display: inline-block; box-sizing: border-box;">
               <img style="all: unset; width: 150px;" src="https://i.ibb.co/YB2tmYP/app-farmadoc-it-2-1.png" alt=""><span style="font-style: italic; color: grey;">Chat</span>
             </div>
-            <div id="${minimizeid}" style="all: unset; width: 19%; padding: 20px; display: inline-block; text-align: right; box-sizing: border-box; cursor: pointer; color: grey">
+            <div id="${minimizeid}" style="all: unset; width: calc(25% - 40px); padding: 20px; display: inline-block; text-align: right; box-sizing: border-box; cursor: pointer; color: grey">
               <h2 style="all: unset; margin: 0; font-size: 20px" id="${minimizeel}">—</h2>
             </div>
           </div>
