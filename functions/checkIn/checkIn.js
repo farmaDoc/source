@@ -25,7 +25,7 @@ exports.handler = async (event, context) => {
         'Access-Control-Allow-Headers': "Content-Type",
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ authorised: true, res: res.data })
+      body: JSON.stringify({ authorised: true, res: res.data, uid: res.ref })
     }
 
     // if(event.headers.origin.includes(res.data.domain)){

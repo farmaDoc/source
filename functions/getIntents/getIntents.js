@@ -10,7 +10,7 @@ exports.handler = async (event, context) => {
 
   return client.query(
     q.Map(
-      q.Paginate(q.Match(q.Index('allIntents'),param), { size: 200 }),
+      q.Paginate(q.Match(q.Index('allIntents'),param), { size: 500 }),
       q.Lambda(x => q.Get(x))
     )
   ).then(res => {
