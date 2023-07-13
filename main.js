@@ -7,7 +7,8 @@ async function farmadocInit(el) {
   let diramCount = 0;
   let risposteBranch = [];
   let lastDomanda = false;
-
+  let uid;
+  let inventoryLoaded = false;
   let result = await fetch(
     "https://source.farmadoc.it/.netlify/functions/checkIn?key=" + el,
     {
@@ -25,8 +26,8 @@ async function farmadocInit(el) {
       console.log(error);
     });
 
-  console.log("RESULT ", result);
-
+    uid = result.uid['@ref'].id;
+    
   let usrIntents = await fetch(
     "https://source.farmadoc.it/.netlify/functions/getIntents?createdBy=" +
       result?.res?.id,
@@ -65,6 +66,27 @@ async function farmadocInit(el) {
       console.log(error);
     });
 
+    async function getInventory() {
+      const respo = await fetch(
+        "http://localhost:8888/.netlify/functions/getInventory?uid=" + uid,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      const drug = await respo.json();
+      inventoryLoaded = true;
+      drugIndex = drug.res.data.map(x => {
+        return ({ name: x.data.name, remedyId: x.ref['@ref'].id })
+      })
+  
+      return drugIndex;
+    }
+    
   sysIntents = sysIntents.res;
   console.log("SYS INTENTS ", sysIntents);
 
@@ -85,11 +107,29 @@ async function farmadocInit(el) {
           <div style="all: unset; width: 100%">
             <div style="width: calc(90% - 40px); padding: 20px; display: inline-block; box-sizing: border-box;">
               <img style="all: unset; width: 150px;" src="https://i.ibb.co/YB2tmYP/app-farmadoc-it-2-1.png" alt=""><span style="font-style: italic; color: grey;">Chat</span>
+              <span id="btn-prod" class="search-prod-btn" style="padding: 10px 20px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
             </div>
             <div id="${minimizeid}" style="all: unset; width: calc(25% - 40px); padding: 20px; display: inline-block; text-align: right; box-sizing: border-box; cursor: pointer; color: grey">
               <h2 style="all: unset; margin: 0; font-size: 20px" id="${minimizeel}">—</h2>
             </div>
           </div>
+          <div id="${contentid}-prod" style="display: none">
+          <hr style="all: unset; border-top: 1px solid grey; display: block;">
+          <div style="all: unset; width: 100%">
+            <div id="${chatid}-prod" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
+              <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
+                <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+                   Inizia scrivendo il nome del prodotto
+                </span>
+              </div>
+            </div>
+          </div>
+          <div id="lista-prod" style="display: none; position: absolute; background-color: #fff; width: calc(100% - 2px); box-shadow: 0px 3px 5px rgba(0,0,0,0.3); bottom: 50px; z-index: 20; border: solid 1px #cecece;"></div>
+          <hr style="all: unset; border-top: 1px solid grey; display: block;">
+          <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
+            <input id="${msgid}-prod" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
+          </div>
+        </div>
           <div id="${contentid}">
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
             <div style="all: unset; width: 100%">
@@ -304,6 +344,33 @@ async function farmadocInit(el) {
     return drug;
   }
 
+  const chatProdotti = (name, id) => {
+    let msgsend =
+      `<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
+      <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+        ${name}
+      </span>
+    </div>
+    `
+    document
+      .getElementById(chatid + "-prod")
+      .insertAdjacentHTML("afterbegin", msgsend);
+
+    getDrugsInfo(id).then((respDrug) => {
+      let qtyBar = {
+        msg: calculateQty(respDrug?.remedy?.qty).msg,
+        color: calculateQty(respDrug?.remedy?.qty).status,
+      };
+      addResProd(
+        `Il farmaco trovato è ${respDrug?.remedy?.name}`,
+        null
+      );
+      addResProd(qtyBar.msg, qtyBar.color);
+    });
+
+    document.getElementById(msgid + "-prod").value = '';
+  }
+
   document.addEventListener("click", function (e) {
     const target = e.target.closest(".pulsanteDiram");
     if (target) {
@@ -476,6 +543,22 @@ async function farmadocInit(el) {
     root.push(newdoc);
   }; // end chatResponder
 
+  const addResProd = (messaggio, color) => {
+    let colorBar;
+    if (color) {
+      colorBar = `<span class="color-bar" style="background-color:${color}; width: 10px; min-width: 10px; height: 10px; margin-right: 10px; border: solid 1px #fff; border-radius: 50%; display: block;"></span>`;
+    }
+
+    let answer = `
+    <div style="all: unset; display: block; text-align: left; width: 100%; position: relative; box-sizing: border-box; margin-top: 10px">
+      <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-flex; align-items: center; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+      ${colorBar ? colorBar : ""} ${messaggio} 
+      </span>
+    </div>
+    `;
+    document.getElementById(chatid + '-prod').insertAdjacentHTML("afterbegin", answer);
+  };
+
   const addRes = (messaggio, status, color) => {
     let colorBar;
     if (color) {
@@ -512,7 +595,26 @@ async function farmadocInit(el) {
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", pulsanti);
   };
 
+  let isSearchProd = false;
+
   if (result.authorised) {
+    document.getElementById("btn-prod").addEventListener("click", function () {
+      if (isSearchProd === false) {
+        if (inventoryLoaded === false) {
+          getInventory();
+        }
+        isSearchProd = true;
+        this.innerText = 'Chat';
+        document.getElementById(`${contentid}-prod`).style.display = 'block';
+        document.getElementById(`${contentid}`).style.display = 'none';
+      } else {
+        isSearchProd = false;
+        this.innerText = 'Ricerca prodotti';
+        document.getElementById(`${contentid}-prod`).style.display = 'none';
+        document.getElementById(`${contentid}`).style.display = 'block';
+      }
+    });
+
     document.getElementById(sendid).addEventListener("click", function () {
       let msgsend =
         '<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
@@ -548,6 +650,67 @@ async function farmadocInit(el) {
         }
       }
     });
+    
+    document.addEventListener("click", function (e) {
+      let target = this.querySelector(".remedy-click");
+      if (target) {
+        let listaProd = document.getElementById('lista-prod');
+        listaProd.style.display = 'none';
+        listaProd.innerHTML = '';
+        chatProdotti(e.target.dataset.value, e.target.dataset.id)
+      }
+    });
+
+    document.getElementById(msgid + '-prod').addEventListener("keyup", function (e) {
+      let searchValue = this.value;
+
+      const findValue = (object, value) => {
+        return object.filter(x => (x.name.toLowerCase().startsWith(value.toLowerCase())))
+      }
+
+      if (typeof drugIndex !== 'undefined' && searchValue !== '' && searchValue.length > 1) {
+        drugFound = findValue(drugIndex, searchValue);
+        console.log(drugFound)
+
+        if (drugFound.length !== 0) {
+          let names = drugFound.map(x => {
+            return `
+            <li class="remedy-click"
+            style="border-bottom: solid 1px #cecece;padding: 10px 10px 7px;
+            line-height: 1rem;
+            font-size: 14px;
+            cursor: pointer"
+            data-value="${x.name}" data-id="${x.remedyId}"
+            >
+              ${x.name}
+            </li>`
+          }).join(' ');
+
+          let listaProd = document.getElementById('lista-prod');
+
+          listaProd.style.display = 'block';
+          listaProd.innerHTML = `<ul style="list-style: none; padding: 0; margin: 0;">${names}</ul>`;
+        }
+      }
+
+      if (e.key === "Enter") {
+        let msgsend =
+          '<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
+          '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
+          document.getElementById(msgid).value +
+          "                    </span>" +
+          "                </div>";
+
+        if (document.getElementById(msgid).value !== "") {
+          document
+            .getElementById(chatid)
+            .insertAdjacentHTML("afterbegin", msgsend);
+          chatResponder(document.getElementById(msgid).value);
+          document.getElementById(msgid).value = "";
+        }
+      }
+    });
+
     if (!result.res.activeSub) {
       document.getElementById(chatid).style.alignItems = "center";
       document.getElementById(chatid).style.flexDirection = "unset";
