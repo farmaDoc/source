@@ -10,42 +10,38 @@ const client = new faunadb.Client({
 exports.handler = async (event, context) => {
 
   let clientKey = event.queryStringParameters.key
-  
+
   console.log(event.headers.origin)
 
   return client.query(
     q.Get(
       q.Match(
-          q.Index('userByKey'),
-          clientKey
+        q.Index('userByKey'),
+        clientKey
       )
     )
-  ).then(res=>{
+  ).then(res => {
 
-    if(event.headers.origin.includes(res.data.domain)){
-      return{
+    if (event.headers.origin.includes(res.data.domain)) {
+      return {
         statusCode: 200,
         headers: {
-          'Access-Control-Allow-Origin' : "*",
+          'Access-Control-Allow-Origin': "*",
           'Access-Control-Allow-Headers': "Content-Type",
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({authorised: true, res: res.data})
-       }
-    }else{
-      return{
+        body: JSON.stringify({ authorised: true, res: res.data, uid: res.ref })
+      }
+    } else {
+      return {
         statusCode: 200,
         headers: {
-          'Access-Control-Allow-Origin' : "*",
+          'Access-Control-Allow-Origin': "*",
           'Access-Control-Allow-Headers': "Content-Type",
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({authorised: false})
-       }
+        body: JSON.stringify({ authorised: false })
+      }
     }
-
-   
-
   })
-
 }
