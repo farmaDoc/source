@@ -69,7 +69,7 @@ async function farmadocInit(el) {
 
     async function getInventory() {
       const respo = await fetch(
-        "http://localhost:8888/.netlify/functions/getInventory?uid=" + uid,
+        "https://source.farmadoc.it/.netlify/functions/getInventory?uid=" + uid,
         {
           method: "GET",
           mode: "cors",
