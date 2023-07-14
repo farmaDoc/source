@@ -113,47 +113,49 @@ async function farmadocInit(el) {
               <h2 style="all: unset; margin: 0; font-size: 20px" id="${minimizeel}">—</h2>
             </div>
           </div>
-          <hr style="all: unset; border-top: 1px solid grey; display: block;">
-          <div class="buttons" style="padding: 10px; display: flex; justify-content: flex-end">
-            <span id="btn-prod" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
-          </div>
-          <hr style="all: unset; border-top: 1px solid grey; display: block;">
-          <div id="${contentid}-prod" style="display: none">
-            <div style="all: unset; width: 100%">
-              <div id="${chatid}-prod" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
-                <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
-                  <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
-                     Inizia scrivendo il nome del prodotto
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div id="lista-prod" style="display: none; position: absolute; background-color: #fff; width: calc(100% - 2px); box-shadow: 0px 3px 5px rgba(0,0,0,0.3); bottom: 50px; z-index: 20; border: solid 1px #cecece;"></div>
+          <div id="chat-wrap">
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
-            <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
-              <input id="${msgid}-prod" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
-            </div>
-          </div>
-          <div id="${contentid}">
-            <div style="all: unset; width: 100%">
-              <div id="${chatid}" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
-                <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
-                  <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
-                    Ciao!
-                  </span><br />
-                  <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
-                    Come posso aiutarti?
-                  </span><br />
-                </div>
-              </div>
+            <div class="buttons" style="padding: 10px; display: flex; justify-content: flex-end">
+              <span id="btn-prod" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
             </div>
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
-            <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
-              <input id="${msgid}" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
-              <div id="${sendid}" style="all: unset; width: 50px; height: 50px; display: inline-block; background-color: #33e894; border-radius: 0 0 10px 0; border-left: 1px solid grey; display: flex; align-items: center; text-align: center; cursor: pointer;">
-                <svg style="all: unset; align-self: center; margin: auto;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-send" viewBox="0 0 16 16">
-                  <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"></path>
-                </svg>
+            <div id="${contentid}-prod" style="display: none">
+              <div style="all: unset; width: 100%">
+                <div id="${chatid}-prod" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
+                  <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
+                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+                      Inizia scrivendo il nome del prodotto
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div id="lista-prod" style="display: none; position: absolute; background-color: #fff; width: calc(100% - 2px); box-shadow: 0px 3px 5px rgba(0,0,0,0.3); bottom: 50px; z-index: 20; border: solid 1px #cecece;"></div>
+              <hr style="all: unset; border-top: 1px solid grey; display: block;">
+              <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
+                <input id="${msgid}-prod" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
+              </div>
+            </div>
+            <div id="${contentid}">
+              <div style="all: unset; width: 100%">
+                <div id="${chatid}" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
+                  <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
+                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+                      Ciao!
+                    </span><br />
+                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+                      Come posso aiutarti?
+                    </span><br />
+                  </div>
+                </div>
+              </div>
+              <hr style="all: unset; border-top: 1px solid grey; display: block;">
+              <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
+                <input id="${msgid}" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
+                <div id="${sendid}" style="all: unset; width: 50px; height: 50px; display: inline-block; background-color: #33e894; border-radius: 0 0 10px 0; border-left: 1px solid grey; display: flex; align-items: center; text-align: center; cursor: pointer;">
+                  <svg style="all: unset; align-self: center; margin: auto;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-send" viewBox="0 0 16 16">
+                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"></path>
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
@@ -161,15 +163,15 @@ async function farmadocInit(el) {
       `;
 
   document.body.insertAdjacentHTML("beforeend", modal);
-  let toggle = true;
+  let toggle = false;
 
   document.getElementById(minimizeid).addEventListener("click", function () {
     toggle ^= true;
     if (toggle == true) {
-      document.getElementById(contentid).style.display = "none";
+      document.getElementById("chat-wrap").style.display = "none";
       document.getElementById(minimizeel).innerHTML = "+";
     } else {
-      document.getElementById(contentid).style.display = "block";
+      document.getElementById("chat-wrap").style.display = "block";
       document.getElementById(minimizeel).innerHTML = "—";
     }
   });
