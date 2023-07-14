@@ -103,14 +103,17 @@ async function farmadocInit(el) {
           <div style="all: unset; width: 100%">
             <div style="width: calc(90% - 40px); padding: 20px; display: inline-block; box-sizing: border-box;">
               <img style="all: unset; width: 150px;" src="https://i.ibb.co/YB2tmYP/app-farmadoc-it-2-1.png" alt=""><span style="font-style: italic; color: grey;">Chat</span>
-              <span id="btn-prod" class="search-prod-btn" style="padding: 10px 20px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
             </div>
             <div id="${minimizeid}" style="all: unset; width: calc(25% - 40px); padding: 20px; display: inline-block; text-align: right; box-sizing: border-box; cursor: pointer; color: grey">
               <h2 style="all: unset; margin: 0; font-size: 20px" id="${minimizeel}">—</h2>
             </div>
           </div>
+          <hr style="all: unset; border-top: 1px solid grey; display: block;">
+          <div class="buttons" style="padding: 10px; display: flex; justify-content: flex-end">
+            <span id="btn-prod" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
+          </div>
+          <hr style="all: unset; border-top: 1px solid grey; display: block;">
           <div id="${contentid}-prod" style="display: none">
-            <hr style="all: unset; border-top: 1px solid grey; display: block;">
             <div style="all: unset; width: 100%">
               <div id="${chatid}-prod" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
                 <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
@@ -127,7 +130,6 @@ async function farmadocInit(el) {
             </div>
           </div>
           <div id="${contentid}">
-            <hr style="all: unset; border-top: 1px solid grey; display: block;">
             <div style="all: unset; width: 100%">
               <div id="${chatid}" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
                 <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
@@ -648,23 +650,30 @@ async function farmadocInit(el) {
     });
 
     document.addEventListener("click", function (e) {
+      const listaProd = document.getElementById('lista-prod');  
       let target = this.querySelector(".remedy-click");
-      if (target) {
-        let listaProd = document.getElementById('lista-prod');
+      if (e.target === target) {
         listaProd.style.display = 'none';
         listaProd.innerHTML = '';
         chatProdotti(e.target.dataset.value, e.target.dataset.id)
+      } else {
+        listaProd.style.display = 'none';
+        listaProd.innerHTML = '';
       }
     });
 
-    document.getElementById(msgid + '-prod').addEventListener("keyup", function (e) {
+    document.getElementById(msgid + '-prod').addEventListener("input", function (e) {
+      const listaProd = document.getElementById('lista-prod');  
       let searchValue = this.value;
 
       const findValue = (object, value) => {
         return object.filter(x => (x.name.toLowerCase().startsWith(value.toLowerCase())))
       }
 
-      if (typeof drugIndex !== 'undefined' && searchValue !== '' && searchValue.length > 1) {
+      if (searchValue === '') {
+        listaProd.style.display = 'none';
+        listaProd.innerHTML = '';
+      } else if (typeof drugIndex !== 'undefined' && searchValue !== '' && searchValue.length > 1) {
         drugFound = findValue(drugIndex, searchValue);
         console.log(drugFound)
 
@@ -681,8 +690,6 @@ async function farmadocInit(el) {
               ${x.name}
             </li>`
           }).join(' ');
-
-          let listaProd = document.getElementById('lista-prod');
 
           listaProd.style.display = 'block';
           listaProd.innerHTML = `<ul style="list-style: none; padding: 0; margin: 0;">${names}</ul>`;
