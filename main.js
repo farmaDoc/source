@@ -651,8 +651,8 @@ async function farmadocInit(el) {
 
     document.addEventListener("click", function (e) {
       const listaProd = document.getElementById('lista-prod');  
-      let target = this.querySelector(".remedy-click");
-      if (e.target === target) {
+      let target = e.target.classList.contains('remedy-click');
+      if (target) {
         listaProd.style.display = 'none';
         listaProd.innerHTML = '';
         chatProdotti(e.target.dataset.value, e.target.dataset.id)
