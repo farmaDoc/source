@@ -365,6 +365,11 @@ async function farmadocInit(el) {
         `Il farmaco trovato è ${respDrug?.remedy?.name}`,
         null
       );
+      if (respDrug?.remedy?.promo) {
+        addResProd(
+          `In promozione: ${respDrug?.remedy?.promodetail}`
+        )
+      }
       addResProd(qtyBar.msg, qtyBar.color);
     });
 
@@ -401,6 +406,11 @@ async function farmadocInit(el) {
                 true,
                 null
               );
+              if (respDrug?.remedy?.promo) {
+                addRes(
+                  `In promozione: ${respDrug?.remedy?.promodetail}`, true, null
+                );
+              }
               addRes(qtyBar.msg, true, qtyBar.color);
             });
           }
@@ -652,7 +662,7 @@ async function farmadocInit(el) {
     });
 
     document.addEventListener("click", function (e) {
-      const listaProd = document.getElementById('lista-prod');  
+      const listaProd = document.getElementById('lista-prod');
       let target = e.target.classList.contains('remedy-click');
       if (target) {
         listaProd.style.display = 'none';
@@ -665,7 +675,7 @@ async function farmadocInit(el) {
     });
 
     document.getElementById(msgid + '-prod').addEventListener("input", function (e) {
-      const listaProd = document.getElementById('lista-prod');  
+      const listaProd = document.getElementById('lista-prod');
       let searchValue = this.value;
 
       const findValue = (object, value) => {
