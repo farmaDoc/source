@@ -27,11 +27,11 @@ async function farmadocInit(el) {
       console.log(error);
     });
 
-    uid = result.uid['@ref'].id;
-    
+  uid = result.uid['@ref'].id;
+
   let usrIntents = await fetch(
     "https://source.farmadoc.it/.netlify/functions/getIntents?createdBy=" +
-      result?.res?.id,
+    result?.res?.id,
     {
       method: "GET",
       mode: "cors",
@@ -67,27 +67,27 @@ async function farmadocInit(el) {
       console.log(error);
     });
 
-    async function getInventory() {
-      const respo = await fetch(
-        "https://source.farmadoc.it/.netlify/functions/getInventory?uid=" + uid,
-        {
-          method: "GET",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-  
-      const drug = await respo.json();
-      inventoryLoaded = true;
-      drugIndex = drug.res.data.map(x => {
-        return ({ name: x.data.name, remedyId: x.ref['@ref'].id })
-      })
-  
-      return drugIndex;
-    }
-    
+  async function getInventory() {
+    const respo = await fetch(
+      "https://source.farmadoc.it/.netlify/functions/getInventory?uid=" + uid,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const drug = await respo.json();
+    inventoryLoaded = true;
+    drugIndex = drug.res.data.map(x => {
+      return ({ name: x.data.name, remedyId: x.ref['@ref'].id })
+    })
+
+    return drugIndex;
+  }
+
   sysIntents = sysIntents.res;
   console.log("SYS INTENTS ", sysIntents);
 
@@ -370,6 +370,11 @@ async function farmadocInit(el) {
         `Il farmaco trovato è ${respDrug?.remedy?.name}`,
         null
       );
+      if (respDrug?.remedy?.promo) {
+        addResProd(
+          `In promozione: ${respDrug?.remedy?.promodetail}`
+        )
+      }
       addResProd(qtyBar.msg, qtyBar.color);
     });
 
@@ -406,6 +411,11 @@ async function farmadocInit(el) {
                 true,
                 null
               );
+              if (respDrug?.remedy?.promo) {
+                addRes(
+                  `In promozione: ${respDrug?.remedy?.promodetail}`, true, null
+                );
+              }
               addRes(qtyBar.msg, true, qtyBar.color);
             });
           }
@@ -655,7 +665,7 @@ async function farmadocInit(el) {
         }
       }
     });
-    
+
     document.addEventListener("click", function (e) {
       const listaProd = document.getElementById('lista-prod');
       let target = e.target.classList.contains('remedy-click');
@@ -670,14 +680,14 @@ async function farmadocInit(el) {
     });
 
     document.getElementById(msgid + '-prod').addEventListener("input", function (e) {
-      const listaProd = document.getElementById('lista-prod'); 
+      const listaProd = document.getElementById('lista-prod');
       let searchValue = this.value;
 
       const findValue = (object, value) => {
         return object.filter(x => (x.name.toLowerCase().startsWith(value.toLowerCase())))
       }
 
-       if (searchValue === '') {
+      if (searchValue === '') {
         listaProd.style.display = 'none';
         listaProd.innerHTML = '';
       } else if (typeof drugIndex !== 'undefined' && searchValue !== '' && searchValue.length > 1) {
@@ -697,7 +707,7 @@ async function farmadocInit(el) {
               ${x.name}
             </li>`
           }).join(' ');
-          
+
           listaProd.style.display = 'block';
           listaProd.innerHTML = `<ul style="list-style: none; padding: 0; margin: 0;">${names}</ul>`;
         }
