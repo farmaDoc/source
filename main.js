@@ -123,7 +123,7 @@ async function farmadocInit(el) {
               <div style="all: unset; width: 100%">
                 <div id="${chatid}-prod" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
                   <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
-                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">  
                       Inizia scrivendo il nome del prodotto
                     </span>
                   </div>
@@ -139,10 +139,10 @@ async function farmadocInit(el) {
               <div style="all: unset; width: 100%">
                 <div id="${chatid}" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
                   <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
-                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
                       Ciao!
                     </span><br />
-                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
                       Come posso aiutarti?
                     </span><br />
                   </div>
@@ -151,7 +151,7 @@ async function farmadocInit(el) {
               <hr style="all: unset; border-top: 1px solid grey; display: block;">
               <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
                 <input id="${msgid}" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
-                <div id="${sendid}" style="all: unset; width: 50px; height: 50px; display: inline-block; background-color: #33e894; border-radius: 0 0 10px 0; border-left: 1px solid grey; display: flex; align-items: center; text-align: center; cursor: pointer;">
+                <div id="${sendid}" style="all: unset; width: 50px; height: 50px; display: inline-block; min-width: 50px; background-color: #33e894; border-radius: 0 0 10px 0; border-left: 1px solid grey; display: flex; align-items: center; text-align: center; cursor: pointer;">
                   <svg style="all: unset; align-self: center; margin: auto;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-send" viewBox="0 0 16 16">
                     <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"></path>
                   </svg>
@@ -352,7 +352,7 @@ async function farmadocInit(el) {
   const chatProdotti = (name, id) => {
     let msgsend =
       `<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
-      <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+      <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
         ${name}
       </span>
     </div>
@@ -566,7 +566,7 @@ async function farmadocInit(el) {
 
     let answer = `
     <div style="all: unset; display: block; text-align: left; width: 100%; position: relative; box-sizing: border-box; margin-top: 10px">
-      <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-flex; align-items: center; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+      <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-flex; align-items: center; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
       ${colorBar ? colorBar : ""} ${messaggio} 
       </span>
     </div>
@@ -582,7 +582,7 @@ async function farmadocInit(el) {
 
     let answer = `
     <div style="all: unset; display: block; text-align: left; width: 100%; position: relative; box-sizing: border-box; margin-top: 10px">
-      <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-flex; align-items: center; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+      <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-flex; align-items: center; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
       ${colorBar ? colorBar : ""} ${messaggio} 
       </span>
     </div>
@@ -593,18 +593,18 @@ async function farmadocInit(el) {
   const printDomanda = (domanda) => {
     document.getElementById(msgid).disabled = true;
     let printOpzioni = opzioni.map((x) => {
-      return `<button class="pulsanteDiram" data-value="${x}" style="cursor: pointer; margin-right: 10px; border: none; background-color: #b9b9b9; padding: 15px; border-radius: 10px; display: inline-block; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">${x}</button>`;
+      return `<button class="pulsanteDiram" data-value="${x}" style="cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${x}</button>`;
     }).join(' ');
 
     let question = `
       <div style="all: unset; display: block; text-align: left; width: 100%; position: relative; box-sizing: border-box; margin-top: 10px">
-        <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">
+        <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
           ${domanda}
         </span>
       </div>
       `;
     let pulsanti = `
-      <div id="pulsanti" style="display: flex; justify-content:flex-end">${printOpzioni}</div>
+      <div id="pulsanti" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row;">${printOpzioni}</div>
     `;
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", question);
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", pulsanti);
@@ -633,7 +633,7 @@ async function farmadocInit(el) {
     document.getElementById(sendid).addEventListener("click", function () {
       let msgsend =
         '<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
-        '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
+        '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">' +
         document.getElementById(msgid).value +
         "                    </span>" +
         "                </div>";
@@ -651,7 +651,7 @@ async function farmadocInit(el) {
       if (e.key === "Enter") {
         let msgsend =
           '<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
-          '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
+          '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">' +
           document.getElementById(msgid).value +
           "                    </span>" +
           "                </div>";
@@ -716,7 +716,7 @@ async function farmadocInit(el) {
       if (e.key === "Enter") {
         let msgsend =
           '<div style="all: unset; display: block; text-align: right; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">' +
-          '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 50%; word-wrap: break-word; overflow: hidden; position: relative; box-sizing: border-box">' +
+          '                    <span style="all: unset; background-color: #b9b9b9; padding: 15px; border-radius: 10px 10px 0 10px; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">' +
           document.getElementById(msgid).value +
           "                    </span>" +
           "                </div>";
