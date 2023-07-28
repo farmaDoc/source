@@ -114,11 +114,12 @@ async function farmadocInit(el) {
   let style = document.createElement("style")
   document.head.appendChild(style)
   console.log(style.sheet)
-  style.sheet.insertRule(`
+  stylestr = `
     ${contentid}-prod>li:hover{
       background-color: blue;
     }
-  `,0)
+  `
+  style.sheet.insertRule(stylestr,0)
 
   let modal = `
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
