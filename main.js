@@ -87,7 +87,6 @@ async function farmadocInit(el) {
     drugIndex = drug.res.data.map(x => {
       return ({ name: x.data.name, remedyId: x.ref['@ref'].id })
     })
-    console.log(drugIndex)
 
     return drugIndex;
   }
@@ -755,7 +754,6 @@ async function farmadocInit(el) {
     });
 
     document.getElementById(msgid + '-prod').addEventListener("input", function (e) {
-      console.log("lol")
       const listaProd = document.getElementById('lista-prod');
       let searchValue = this.value;
 
