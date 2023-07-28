@@ -87,6 +87,7 @@ async function farmadocInit(el) {
     drugIndex = drug.res.data.map(x => {
       return ({ name: x.data.name, remedyId: x.ref['@ref'].id })
     })
+    console.log(drugIndex)
 
     return drugIndex;
   }
