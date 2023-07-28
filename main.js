@@ -772,7 +772,7 @@ async function farmadocInit(el) {
           let names = drugFound.map(x => {
             return `
             <li class="remedy-click"
-            onMouseOver="this.style.backgroundColor='rgb(203 235 214)'" 
+            onMouseOver="this.style.backgroundColor='lightgrey'" 
             onMouseOut="this.style.backgroundColor='white'"
             style="border-bottom: solid 1px #cecece;padding: 10px 10px 7px;
             line-height: 1rem;
