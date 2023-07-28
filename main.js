@@ -9,6 +9,7 @@ async function farmadocInit(el) {
   let lastDomanda = false;
   let uid;
   let inventoryLoaded = false;
+  let tempServData = {}
 
   let result = await fetch(
     "https://source.farmadoc.it/.netlify/functions/checkIn?key=" + el,
@@ -21,6 +22,7 @@ async function farmadocInit(el) {
     }
   )
     .then((res) => {
+      console.log(res.json())
       return res.json();
     })
     .catch((error) => {
@@ -28,6 +30,7 @@ async function farmadocInit(el) {
     });
 
   uid = result.uid['@ref'].id;
+  console.log(uid)
 
   let usrIntents = await fetch(
     "https://source.farmadoc.it/.netlify/functions/getIntents?createdBy=" +
