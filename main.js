@@ -121,7 +121,7 @@ async function farmadocInit(el) {
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
             <div class="buttons" style="padding: 10px; display: flex; justify-content: flex-end">
               <span id="btn-prod" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
-              <span id="${servbtnid}" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
+              <span id="${servbtnid}" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Visualizza i servizi</span>
             </div>
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
             <div id="${contentid}-prod" style="display: none">
@@ -141,7 +141,18 @@ async function farmadocInit(el) {
               </div>
             </div>
             <div id="${contentid}-serv" style="display: none">
-                <div>lmao!</div>
+              <div style="all: unset; width: 100%">
+                <div id="${chatid}-prod" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
+                <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
+                  <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">  
+                    ${ServData.text}
+                  </span>
+                </div>
+              </div>
+              <hr style="all: unset; border-top: 1px solid grey; display: block;">
+              <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
+                
+              </div>
             </div>
             <div id="${contentid}">
               <div style="all: unset; width: 100%">
