@@ -634,7 +634,7 @@ async function farmadocInit(el) {
 
   if (result.authorised) {
     document.getElementById(servbtnid).addEventListener("click", function () {
-      if (isServ === false) {
+      if (isServ === false && isSearchProd == false) {
         isServ = true
         this.innerText = 'Chat';
         document.getElementById(`${contentid}-serv`).style.display = 'block';
@@ -647,7 +647,7 @@ async function farmadocInit(el) {
       }
     })
     document.getElementById("btn-prod").addEventListener("click", function () {
-      if (isSearchProd === false) {
+      if (isSearchProd === false && isServ === false) {
         if (inventoryLoaded === false) {
           getInventory();
         }
