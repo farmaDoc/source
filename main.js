@@ -28,7 +28,7 @@ async function farmadocInit(el) {
   });
 
   console.log(result)
-  let ServData = result.serv.cur
+  let ServData = result.res.serv.cur
   uid = result.uid['@ref'].id;
   console.log(uid)
 
