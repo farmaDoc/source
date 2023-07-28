@@ -155,7 +155,7 @@ async function farmadocInit(el) {
                   </div>
                 </div>
               </div>
-              <div id="lista-prod" style="position: absolute; background-color: #fff; width: calc(100% - 2px); box-shadow: 0px 3px 5px rgba(0,0,0,0.3); bottom: 50px; z-index: 20; border: solid 1px #cecece;"></div>
+              <div id="lista-prod" style="display: none; position: absolute; background-color: #fff; width: calc(100% - 2px); box-shadow: 0px 3px 5px rgba(0,0,0,0.3); bottom: 50px; z-index: 20; border: solid 1px #cecece;"></div>
               <hr style="all: unset; border-top: 1px solid grey; display: block;">
               <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
                 <input id="${msgid}-prod" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
