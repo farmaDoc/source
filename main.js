@@ -749,6 +749,7 @@ async function farmadocInit(el) {
     });
 
     document.getElementById(msgid + '-prod').addEventListener("input", function (e) {
+      console.log("lol")
       const listaProd = document.getElementById('lista-prod');
       let searchValue = this.value;
 
