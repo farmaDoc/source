@@ -117,7 +117,7 @@ async function farmadocInit(el) {
     ${contentid}-prod>li:hover{
       background-color: blue;
     }
-  `)
+  `,0)
 
   let modal = `
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
