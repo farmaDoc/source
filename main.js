@@ -111,6 +111,14 @@ async function farmadocInit(el) {
     return new Date(date).toLocaleDateString('it-IT',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
   }
 
+  let style = document.createElement("style")
+  document.head.appendChild(style)
+  style.sheet.insertRule(`
+    ${contentid}-prod>li:hover{
+      background-color: blue;
+    }
+  `)
+
   let modal = `
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
           <div style="all: unset; width: 100%">
@@ -155,7 +163,7 @@ async function farmadocInit(el) {
                   </div>
                 </div>
               </div>
-              <div id="lista-prod" style="display: none; position: absolute; background-color: rgb(240,240,240); text-decoration: underline; width: 100%; bottom: 50px; z-index: 20; border-top: 1px solid lightgrey;"></div>
+              <div id="lista-prod" style="display: none; position: absolute; background-color: white; transform: translateX(-2px); width: 100%; bottom: 50px; z-index: 20; border: 2px solid #72E49A;"></div>
               <hr style="all: unset; border-top: 1px solid grey; display: block;">
               <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
                 <input id="${msgid}-prod" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
