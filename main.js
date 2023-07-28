@@ -622,32 +622,27 @@ async function farmadocInit(el) {
 
   if (result.authorised) {
     document.getElementById(servbtnid+"-chat").addEventListener("click", function () {
-      document.getElementById(`${contentid}`).style.display = 'block';
-
-      document.getElementById(`${contentid}-prod`).style.display = 'none';
-      document.getElementById(`${contentid}-serv`).style.display = 'none';
-
-      document.getElementById(`${servbtnid}-serv`).style.display = 'block';
-      document.getElementById(`${servbtnid}-prod`).style.display = 'block';
       document.getElementById(`${servbtnid}-chat`).style.display = 'none';
+
+      document.getElementById(`${contentid}`).style.display = 'block';
+      document.getElementById(`${contentid}-serv`).style.display = 'none';
+      document.getElementById(`${contentid}-prod`).style.display = 'none';
     })
     document.getElementById(servbtnid+"-serv").addEventListener("click", function () {
-      document.getElementById(`${contentid}-serv`).style.display = 'block';
-
-      document.getElementById(`${contentid}-prod`).style.display = 'none';
-      document.getElementById(`${contentid}`).style.display = 'none';
-
       document.getElementById(`${servbtnid}-serv`).style.display = 'none';
-      document.getElementById(`${servbtnid}-chat`).style.display = 'block';
+      document.getElementById(`${servbtnid}-prod`).style.display = 'none';
+
+      document.getElementById(`${contentid}`).style.display = 'none';
+      document.getElementById(`${contentid}-serv`).style.display = 'block';
+      document.getElementById(`${contentid}-prod`).style.display = 'none';
     })
     document.getElementById(servbtnid+"-prod").addEventListener("click", function () {
-      document.getElementById(`${contentid}-prod`).style.display = 'block';
-
-      document.getElementById(`${contentid}-serv`).style.display = 'none';
-      document.getElementById(`${contentid}`).style.display = 'none';
-
+      document.getElementById(`${servbtnid}-serv`).style.display = 'none';
       document.getElementById(`${servbtnid}-prod`).style.display = 'none';
-      document.getElementById(`${servbtnid}-chat`).style.display = 'block';
+
+      document.getElementById(`${contentid}`).style.display = 'none';
+      document.getElementById(`${contentid}-serv`).style.display = 'none';
+      document.getElementById(`${contentid}-prod`).style.display = 'block';
     })
     /* document.getElementById(servbtnid+"-prod").addEventListener("click", function () {
       if (isSearchProd === false) {
