@@ -111,18 +111,6 @@ async function farmadocInit(el) {
     return new Date(date).toLocaleDateString('it-IT',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
   }
 
-  let style = document.createElement("style")
-  document.head.appendChild(style)
-  console.log(style.sheet)
-  let stylestr = `
-  <style>
-    ${contentid}-prod:hover{
-      background-color: blue;
-    }
-  </style>
-  `
-  document.head.insertAdjacentHTML('beforeend', stylestr);
-
   let modal = `
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
           <div style="all: unset; width: 100%">
@@ -784,6 +772,8 @@ async function farmadocInit(el) {
           let names = drugFound.map(x => {
             return `
             <li class="remedy-click"
+            onMouseOver="this.style.backgroundColor='rgb(203 235 214)'" 
+            onMouseOut="this.style.backgroundColor='white'"
             style="border-bottom: solid 1px #cecece;padding: 10px 10px 7px;
             line-height: 1rem;
             font-size: 14px;
