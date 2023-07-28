@@ -113,7 +113,7 @@ async function farmadocInit(el) {
 
   let style = document.createElement("style")
   document.head.appendChild(style)
-  console.log(style)
+  console.log(style.sheet)
   style.sheet.insertRule(`
     ${contentid}-prod>li:hover{
       background-color: blue;
