@@ -676,6 +676,11 @@ async function farmadocInit(el) {
       document.getElementById(`${contentid}-prod`).style.display = 'none';
     })
     document.getElementById(servbtnid+"-prod").addEventListener("click", function () {
+
+      if (inventoryLoaded === false) {
+        getInventory();
+      }
+
       document.getElementById(`${servbtnid}-chat`).style.display = 'block';
       document.getElementById(`${servbtnid}-serv`).style.display = 'none';
       document.getElementById(`${servbtnid}-prod`).style.display = 'none';
