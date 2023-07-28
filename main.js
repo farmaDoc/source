@@ -119,7 +119,7 @@ async function farmadocInit(el) {
       background-color: blue;
     }
   `
-  style.sheet.insertRule(stylestr,0)
+  style.innerHTML = stylestr
 
   let modal = `
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
