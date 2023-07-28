@@ -115,7 +115,7 @@ async function farmadocInit(el) {
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
           <div style="all: unset; width: 100%">
             <div style="width: calc(90% - 40px); padding: 20px; display: inline-block; box-sizing: border-box;">
-              <img style="all: unset; width: 150px;" src="https://i.ibb.co/YB2tmYP/app-farmadoc-it-2-1.png" alt=""><span style="font-style: italic; color: grey;">Torna alla chat</span>
+              <img style="all: unset; width: 150px;" src="https://i.ibb.co/YB2tmYP/app-farmadoc-it-2-1.png" alt=""><span style="font-style: italic; color: grey;">Chat</span>
             </div>
             <div id="${minimizeid}" style="all: unset; width: calc(25% - 40px); padding: 20px; display: inline-block; text-align: right; box-sizing: border-box; cursor: pointer; color: grey">
               <h2 style="all: unset; margin: 0; font-size: 20px" id="${minimizeel}">—</h2>
@@ -128,7 +128,7 @@ async function farmadocInit(el) {
                 <svg style="transform: translateY(2px);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                 </svg>
-                Chat
+                Torna alla chat
               </span>  
               <span id="${servbtnid}-prod" class="search-prod-btn" style="display: block; padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">
                 <svg style="transform: translateY(2px);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
