@@ -115,11 +115,13 @@ async function farmadocInit(el) {
   document.head.appendChild(style)
   console.log(style.sheet)
   let stylestr = `
-    ${contentid}-prod{
+  <style>
+    ${contentid}-prod:hover{
       background-color: blue;
     }
+  </style>
   `
-  style.sheet.insertRule(stylestr,0)
+  document.head.insertAdjacentHTML('beforeend', stylestr);
 
   let modal = `
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
