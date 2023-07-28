@@ -120,8 +120,9 @@ async function farmadocInit(el) {
           <div id="chat-wrap">
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
             <div class="buttons" style="padding: 10px; display: flex; justify-content: flex-end">
-              <span id="btn-prod" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
-              <span id="${servbtnid}" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Visualizza i servizi</span>
+              <span id="${servbtnid}-chat" class="search-prod-btn" style="display: none; padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Chat</span>  
+              <span id="${servbtnid}-prod" class="search-prod-btn" style="display: block; padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
+              <span id="${servbtnid}-serv" class="search-prod-btn" style="display: block; padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Visualizza i servizi</span>
             </div>
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
             <div id="${contentid}-prod" style="display: none">
@@ -141,18 +142,7 @@ async function farmadocInit(el) {
               </div>
             </div>
             <div id="${contentid}-serv" style="display: none">
-              <div style="all: unset; width: 100%">
-                <div id="${chatid}-prod" style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
-                <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
-                  <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">  
-                    ${ServData.text}
-                  </span>
-                </div>
-              </div>
-              <hr style="all: unset; border-top: 1px solid grey; display: block;">
-              <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
-                
-              </div>
+                <div>lmao!</div>
             </div>
             <div id="${contentid}">
               <div style="all: unset; width: 100%">
@@ -629,30 +619,42 @@ async function farmadocInit(el) {
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", pulsanti);
   };
 
-  let isSearchProd = false;
-  let isServ = false
 
   if (result.authorised) {
-    document.getElementById(servbtnid).addEventListener("click", function () {
-      if (isServ === false && isSearchProd == false) {
-        isServ = true
-        this.innerText = 'Chat';
-        document.getElementById(`${contentid}-serv`).style.display = 'block';
-        document.getElementById(`${contentid}`).style.display = 'none';
-      }else{
-        isServ = false;
-        this.innerText = 'Servizi';
-        document.getElementById(`${contentid}-serv`).style.display = 'none';
-        document.getElementById(`${contentid}`).style.display = 'block';
-      }
+    document.getElementById(servbtnid+"-chat").addEventListener("click", function () {
+      document.getElementById(`${contentid}`).style.display = 'block';
+
+      document.getElementById(`${contentid}-prod`).style.display = 'none';
+      document.getElementById(`${contentid}-serv`).style.display = 'none';
+
+      document.getElementById(`${servbtnid}-serv`).style.display = 'block';
+      document.getElementById(`${servbtnid}-prod`).style.display = 'block';
+      document.getElementById(`${servbtnid}-chat`).style.display = 'none';
     })
-    document.getElementById("btn-prod").addEventListener("click", function () {
-      if (isSearchProd === false && isServ === false) {
+    document.getElementById(servbtnid+"-serv").addEventListener("click", function () {
+      document.getElementById(`${contentid}-serv`).style.display = 'block';
+
+      document.getElementById(`${contentid}-prod`).style.display = 'none';
+      document.getElementById(`${contentid}`).style.display = 'none';
+
+      document.getElementById(`${servbtnid}-serv`).style.display = 'none';
+      document.getElementById(`${servbtnid}-chat`).style.display = 'block';
+    })
+    document.getElementById(servbtnid+"-prod").addEventListener("click", function () {
+      document.getElementById(`${contentid}-prod`).style.display = 'block';
+
+      document.getElementById(`${contentid}-serv`).style.display = 'none';
+      document.getElementById(`${contentid}`).style.display = 'none';
+
+      document.getElementById(`${servbtnid}-prod`).style.display = 'none';
+      document.getElementById(`${servbtnid}-chat`).style.display = 'block';
+    })
+    /* document.getElementById(servbtnid+"-prod").addEventListener("click", function () {
+      if (isSearchProd === false) {
         if (inventoryLoaded === false) {
           getInventory();
         }
         isSearchProd = true;
-        this.innerText = 'Chat';
         document.getElementById(`${contentid}-prod`).style.display = 'block';
         document.getElementById(`${contentid}`).style.display = 'none';
       } else {
@@ -661,7 +663,7 @@ async function farmadocInit(el) {
         document.getElementById(`${contentid}-prod`).style.display = 'none';
         document.getElementById(`${contentid}`).style.display = 'block';
       }
-    });
+    }); */
 
     document.getElementById(sendid).addEventListener("click", function () {
       let msgsend =
