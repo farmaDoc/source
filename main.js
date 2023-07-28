@@ -21,14 +21,14 @@ async function farmadocInit(el) {
       },
     }
   )
-    .then((res) => {
-      console.log(res.json())
-      return res.json();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  .then((res) => {
+    return res.json();
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
+  console.log(result)
   uid = result.uid['@ref'].id;
   console.log(uid)
 
