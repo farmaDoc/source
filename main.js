@@ -123,7 +123,7 @@ async function farmadocInit(el) {
           </div>
           <div id="chat-wrap">
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
-            <div class="buttons" style="padding: 10px; display: flex; justify-content: flex-end">
+            <div class="buttons" style="padding: 10px; display: flex; justify-content: flex-end; color: grey;">
               <span id="${servbtnid}-chat" class="search-prod-btn" style="display: none; padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">
                 <svg style="transform: translateY(2px);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
