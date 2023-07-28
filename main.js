@@ -9,7 +9,6 @@ async function farmadocInit(el) {
   let lastDomanda = false;
   let uid;
   let inventoryLoaded = false;
-  let tempServData = {}
 
   let result = await fetch(
     "https://source.farmadoc.it/.netlify/functions/checkIn?key=" + el,
@@ -29,6 +28,7 @@ async function farmadocInit(el) {
   });
 
   console.log(result)
+  let ServData = result.serv.cur
   uid = result.uid['@ref'].id;
   console.log(uid)
 
@@ -104,6 +104,7 @@ async function farmadocInit(el) {
   let chatid = btoa(Math.random().toString()).substring(10, 20);
   let sendid = btoa(Math.random().toString()).substring(10, 20);
   let msgid = btoa(Math.random().toString()).substring(10, 20);
+  let servbtnid = btoa(Math.random().toString()).substring(10, 20);
   let width = screen.width < 960 ? "calc(100% - 20px)" : "500px";
 
   let modal = `
@@ -120,6 +121,7 @@ async function farmadocInit(el) {
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
             <div class="buttons" style="padding: 10px; display: flex; justify-content: flex-end">
               <span id="btn-prod" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
+              <span id="${servbtnid}" class="search-prod-btn" style="padding: 5px 10px; border: solid 1px #cecece; cursor: pointer; border-radius: 10px; margin-left: 20px;">Ricerca prodotti</span>
             </div>
             <hr style="all: unset; border-top: 1px solid grey; display: block;">
             <div id="${contentid}-prod" style="display: none">
@@ -137,6 +139,9 @@ async function farmadocInit(el) {
               <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
                 <input id="${msgid}-prod" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
               </div>
+            </div>
+            <div id="${contentid}-serv" style="display: none">
+                <div>lmao!</div>
             </div>
             <div id="${contentid}">
               <div style="all: unset; width: 100%">
@@ -614,8 +619,22 @@ async function farmadocInit(el) {
   };
 
   let isSearchProd = false;
+  let isServ = false
 
   if (result.authorised) {
+    document.getElementById(servbtnid).addEventListener("click", function () {
+      if (isServ === false) {
+        isServ = true
+        this.innerText = 'Chat';
+        document.getElementById(`${contentid}-serv`).style.display = 'block';
+        document.getElementById(`${contentid}`).style.display = 'none';
+      }else{
+        isServ = false;
+        this.innerText = 'Servizi';
+        document.getElementById(`${contentid}-serv`).style.display = 'none';
+        document.getElementById(`${contentid}`).style.display = 'block';
+      }
+    })
     document.getElementById("btn-prod").addEventListener("click", function () {
       if (isSearchProd === false) {
         if (inventoryLoaded === false) {
