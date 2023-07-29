@@ -114,7 +114,7 @@ async function farmadocInit(el) {
     const phoneNumbers = cont.match(phoneNumberRegex);
     console.log(phoneNumbers)
     phoneNumbers.forEach(el=>{
-      servres.replace(el,"<a href='tel:"+el+">"+el+"</a>")
+      servres = servres.replace(el,"<a href='tel:"+el+">"+el+"</a>")
     })
     servres = servres.replace(/\n/g, "<br>")
     return(servres)
