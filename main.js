@@ -110,12 +110,14 @@ async function farmadocInit(el) {
   function parseserv(cont){
     console.log(cont)
     let servres = cont
-    const phoneNumberRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+    const phoneNumberRegex = /\b\d{8,15}\b/g
     const phoneNumbers = cont.match(phoneNumberRegex);
     console.log(phoneNumbers)
-    phoneNumbers.forEach(el=>{
-      servres = servres.replace(el,"<a href='tel:"+el+"'>"+el+"</a>")
-    })
+    if(phoneNumbers){
+      phoneNumbers.forEach(el=>{
+        servres = servres.replace(el,"<a href='tel:"+el+"'>"+el+"</a>")
+      })
+    }
     servres = servres.replace(/\n/g, "<br>")
     return(servres)
   }
