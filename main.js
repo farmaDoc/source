@@ -107,21 +107,6 @@ async function farmadocInit(el) {
   let servbtnid = btoa(Math.random().toString()).substring(10, 20);
   let width = screen.width < 960 ? "calc(100% - 20px)" : "500px";
 
-  function parseserv(cont){
-    console.log(cont)
-    let servres = cont
-    const phoneNumberRegex = /\b\d{8,15}\b/g
-    const phoneNumbers = cont.match(phoneNumberRegex);
-    console.log(phoneNumbers)
-    if(phoneNumbers){
-      phoneNumbers.forEach(el=>{
-        servres = servres.replace(el,"<a href='tel:"+el+"'>"+el+"</a>")
-      })
-    }
-    servres = servres.replace(/\n/g, "<br>")
-    return(servres)
-  }
-
   let modal = `
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
           <div style="all: unset; width: 100%">
@@ -177,7 +162,7 @@ async function farmadocInit(el) {
                 <div style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
                   <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
                     <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">  
-                      ${parseserv(ServData)}
+                      ${ServData}
                     </span>
                   </div>
                 </div>
