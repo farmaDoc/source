@@ -107,7 +107,7 @@ async function farmadocInit(el) {
   let servbtnid = btoa(Math.random().toString()).substring(10, 20);
   let width = screen.width < 960 ? "calc(100% - 20px)" : "500px";
 
-  function parseserv(cont){
+  /* function parseserv(cont){
     console.log(cont)
     result = cont
     const phoneNumberRegex = /(\+\d{1,2}\s?)?(\(?\d{1,}\)?[\s-]?)?\d{1,}[\s-]?\d{1,}[\s-]?\d{1,}/g;
@@ -117,7 +117,7 @@ async function farmadocInit(el) {
     })
     result = result.replace(/\n/g, "<br>")
     return(result)
-  }
+  } */
 
   let modal = `
         <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
