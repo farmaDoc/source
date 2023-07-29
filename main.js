@@ -109,6 +109,7 @@ async function farmadocInit(el) {
 
   function parseserv(cont){
     console.log(cont)
+    return(cont.replace("\n","<br>"))
   }
 
   let modal = `
