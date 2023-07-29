@@ -112,6 +112,7 @@ async function farmadocInit(el) {
     let servres = cont
     const phoneNumberRegex = /(\+\d{1,2}\s?)?(\(?\d{1,}\)?[\s-]?)?\d{1,}[\s-]?\d{1,}[\s-]?\d{1,}/g;
     const phoneNumbers = cont.match(phoneNumberRegex);
+    console.log(phoneNumbers)
     phoneNumbers.forEach(el=>{
       servres.replace(el,"<a href='tel:"+el+">"+el+"</a>")
     })
