@@ -28,7 +28,7 @@ async function farmadocInit(el) {
   });
 
   console.log(result)
-  let ServData = result.res.serv.cur
+  let ServData = result.res.serv
   uid = result.uid['@ref'].id;
   console.log(uid)
 
@@ -166,7 +166,7 @@ async function farmadocInit(el) {
                 <div style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
                   <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
                     <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">  
-                      ${parseserv(ServData.text)}
+                      ${parseserv(ServData)}
                     </span>
                   </div>
                 </div>
