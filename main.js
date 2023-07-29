@@ -107,8 +107,8 @@ async function farmadocInit(el) {
   let servbtnid = btoa(Math.random().toString()).substring(10, 20);
   let width = screen.width < 960 ? "calc(100% - 20px)" : "500px";
 
-  function date(date){
-    return new Date(date).toLocaleDateString('it-IT',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+  function parseserv(cont){
+    console.log(cont)
   }
 
   let modal = `
@@ -166,10 +166,7 @@ async function farmadocInit(el) {
                 <div style="height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
                   <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
                     <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">  
-                      ${ServData.text}
-                    </span>
-                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">  
-                      Il servizio sarà disponibile da ${date(ServData.start)} a ${date(ServData.end)}
+                      ${parseserv(ServData.text)}
                     </span>
                   </div>
                 </div>
