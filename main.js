@@ -612,6 +612,7 @@ async function farmadocInit(el) {
   };
 
   const addRes = (messaggio, status, color) => {
+    console.log("RES!!!!")
     let colorBar;
     if (color) {
       colorBar = `<span class="color-bar" style="background-color:${color}; width: 10px; min-width: 10px; height: 10px; margin-right: 10px; border: solid 1px #fff; border-radius: 50%; display: block;"></span>`;
