@@ -453,7 +453,7 @@ async function farmadocInit(el) {
         
 /*         console.log(rimedioFound.prodTrov)
  */
-        /* console.log(currisp) */
+        console.log(rimedioFound.prodTrov)
         sendStat(rimedioFound.prodTrov,currisp,uid)
         if (rimedioFound !== {}) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
