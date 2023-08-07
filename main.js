@@ -441,6 +441,7 @@ async function farmadocInit(el) {
       }
 
       const checkRimedioDiram = () => {
+        console.log(rimedi)
         rimediSimple = rimedi.map(x => ({ remFor: x.for.toString(), prodotto: x.res, note: x.note }));
         rimedioTrovato = rimediSimple.filter((x) => x.remFor === risposteBranch.toString());
 
