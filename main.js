@@ -371,6 +371,19 @@ async function farmadocInit(el) {
     }
   };
 
+  async function sendStat(drugid,intid){
+    await fetch(
+      "https://source.farmadoc.it/.netlify/functions/sendStats?farma=" + drugid + "&int=" + intid,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+    )
+  }
+
   async function getDrugsInfo(id) {
     const respo = await fetch(
       "https://source.farmadoc.it/.netlify/functions/getDrugs?id=" + id,
@@ -435,8 +448,11 @@ async function farmadocInit(el) {
         if (rimedioTrovato.length) {
           rimedioFound = { prodTrov: rimedioTrovato[0].prodotto, rispNota: rimedioTrovato[0].note };
         }
-        console.log(rimedioFound)
-
+        
+/*         console.log(rimedioFound.prodTrov)
+ */
+        console.log(rimedioTrovato)
+        sendStat(rimedioFound.prodTrov)
         if (rimedioFound !== {}) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
             getDrugsInfo(rimedioFound.prodTrov).then((respDrug) => {
