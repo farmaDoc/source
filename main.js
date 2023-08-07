@@ -3,6 +3,7 @@ async function farmadocInit(el) {
   let opzioni = [];
   let domandaBranch;
   let rimedi = [];
+  let currisp = ""
   let tempDiramsData = [];
   let diramCount = 0;
   let risposteBranch = [];
@@ -441,7 +442,7 @@ async function farmadocInit(el) {
       }
 
       const checkRimedioDiram = () => {
-        console.log(rimedi)
+        
         rimediSimple = rimedi.map(x => ({ remFor: x.for.toString(), prodotto: x.res, note: x.note }));
         rimedioTrovato = rimediSimple.filter((x) => x.remFor === risposteBranch.toString());
 
@@ -453,7 +454,7 @@ async function farmadocInit(el) {
         
 /*         console.log(rimedioFound.prodTrov)
  */
-        console.log(rimedioTrovato)
+        console.log(currisp)
         sendStat(rimedioFound.prodTrov,uid)
         if (rimedioFound !== {}) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
@@ -516,6 +517,7 @@ async function farmadocInit(el) {
     getMsg().then((input) => {
       detectIntent(input, intents)
         .then((res) => {
+          currisp = res.ref["@ref"].id
           rimedi = res?.data?.rems;
           tempDiramsData = res?.data?.dirams;
 
