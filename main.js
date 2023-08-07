@@ -30,7 +30,7 @@ async function farmadocInit(el) {
   console.log(result)
   let ServData = result.res.serv
   uid = result.uid['@ref'].id;
-  console.log(uid)
+  /* console.log(uid) */
 
   let usrIntents = await fetch(
     "https://source.farmadoc.it/.netlify/functions/getIntents?createdBy=" +
@@ -51,7 +51,7 @@ async function farmadocInit(el) {
     });
 
   usrIntents = usrIntents.res;
-  console.log("USR INTENTS ", usrIntents);
+  /* console.log("USR INTENTS ", usrIntents); */
 
   let sysIntents = await fetch(
     "https://source.farmadoc.it/.netlify/functions/getIntents?createdBy=system",
@@ -92,11 +92,11 @@ async function farmadocInit(el) {
   }
 
   sysIntents = sysIntents.res;
-  console.log("SYS INTENTS ", sysIntents);
+  /* console.log("SYS INTENTS ", sysIntents); */
 
   let intents = sysIntents.concat(usrIntents);
-  console.log("GLOBAL INTENTS", intents);
-  console.log("GLOBAL INTENTS length ", intents.length);
+  /* console.log("GLOBAL INTENTS", intents);
+  console.log("GLOBAL INTENTS length ", intents.length); */
 
   let minimizeid = btoa(Math.random().toString()).substring(10, 20);
   let contentid = btoa(Math.random().toString()).substring(10, 20);
@@ -372,7 +372,8 @@ async function farmadocInit(el) {
   };
 
   async function sendStat(drugid,intid){
-    await fetch(
+    return
+    /* await fetch(
       "https://source.farmadoc.it/.netlify/functions/sendStats?farma=" + drugid + "&int=" + intid,
       {
         method: "GET",
@@ -381,7 +382,7 @@ async function farmadocInit(el) {
           "Content-Type": "application/json",
         }
       }
-    )
+    ) */
   }
 
   async function getDrugsInfo(id) {
@@ -452,7 +453,7 @@ async function farmadocInit(el) {
 /*         console.log(rimedioFound.prodTrov)
  */
         console.log(rimedioTrovato)
-        sendStat(rimedioFound.prodTrov)
+        sendStat(rimedioFound.prodTrov,uid)
         if (rimedioFound !== {}) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
             getDrugsInfo(rimedioFound.prodTrov).then((respDrug) => {
@@ -460,7 +461,7 @@ async function farmadocInit(el) {
                 msg: calculateQty(respDrug?.remedy?.qty).msg,
                 color: calculateQty(respDrug?.remedy?.qty).status,
               };
-              console.log(respDrug)
+              /* console.log(respDrug) */
               addRes(
                 `Il farmaco suggerito in questo caso è ${respDrug?.remedy?.name}`,
                 true,
@@ -602,8 +603,8 @@ async function farmadocInit(el) {
   // ********************************* //
 
   const chatResponder = (msg) => {
-    console.log(intents);
-    console.log("MESSAGGIO INSERITO: " + msg);
+    /* console.log(intents);
+    console.log("MESSAGGIO INSERITO: " + msg); */
 
     let newdoc = {
       msg,
@@ -630,7 +631,6 @@ async function farmadocInit(el) {
   };
 
   const addRes = (messaggio, status, color) => {
-    console.log("RES!!!!")
     let colorBar;
     if (color) {
       colorBar = `<span class="color-bar" style="background-color:${color}; width: 10px; min-width: 10px; height: 10px; margin-right: 10px; border: solid 1px #fff; border-radius: 50%; display: block;"></span>`;
@@ -778,7 +778,7 @@ async function farmadocInit(el) {
         listaProd.innerHTML = '';
       } else if (typeof drugIndex !== 'undefined' && searchValue !== '' && searchValue.length > 1) {
         drugFound = findValue(drugIndex, searchValue);
-        console.log(drugFound)
+        /* console.log(drugFound) */
 
         if (drugFound.length !== 0) {
           let names = drugFound.map(x => {
