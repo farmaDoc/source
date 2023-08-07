@@ -28,7 +28,7 @@ async function farmadocInit(el) {
     console.log(error);
   });
 
-  console.log(result)
+  /* console.log(result) */
   let ServData = result.res.serv
   uid = result.uid['@ref'].id;
   /* console.log(uid) */
@@ -453,7 +453,7 @@ async function farmadocInit(el) {
         
 /*         console.log(rimedioFound.prodTrov)
  */
-        console.log(currisp)
+        /* console.log(currisp) */
         sendStat(rimedioFound.prodTrov,currisp,uid)
         if (rimedioFound !== {}) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
