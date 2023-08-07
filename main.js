@@ -438,6 +438,7 @@ async function farmadocInit(el) {
 
         if (rimedioFound !== {}) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
+            console.group(rimedioFound)
             getDrugsInfo(rimedioFound.prodTrov).then((respDrug) => {
               let qtyBar = {
                 msg: calculateQty(respDrug?.remedy?.qty).msg,
