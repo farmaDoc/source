@@ -443,6 +443,7 @@ async function farmadocInit(el) {
                 msg: calculateQty(respDrug?.remedy?.qty).msg,
                 color: calculateQty(respDrug?.remedy?.qty).status,
               };
+              console.log(respDrug)
               addRes(
                 `Il farmaco suggerito in questo caso è ${respDrug?.remedy?.name}`,
                 true,
