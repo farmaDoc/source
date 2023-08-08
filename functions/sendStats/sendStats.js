@@ -11,46 +11,59 @@ exports.handler = async (event, context) => {
     let int = event.queryStringParameters.int
     let now = new Date()
 
-    const updateQuery = q.Let(
-        {
-            docRef: q.Ref(q.Collection("drugs"), farma),
-            document: q.Get(q.Var("docRef")),
-            myArray: q.Select(["data", "reqs"], q.Var("document")),
-        },
-        
-        q.Do(
-            q.If(
-                q.IsNull(q.Var("myArray")),
-                q.Update(q.Var("docRef"), {
+    return client.query(
+        q.Get(q.Ref(q.Collection('drugs'), farma))
+    ).then(res=>{
+        console.log(res)
+        if(res.data.reqs){
+            return client.query(
+                q.Update(q.Ref(q.Collection('drugs'), farma), {
                     data: {
-                    my_array: q.Append(q.Var("myArray"), [{
-                        ts: now,
-                        intent: int
-                    }]),
-                    },
-                }),
-                q.Update(q.Var("docRef"), {
-                    data: {
-                    reqs: [{
-                        ts: now,
-                        intent: int
-                    }],
-                    },
+                        reqs: q.Append(
+                            {
+                                ts: now,
+                                intent: int
+                            },
+                            q.Select(
+                                ["data", "reqs"],
+                                q.Get(q.Ref(q.Collection('drugs'), farma))
+                            )
+                        )
+                    }
                 })
-            )
-        )
-        
-      );
-    
-    return client.query(updateQuery).then(res => {
-        return{
-            statusCode: 200,
-            headers: {
-				'Access-Control-Allow-Origin': "*",
-				'Access-Control-Allow-Headers': "Content-Type",
-				'Content-Type': 'application/json'
-			},
-            body: "Success"
+            ).then(()=>{
+                return{
+                    statusCode: 200,
+                    headers: {
+                        'Access-Control-Allow-Origin': "*",
+                        'Access-Control-Allow-Headers': "Content-Type",
+                        'Content-Type': 'application/json'
+                    },
+                    body: "Success"
+                }
+            })
+        }else{
+            return client.query(
+                q.Update(q.Ref(q.Collection('drugs'), farma), {
+                    data: {
+                        reqs: [{
+                            ts: now,
+                            intent: int
+                        }]
+                    }
+                })
+            ).then(()=>{
+                return{
+                    statusCode: 200,
+                    headers: {
+                        'Access-Control-Allow-Origin': "*",
+                        'Access-Control-Allow-Headers': "Content-Type",
+                        'Content-Type': 'application/json'
+                    },
+                    body: "Success"
+                }
+            })
         }
     })
+
 }
