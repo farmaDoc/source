@@ -19,7 +19,6 @@ exports.handler = async (event, context) => {
         },
         
         q.Do(
-            q.Console("myArray:", q.Var("myArray")),
             q.If(
                 q.IsNull(q.Var("myArray")),
                 q.Update(q.Var("docRef"), {
