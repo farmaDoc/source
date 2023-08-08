@@ -29,7 +29,7 @@ exports.handler = async (event, context) => {
           }),
           q.Update(q.Var("docRef"), {
             data: {
-              req: [{
+              reqs: [{
                 ts: now,
                 intent: int
             }],
