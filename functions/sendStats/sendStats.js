@@ -17,6 +17,7 @@ exports.handler = async (event, context) => {
           document: q.Get(q.Var("docRef")),
           myArray: q.Select(["data", "reqs"], q.Var("document")),
         },
+        q.Console("myArray:", q.Var("myArray")),
         q.If(
           q.IsArray(q.Var("myArray")),
           q.Update(q.Var("docRef"), {
