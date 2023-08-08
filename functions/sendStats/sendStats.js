@@ -9,7 +9,7 @@ const client = new faunadb.Client({
 exports.handler = async (event, context) => {
     let farma = event.queryStringParameters.farma
     let int = event.queryStringParameters.int
-    let now = new Date()
+    let now = new Date().getTime()
 
     return client.query(
         q.Get(q.Ref(q.Collection('drugs'), farma))
