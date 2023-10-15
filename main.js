@@ -11,8 +11,8 @@ async function farmadocInit(el) {
   let uid;
   let inventoryLoaded = false;
 
-  //let urlServer = https://source.farmadoc.it/
-  let urlServer = "http://localhost:8888/";
+  let urlServer = "https://source.farmadoc.it/"
+  // let urlServer = "http://localhost:8888/";
 
   let result = await fetch(
     urlServer + ".netlify/functions/checkIn?key=" + el,
@@ -438,17 +438,19 @@ async function farmadocInit(el) {
   document.addEventListener("click", function (e) {
     const indietro = e.target.closest(".btnIndietro");
     if (indietro) {
-      console.log('indietro')
-      count = diramCount - 1;
-      document.getElementById(`pulsanti-${count}`).remove();
-      document.getElementById(`domanda-${count}`).remove();
-      document.getElementById(`indietro-${count}`).remove();
-      risposteBranch.pop();
-      
-      let padre = document.getElementById(`pulsanti-${count - 1 }`)
+      document.getElementById(`pulsanti-${diramCount - 1}`).remove();
+      document.getElementById(`domanda-${diramCount - 1}`).remove();
+      document.getElementById(`indietro-${diramCount - 1}`).remove();
+
+      let padre = document.getElementById(`pulsanti-${diramCount === 1 ? 0 : diramCount - 2}`)
       for (const child of padre.children) {
         child.disabled = false;
       };
+
+      risposteBranch.pop();
+      domandaBranch = tempDiramsData[diramCount - 1]?.domanda;
+      diramCount--
+      lastDomanda = false;
     }
 
     const target = e.target.closest(".pulsanteDiram");
@@ -458,9 +460,7 @@ async function farmadocInit(el) {
         child.disabled = true;
       }
 
-
       const checkRimedioDiram = () => {
-
         rimediSimple = rimedi.map(x => ({ remFor: x.for.toString(), prodotto: x.res, note: x.note }));
         rimedioTrovato = rimediSimple.filter((x) => x.remFor === risposteBranch.toString());
 
@@ -468,12 +468,9 @@ async function farmadocInit(el) {
 
         if (rimedioTrovato.length) {
           rimedioFound = { prodTrov: rimedioTrovato[0].prodotto, rispNota: rimedioTrovato[0].note };
+          sendStat(rimedioFound.prodTrov, currisp, uid)
         }
 
-        /*         console.log(rimedioFound.prodTrov)
-         */
-        console.log(rimedioFound.prodTrov)
-        sendStat(rimedioFound.prodTrov, currisp, uid)
         if (Object.keys(rimedioFound).length !== 0) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
             getDrugsInfo(rimedioFound.prodTrov).then((respDrug) => {
@@ -505,6 +502,10 @@ async function farmadocInit(el) {
           domandaBranch = "";
           diramCount = 0;
           document.getElementById(msgid).disabled = false;
+          let btnIndietro = document.getElementsByClassName(`btnIndietro`)
+          if (btnIndietro.length) {
+            btnIndietro[0].remove();
+          }
         }
       };
 
@@ -518,6 +519,10 @@ async function farmadocInit(el) {
       if (domandaBranch === undefined) {
         checkRimedioDiram();
       } else {
+        let btnIndietro = document.getElementsByClassName(`btnIndietro`)
+        if (btnIndietro.length) {
+          btnIndietro[0].remove();
+        }
         printDomanda(domandaBranch);
         diramCount++;
         domandaBranch = tempDiramsData[diramCount]?.domanda;
@@ -673,21 +678,27 @@ async function farmadocInit(el) {
       return `<button class="pulsanteDiram" data-value="${x}" style="cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${x}</button>`;
     }).join(' ');
 
+    let indietro = `
+    <div id="indietro-${diramCount}" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row;">
+      <span class="btnIndietro" data-value="indietro" style="cursor: pointer; font-size: 10px; margin-top: 15px;">
+        torna indietro
+        <svg style="height: 10px; width: 10px; fill: gray;" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318 145.6c-3.812 8.75-12.45 14.41-22 14.41L224 160v272c0 44.13-35.89 80-80 80H32c-17.67 0-32-14.31-32-32s14.33-32 32-32h112C152.8 448 160 440.8 160 432V160L88 159.1c-9.547 0-18.19-5.656-22-14.41S63.92 126.7 70.41 119.7l104-112c9.498-10.23 25.69-10.23 35.19 0l104 112C320.1 126.7 321.8 136.8 318 145.6z"/></svg>
+      </span>
+    </div>
+    `
     let question = `
       <div id="domanda-${diramCount}" style="all: unset; display: block; text-align: left; width: 100%; position: relative; box-sizing: border-box; margin-top: 10px">
         <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
           ${domanda}
         </span>
       </div>
-      `;
-    let indietro = `
-      <div id="indietro-${diramCount}" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row;">
-        <button class="btnIndietro" data-value="indietro" style="cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">Torna indietro</button>
-      </div>
-    `
+    `;
+
     let pulsanti = `
       ${diramCount !== 0 ? indietro : ''}
-      <div id="pulsanti-${diramCount}" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row;">${printOpzioni}</div>
+      <div id="pulsanti-${diramCount}" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row;">
+        ${printOpzioni}
+      </div>
     `;
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", question);
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", pulsanti);
