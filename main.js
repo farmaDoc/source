@@ -10,7 +10,7 @@ async function farmadocInit(el) {
   let lastDomanda = false;
   let uid;
   let inventoryLoaded = false;
-
+  
   let urlServer = "https://source.farmadoc.it/"
   // let urlServer = "http://localhost:8888/";
 
@@ -31,10 +31,11 @@ async function farmadocInit(el) {
       console.log(error);
     });
 
-  /* console.log(result) */
   let ServData = result?.res?.serv
-  uid = result.uid['@ref'].id;
-  /* console.log(uid) */
+  uid = result?.uid['@ref']?.id;
+
+  let userMail = result?.res?.clientContact;
+  let userPhone = result?.res?.phoneContact;
 
   let usrIntents = await fetch(
     urlServer + ".netlify/functions/getIntents?createdBy=" +
@@ -607,7 +608,12 @@ async function farmadocInit(el) {
             if (sessionData.confusionStage > 3) {
               sessionData.confusionStage = 0;
               addRes(
-                "Purtroppo sto avendo difficoltà a capire le tue domande, se il problema persiste ti consiglio di lasciare un feedback a info@farmadoc.it",
+                `<span>
+                  <span>Purtroppo sto avendo difficoltà a capire le tue domande, se il problema persiste ti consiglio di lasciare un feedback a</span>
+                  <a href="mailto:${userMail}" target="_blank">${userMail}</a>
+                  <span>oppure contattandoci su watsapp al</span>
+                  <a href="https://wa.me/${userPhone}" target="_blank">${userPhone}</a>
+                </span>`,
                 false
               );
             } else {
