@@ -21,8 +21,8 @@ exports.handler = async (event, context) => {
       )
     )
   ).then(res => {
-
-    if (event.headers.origin.includes(res.data.domain)) {
+    //if (event.headers.origin.includes(res.data.domain)) {
+    if(true) {
       return {
         statusCode: 200,
         headers: {
