@@ -10,7 +10,7 @@ async function farmadocInit(el) {
   let lastDomanda = false;
   let uid;
   let inventoryLoaded = false;
-  
+
   let urlServer = "https://source.farmadoc.it/"
   // let urlServer = "http://localhost:8888/";
 
@@ -579,19 +579,41 @@ async function farmadocInit(el) {
                   color: calculateQty(respDrug?.remedy?.qty).status,
                 };
                 addRes(
-                  `Il farmaco suggerito in questo caso è ${respDrug?.remedy?.name}`,
+                  `<span>Il farmaco suggerito in questo caso è:<br/><strong>${respDrug?.remedy?.name}</strong><br/>${qtyBar.msg}</span>`,
                   true,
-                  null
+                  qtyBar.color
                 );
-                addRes(qtyBar.msg, true, qtyBar.color);
               });
             } else {
               return "Purtroppo non ho un rimedio da consigliare :(";
             }
           };
 
+          const printRimediMulti = () => {
+            addRes(
+              `I farmaci suggeriti in questo caso sono:`,
+              true,
+              null
+            );
+            rimedi.map((x) => {
+              getDrugsInfo(x).then((respDrug) => {
+                let qtyBar = {
+                  msg: calculateQty(respDrug?.remedy?.qty).msg,
+                  color: calculateQty(respDrug?.remedy?.qty).status,
+                };
+                addRes(
+                  `${respDrug?.remedy?.name}<br/>${qtyBar.msg}`,
+                  true,
+                  qtyBar.color
+                );
+              });
+            })
+          }
+
           if (rimedi.length <= 1) {
             printRimedio();
+          } else {
+            printRimediMulti();
           }
           ask(defaultIntents);
         })
