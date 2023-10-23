@@ -12,7 +12,7 @@ async function farmadocInit(el) {
   let inventoryLoaded = false;
 
   let urlServer = "https://source.farmadoc.it/"
-  // let urlServer = "http://localhost:8888/";
+  //let urlServer = "http://localhost:8888/";
 
   let result = await fetch(
     urlServer + ".netlify/functions/checkIn?key=" + el,
@@ -34,7 +34,7 @@ async function farmadocInit(el) {
   let ServData = result?.res?.serv
   uid = result?.uid['@ref']?.id;
 
-  let userMail = result?.res?.clientContact;
+  let userMail = result?.res?.persMailContact;
   let userPhone = result?.res?.phoneContact;
 
   let usrIntents = await fetch(
@@ -613,7 +613,9 @@ async function farmadocInit(el) {
           if (rimedi.length <= 1) {
             printRimedio();
           } else {
-            printRimediMulti();
+            if (tempDiramsData.length <= 0) {
+              printRimediMulti();
+            }
           }
           ask(defaultIntents);
         })
