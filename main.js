@@ -12,7 +12,7 @@ async function farmadocInit(el) {
   let inventoryLoaded = false;
 
   let urlServer = "https://source.farmadoc.it/"
-  //let urlServer = "http://localhost:8888/";
+  // let urlServer = "http://localhost:8888/";
 
   let result = await fetch(
     urlServer + ".netlify/functions/checkIn?key=" + el,
@@ -422,12 +422,12 @@ async function farmadocInit(el) {
         color: calculateQty(respDrug?.remedy?.qty).status,
       };
       addResProd(
-        `Il farmaco trovato è ${respDrug?.remedy?.name}`,
+        `Il prodotto trovato è ${respDrug?.remedy?.name}`,
         null
       );
       if (respDrug?.remedy?.promo) {
         addResProd(
-          `In promozione: ${respDrug?.remedy?.promodetail}`
+          `${respDrug?.remedy?.promodetail}`
         )
       }
       addResProd(qtyBar.msg, qtyBar.color);
@@ -481,13 +481,13 @@ async function farmadocInit(el) {
               };
               /* console.log(respDrug) */
               addRes(
-                `Il farmaco suggerito in questo caso è ${respDrug?.remedy?.name}`,
+                `Il prodotto suggerito in questo caso è ${respDrug?.remedy?.name}`,
                 true,
                 null
               );
               if (respDrug?.remedy?.promo) {
                 addRes(
-                  `In promozione: ${respDrug?.remedy?.promodetail}`, true, null
+                  `${respDrug?.remedy?.promodetail}`, true, null
                 );
               }
               addRes(qtyBar.msg, true, qtyBar.color);
@@ -579,10 +579,15 @@ async function farmadocInit(el) {
                   color: calculateQty(respDrug?.remedy?.qty).status,
                 };
                 addRes(
-                  `<span>Il farmaco suggerito in questo caso è:<br/><strong>${respDrug?.remedy?.name}</strong><br/>${qtyBar.msg}</span>`,
+                  `<span>Il prodotto suggerito in questo caso è<br/><strong>${respDrug?.remedy?.name}</strong><br/>${qtyBar.msg}</span>`,
                   true,
                   qtyBar.color
                 );
+                if (respDrug?.remedy?.promo) {
+                  addRes(
+                    `${respDrug?.remedy?.promodetail}`
+                  )
+                }
               });
             } else {
               return "Purtroppo non ho un rimedio da consigliare :(";
@@ -591,7 +596,7 @@ async function farmadocInit(el) {
 
           const printRimediMulti = () => {
             addRes(
-              `I farmaci suggeriti in questo caso sono:`,
+              `I prodotti suggeriti in questo caso sono:`,
               true,
               null
             );
@@ -602,7 +607,10 @@ async function farmadocInit(el) {
                   color: calculateQty(respDrug?.remedy?.qty).status,
                 };
                 addRes(
-                  `${respDrug?.remedy?.name}<br/>${qtyBar.msg}`,
+                  `<span>
+                    <strong>${respDrug?.remedy?.name}</strong><br/>${qtyBar.msg}
+                    ${respDrug?.remedy?.promo ? '<br />' + respDrug?.remedy?.promodetail : ''}
+                  </span>`,
                   true,
                   qtyBar.color
                 );
