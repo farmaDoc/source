@@ -22,15 +22,8 @@ exports.handler = async (event, context) => {
     )
   ).then(res => {
 
-    let doc = {
-      authorised: true, res: res.data, uid: res.ref
-    }
-
-    if(event.headers.origin.includes("farmadoc.it")){
-      doc["demo"] = true
-    }
-    
     if (event.headers.origin.includes(res.data.domain)) {
+    // if(true) {
       return {
         statusCode: 200,
         headers: {

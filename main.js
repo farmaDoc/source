@@ -11,8 +11,11 @@ async function farmadocInit(el) {
   let uid;
   let inventoryLoaded = false;
 
+  let urlServer = "https://source.farmadoc.it/"
+  // let urlServer = "http://localhost:8888/";
+
   let result = await fetch(
-    "https://source.farmadoc.it/.netlify/functions/checkIn?key=" + el,
+    urlServer + ".netlify/functions/checkIn?key=" + el,
     {
       method: "GET",
       mode: "cors",
@@ -21,20 +24,21 @@ async function farmadocInit(el) {
       },
     }
   )
-  .then((res) => {
-    return res.json();
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+    .then((res) => {
+      return res.json();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
-  /* console.log(result) */
-  let ServData = result.res.serv
-  uid = result.uid['@ref'].id;
-  /* console.log(uid) */
+  let ServData = result?.res?.serv
+  uid = result?.uid['@ref']?.id;
+
+  let userMail = result?.res?.persMailContact;
+  let userPhone = result?.res?.phoneContact;
 
   let usrIntents = await fetch(
-    "https://source.farmadoc.it/.netlify/functions/getIntents?createdBy=" +
+    urlServer + ".netlify/functions/getIntents?createdBy=" +
     result?.res?.id,
     {
       method: "GET",
@@ -55,7 +59,7 @@ async function farmadocInit(el) {
   /* console.log("USR INTENTS ", usrIntents); */
 
   let sysIntents = await fetch(
-    "https://source.farmadoc.it/.netlify/functions/getIntents?createdBy=system",
+    urlServer + ".netlify/functions/getIntents?createdBy=system",
     {
       method: "GET",
       mode: "cors",
@@ -73,7 +77,7 @@ async function farmadocInit(el) {
 
   async function getInventory() {
     const respo = await fetch(
-      "https://source.farmadoc.it/.netlify/functions/getInventory?uid=" + uid,
+      urlServer + ".netlify/functions/getInventory?uid=" + uid,
       {
         method: "GET",
         mode: "cors",
@@ -161,7 +165,7 @@ async function farmadocInit(el) {
               <div id="lista-prod" style="display: none; position: absolute; background-color: white; transform: translateX(-2px); width: 100%; bottom: 50px; z-index: 20; border: 2px solid #72E49A;"></div>
               <hr style="all: unset; border-top: 1px solid grey; display: block;">
               <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
-                <input id="${msgid}-prod" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
+                <input id="${msgid}-prod" placeholder='Digita il nome del prodotto che stai cercando' type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
               </div>
             </div>
             <div id="${contentid}-serv" style="display: none">
@@ -194,7 +198,7 @@ async function farmadocInit(el) {
               </div>
               <hr style="all: unset; border-top: 1px solid grey; display: block;">
               <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
-                <input id="${msgid}" placeholder="Digita qui" type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
+                <input id="${msgid}" placeholder='Digita il tuo sintomo es. "ho la tosse secca"' type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
                 <div id="${sendid}" style="all: unset; width: 50px; height: 50px; display: inline-block; min-width: 50px; background-color: #33e894; border-radius: 0 0 10px 0; border-left: 1px solid grey; display: flex; align-items: center; text-align: center; cursor: pointer;">
                   <svg style="all: unset; align-self: center; margin: auto;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-send" viewBox="0 0 16 16">
                     <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"></path>
@@ -208,7 +212,7 @@ async function farmadocInit(el) {
 
   document.body.insertAdjacentHTML("beforeend", modal);
   let toggle = false;
-  
+
   document.getElementById(minimizeid).addEventListener("click", function () {
     toggle ^= true;
     if (toggle == true) {
@@ -378,9 +382,9 @@ async function farmadocInit(el) {
     }
   };
 
-  async function sendStat(drugid,intid,uid){
+  async function sendStat(drugid, intid, uid) {
     await fetch(
-      "https://source.farmadoc.it/.netlify/functions/sendStats?farma=" + drugid + "&int=" + intid + "&uid=" + uid,
+      urlServer + ".netlify/functions/sendStats?farma=" + drugid + "&int=" + intid + "&uid=" + uid,
       {
         method: "GET",
         mode: "cors",
@@ -393,7 +397,7 @@ async function farmadocInit(el) {
 
   async function getDrugsInfo(id) {
     const respo = await fetch(
-      "https://source.farmadoc.it/.netlify/functions/getDrugs?id=" + id,
+      urlServer + ".netlify/functions/getDrugs?id=" + id,
       {
         method: "GET",
         mode: "cors",
@@ -424,12 +428,12 @@ async function farmadocInit(el) {
         color: calculateQty(respDrug?.remedy?.qty).status,
       };
       addResProd(
-        `Il farmaco trovato è ${respDrug?.remedy?.name}`,
+        `Il prodotto trovato è ${respDrug?.remedy?.name}`,
         null
       );
       if (respDrug?.remedy?.promo) {
         addResProd(
-          `In promozione: ${respDrug?.remedy?.promodetail}`
+          `${respDrug?.remedy?.promodetail}`
         )
       }
       addResProd(qtyBar.msg, qtyBar.color);
@@ -439,6 +443,23 @@ async function farmadocInit(el) {
   }
 
   document.addEventListener("click", function (e) {
+    const indietro = e.target.closest(".btnIndietro");
+    if (indietro) {
+      document.getElementById(`pulsanti-${diramCount - 1}`).remove();
+      document.getElementById(`domanda-${diramCount - 1}`).remove();
+      document.getElementById(`indietro-${diramCount - 1}`).remove();
+
+      let padre = document.getElementById(`pulsanti-${diramCount === 1 ? 0 : diramCount - 2}`)
+      for (const child of padre.children) {
+        child.disabled = false;
+      };
+
+      risposteBranch.pop();
+      domandaBranch = tempDiramsData[diramCount - 1]?.domanda;
+      diramCount--
+      lastDomanda = false;
+    }
+
     const target = e.target.closest(".pulsanteDiram");
     if (target) {
       let padre = target.parentElement;
@@ -447,7 +468,6 @@ async function farmadocInit(el) {
       }
 
       const checkRimedioDiram = () => {
-        
         rimediSimple = rimedi.map(x => ({ remFor: x.for.toString(), prodotto: x.res, note: x.note }));
         rimedioTrovato = rimediSimple.filter((x) => x.remFor === risposteBranch.toString());
 
@@ -455,13 +475,10 @@ async function farmadocInit(el) {
 
         if (rimedioTrovato.length) {
           rimedioFound = { prodTrov: rimedioTrovato[0].prodotto, rispNota: rimedioTrovato[0].note };
+          sendStat(rimedioFound.prodTrov, currisp, uid)
         }
-        
-/*         console.log(rimedioFound.prodTrov)
- */
-        console.log(rimedioFound.prodTrov)
-        sendStat(rimedioFound.prodTrov,currisp,uid)
-        if (rimedioFound !== {}) {
+
+        if (Object.keys(rimedioFound).length !== 0) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
             getDrugsInfo(rimedioFound.prodTrov).then((respDrug) => {
               let qtyBar = {
@@ -470,13 +487,13 @@ async function farmadocInit(el) {
               };
               /* console.log(respDrug) */
               addRes(
-                `Il farmaco suggerito in questo caso è ${respDrug?.remedy?.name}`,
+                `Il prodotto suggerito in questo caso è ${respDrug?.remedy?.name}`,
                 true,
                 null
               );
               if (respDrug?.remedy?.promo) {
                 addRes(
-                  `In promozione: ${respDrug?.remedy?.promodetail}`, true, null
+                  `${respDrug?.remedy?.promodetail}`, true, null
                 );
               }
               addRes(qtyBar.msg, true, qtyBar.color);
@@ -492,6 +509,10 @@ async function farmadocInit(el) {
           domandaBranch = "";
           diramCount = 0;
           document.getElementById(msgid).disabled = false;
+          let btnIndietro = document.getElementsByClassName(`btnIndietro`)
+          if (btnIndietro.length) {
+            btnIndietro[0].remove();
+          }
         }
       };
 
@@ -505,6 +526,10 @@ async function farmadocInit(el) {
       if (domandaBranch === undefined) {
         checkRimedioDiram();
       } else {
+        let btnIndietro = document.getElementsByClassName(`btnIndietro`)
+        if (btnIndietro.length) {
+          btnIndietro[0].remove();
+        }
         printDomanda(domandaBranch);
         diramCount++;
         domandaBranch = tempDiramsData[diramCount]?.domanda;
@@ -560,19 +585,51 @@ async function farmadocInit(el) {
                   color: calculateQty(respDrug?.remedy?.qty).status,
                 };
                 addRes(
-                  `Il farmaco suggerito in questo caso è ${respDrug?.remedy?.name}`,
+                  `<span>Il prodotto suggerito in questo caso è<br/><strong>${respDrug?.remedy?.name}</strong><br/>${qtyBar.msg}</span>`,
                   true,
-                  null
+                  qtyBar.color
                 );
-                addRes(qtyBar.msg, true, qtyBar.color);
+                if (respDrug?.remedy?.promo) {
+                  addRes(
+                    `${respDrug?.remedy?.promodetail}`
+                  )
+                }
               });
             } else {
               return "Purtroppo non ho un rimedio da consigliare :(";
             }
           };
 
+          const printRimediMulti = () => {
+            addRes(
+              `I prodotti suggeriti in questo caso sono:`,
+              true,
+              null
+            );
+            rimedi.map((x) => {
+              getDrugsInfo(x).then((respDrug) => {
+                let qtyBar = {
+                  msg: calculateQty(respDrug?.remedy?.qty).msg,
+                  color: calculateQty(respDrug?.remedy?.qty).status,
+                };
+                addRes(
+                  `<span>
+                    <strong>${respDrug?.remedy?.name}</strong><br/>${qtyBar.msg}
+                    ${respDrug?.remedy?.promo ? '<br />' + respDrug?.remedy?.promodetail : ''}
+                  </span>`,
+                  true,
+                  qtyBar.color
+                );
+              });
+            })
+          }
+
           if (rimedi.length <= 1) {
             printRimedio();
+          } else {
+            if (tempDiramsData.length <= 0) {
+              printRimediMulti();
+            }
           }
           ask(defaultIntents);
         })
@@ -589,7 +646,12 @@ async function farmadocInit(el) {
             if (sessionData.confusionStage > 3) {
               sessionData.confusionStage = 0;
               addRes(
-                "Purtroppo sto avendo difficoltà a capire le tue domande, se il problema persiste ti consiglio di lasciare un feedback a info@farmadoc.it",
+                `<span>
+                  <span>Purtroppo sto avendo difficoltà a capire le tue domande, se il problema persiste ti consiglio di lasciare un feedback a</span>
+                  <a href="mailto:${userMail}" target="_blank">${userMail}</a>
+                  <span>oppure contattandoci su watsapp al</span>
+                  <a href="https://wa.me/${userPhone}" target="_blank">${userPhone}</a>
+                </span>`,
                 false
               );
             } else {
@@ -660,15 +722,27 @@ async function farmadocInit(el) {
       return `<button class="pulsanteDiram" data-value="${x}" style="cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${x}</button>`;
     }).join(' ');
 
+    let indietro = `
+    <div id="indietro-${diramCount}" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row;">
+      <span class="btnIndietro" data-value="indietro" style="cursor: pointer; font-size: 10px; margin-top: 15px;">
+        torna indietro
+        <svg style="height: 10px; width: 10px; fill: gray;" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M318 145.6c-3.812 8.75-12.45 14.41-22 14.41L224 160v272c0 44.13-35.89 80-80 80H32c-17.67 0-32-14.31-32-32s14.33-32 32-32h112C152.8 448 160 440.8 160 432V160L88 159.1c-9.547 0-18.19-5.656-22-14.41S63.92 126.7 70.41 119.7l104-112c9.498-10.23 25.69-10.23 35.19 0l104 112C320.1 126.7 321.8 136.8 318 145.6z"/></svg>
+      </span>
+    </div>
+    `
     let question = `
-      <div style="all: unset; display: block; text-align: left; width: 100%; position: relative; box-sizing: border-box; margin-top: 10px">
+      <div id="domanda-${diramCount}" style="all: unset; display: block; text-align: left; width: 100%; position: relative; box-sizing: border-box; margin-top: 10px">
         <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
           ${domanda}
         </span>
       </div>
-      `;
+    `;
+
     let pulsanti = `
-      <div id="pulsanti" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row;">${printOpzioni}</div>
+      ${diramCount !== 0 ? indietro : ''}
+      <div id="pulsanti-${diramCount}" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row;">
+        ${printOpzioni}
+      </div>
     `;
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", question);
     document.getElementById(chatid).insertAdjacentHTML("afterbegin", pulsanti);
@@ -676,7 +750,7 @@ async function farmadocInit(el) {
 
 
   if (result.authorised) {
-    document.getElementById(servbtnid+"-chat").addEventListener("click", function () {
+    document.getElementById(servbtnid + "-chat").addEventListener("click", function () {
       document.getElementById(`${servbtnid}-chat`).style.display = 'none';
       document.getElementById(`${servbtnid}-serv`).style.display = 'block';
       document.getElementById(`${servbtnid}-prod`).style.display = 'block';
@@ -685,7 +759,7 @@ async function farmadocInit(el) {
       document.getElementById(`${contentid}-serv`).style.display = 'none';
       document.getElementById(`${contentid}-prod`).style.display = 'none';
     })
-    document.getElementById(servbtnid+"-serv").addEventListener("click", function () {
+    document.getElementById(servbtnid + "-serv").addEventListener("click", function () {
       document.getElementById(`${servbtnid}-chat`).style.display = 'block';
       document.getElementById(`${servbtnid}-serv`).style.display = 'none';
       document.getElementById(`${servbtnid}-prod`).style.display = 'none';
@@ -694,7 +768,7 @@ async function farmadocInit(el) {
       document.getElementById(`${contentid}-serv`).style.display = 'block';
       document.getElementById(`${contentid}-prod`).style.display = 'none';
     })
-    document.getElementById(servbtnid+"-prod").addEventListener("click", function () {
+    document.getElementById(servbtnid + "-prod").addEventListener("click", function () {
 
       if (inventoryLoaded === false) {
         getInventory();
