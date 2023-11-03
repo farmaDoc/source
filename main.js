@@ -114,6 +114,7 @@ async function farmadocInit(el) {
 
   let demo = ""
 
+  console.log(result)
   if(result.demo){
     demo = "Demo "
   }
