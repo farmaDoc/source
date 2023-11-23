@@ -113,14 +113,13 @@ async function farmadocInit(el) {
   let width = screen.width < 960 ? "calc(100% - 20px)" : "500px";
 
   let demo = ""
-
-  console.log(result)
+  
   if(result.demo){
     demo = "Demo "
   }
 
   let modal = `
-        <div style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
+        <div id="farmadocchat" style="all: unset; background-color: white; box-sizing: border-box; font-family: Arial; z-index: 100000; width: ${width}; position: fixed; bottom: 10px; right: 10px; border: 1px solid grey; border-radius: 10px">
           <div style="all: unset; width: 100%">
             <div style="width: calc(90% - 40px); padding: 20px; display: inline-block; box-sizing: border-box;">
               <img style="all: unset; width: 150px;" src="https://i.ibb.co/YB2tmYP/app-farmadoc-it-2-1.png" alt=""><span style="font-style: italic; color: grey;">${demo}Chat</span>
