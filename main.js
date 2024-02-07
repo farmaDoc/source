@@ -316,7 +316,7 @@ async function farmadocInit(el) {
             (item) => item.ref["@ref"].id == el.intent
           )
           if(matchDoc.data.createdBy == "system"){
-            objsort.splice(index,1)
+            objsort = objsort.splice(index,1)
           }
         })
         let topmatches = objsort.slice(0, 3);
