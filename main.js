@@ -331,6 +331,7 @@ async function farmadocInit(el) {
             let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row; margin-top: 15px;"></div>`
             document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
             topmatches.reverse()
+            let totbtns = 0
             topmatches.forEach((el,index)=>{
               let curD = intents.find(
                 (item) => item.ref["@ref"].id == el.intent
@@ -347,10 +348,14 @@ async function farmadocInit(el) {
               }
               let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
               if(curD.data.createdBy != "system"){
+                totbtns++
                 document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
                 document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
                   this.style.backgroundColor = "white";
                 });
+              }
+              if(totbtns == 0){
+                reject("no matches")
               }
               
             })
@@ -358,11 +363,16 @@ async function farmadocInit(el) {
               return new Promise(resolve => {
                 const waitforCoice = setInterval(() => {
                   topmatch.forEach(el=>{
-                    if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "white"){
-                      document.getElementById("buttonrowclear").remove()
-                      document.getElementById(chatid).getElementsByTagName('span')[0].remove()
-                      resolve(el.intent)
-                      clearInterval(waitforCoice)
+                    let curD = intents.find(
+                      (item) => item.ref["@ref"].id == el.intent
+                    )
+                    if(curD.data.createdBy != "system"){
+                      if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "white"){
+                        document.getElementById("buttonrowclear").remove()
+                        document.getElementById(chatid).getElementsByTagName('span')[0].remove()
+                        resolve(el.intent)
+                        clearInterval(waitforCoice)
+                      }
                     }
                   })
                 }, 250);
