@@ -12,7 +12,7 @@ async function farmadocInit(el) {
   let inventoryLoaded = false;
 
   let urlServer = "https://source.farmadoc.it/"
-  // let urlServer = "http://localhost:8888/";
+  /* let urlServer = "http://localhost:8888/"; */
 
   let result = await fetch(
     urlServer + ".netlify/functions/checkIn?key=" + el,
@@ -313,6 +313,7 @@ async function farmadocInit(el) {
 
         //get best match
         let vals = objres.map((a) => a.probability);
+        console.log(vals)
         let maxval = Math.max(...vals);
 
         //return best match

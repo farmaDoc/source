@@ -30,6 +30,8 @@ exports.handler = async (event, context) => {
       doc["demo"] = true
     }
 
+    console.log(doc)
+
     if (event.headers.origin.includes(res.data.domain)) {
     // if(true) {
       return {
