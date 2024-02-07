@@ -312,11 +312,13 @@ async function farmadocInit(el) {
 
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
+        console.log(maxval)
         if (maxval > 0.2) {
           if(maxval > 0.85){
             let matchDoc = intents.find(
               (item) => item.ref["@ref"].id == choseInt
             )
+            console.log(matchDoc)
             resolve(matchDoc);
           }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
