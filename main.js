@@ -330,9 +330,12 @@ async function farmadocInit(el) {
           return new Promise(resolve => {
             const waitforCoice = setInterval(() => {
               topmatch.forEach(el=>{
+                let curC = intents.find(
+                  (item) => item.ref["@ref"].id == el.intent
+                )
                 if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "white"){
                   document.getElementById("buttonrowclear").remove()
-                  document.getElementById(chatid).querySelector("div:last-child").remove()
+                  document.getElementById(chatid).querySelector('span:contains("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:"').innerText = `in base ai tuoi sintomi, potresti avere bisogno di assistenza per: ${curC.data.title}`
                   resolve(el.intent)
                   clearInterval(waitforCoice)
                 }
