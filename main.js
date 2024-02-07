@@ -354,12 +354,11 @@ async function farmadocInit(el) {
                   this.style.backgroundColor = "white";
                 });
               }
-              console.log(totbtns)
-              if(totbtns == 0){
-                reject("no matches")
-              }
-              
             })
+            console.log(totbtns)
+            if(totbtns == 0){
+              reject("no matches")
+            }
             function waitUntilIntervalCleared(topmatch) {
               return new Promise(resolve => {
                 const waitforCoice = setInterval(() => {
