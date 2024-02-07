@@ -310,16 +310,6 @@ async function farmadocInit(el) {
           objres.push(objdoc);
         });
 
-        let objsort = objres.sort((a, b) => b.probability - a.probability);
-        objsort.forEach((el,index)=>{
-          let matchDoc = intents.find(
-            (item) => item.ref["@ref"].id == el.intent
-          )
-          if(matchDoc.data.createdBy == "system"){
-            objsort = objsort.splice(index,1)
-          }
-        })
-
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
         if (maxval > 0.2) {
@@ -329,6 +319,15 @@ async function farmadocInit(el) {
             )
             resolve(matchDoc);
           }else{
+            let objsort = objres.sort((a, b) => b.probability - a.probability);
+            objsort.forEach((el,index)=>{
+              let matchDoc = intents.find(
+                (item) => item.ref["@ref"].id == el.intent
+              )
+              if(matchDoc.data.createdBy == "system"){
+                objsort = objsort.splice(index,1)
+              }
+            })
             let topmatches = objsort.slice(0, 3);
             addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
 
