@@ -10,7 +10,7 @@ async function farmadocInit(el) {
   let lastDomanda = false;
   let uid;
   let inventoryLoaded = false;
-  let chosenInt = ""
+  var chosenInt = ""
 
   let urlServer = "https://source.farmadoc.it/"
   /* let urlServer = "http://localhost:8888/"; */
