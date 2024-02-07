@@ -10,8 +10,6 @@ async function farmadocInit(el) {
   let lastDomanda = false;
   let uid;
   let inventoryLoaded = false;
-  var chosenInt = ""
-
   let urlServer = "https://source.farmadoc.it/"
   /* let urlServer = "http://localhost:8888/"; */
 
@@ -322,7 +320,66 @@ async function farmadocInit(el) {
             this.style.backgroundColor = "yellow";
           });
         })
-
+        function waitUntilIntervalCleared(topmatch) {
+          return new Promise(resolve => {
+            const waitforCoice = setInterval(() => {
+              topmatches.forEach(el=>{
+                if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor = "yellow"){
+                  resolve(el.intent)
+                  clearInterval(waitforCoice)
+                }
+              })
+            }, 100);
+          });
+        }
+        
+        waitUntilIntervalCleared(topmatches).then(choseInt=>{
+          let vals = objres.map((a) => a.probability);
+          let maxval = Math.max(...vals);
+          if (maxval > 0.6) {
+            let matchDoc = intents.find(
+              (item) => item.ref["@ref"].id == choseInt
+            )
+            resolve(matchDoc);
+          } else {
+            if (sessionData.lastOptions.length > 0) {
+              sessionData.lastOptions.forEach((branch, index) => {
+                branch.forEach((option, optionIndex) => {
+                  if (
+                    natural.PorterStemmerIt.stem(input.toLowerCase()).includes(
+                      natural.PorterStemmerIt.stem(option)
+                    )
+                  ) {
+                    let oldBranch = sessionData.lastBranch;
+                    oldBranch[index] = option;
+  
+                    remediesList = defaultIntents.find(
+                      (element) => element.id == sessionData.lastId
+                    ).remedies;
+                    remediesList.forEach((remedy) => {
+                      if (
+                        JSON.stringify(remedy.suitableFor.sort()) ==
+                        JSON.stringify(oldBranch.sort())
+                      ) {
+                        addRes(remedy.items, true);
+                        reject("ignore");
+                      }
+                    });
+                  } else {
+                    if (
+                      optionIndex == branch.length - 1 &&
+                      index == sessionData.lastOptions.length - 1
+                    ) {
+                      reject("no matches");
+                    }
+                  }
+                });
+              });
+            } else {
+              reject("no matches");
+            }
+          }
+        })
         //get best match
         /* console.log(objres)
         let vals = objres.map((a) => a.probability);
@@ -336,6 +393,7 @@ async function farmadocInit(el) {
           let matchDoc = intents.find(
             (item) => item.ref["@ref"].id == matchingId
           );
+          
           resolve(matchDoc);
         } else {
           if (sessionData.lastOptions.length > 0) {
