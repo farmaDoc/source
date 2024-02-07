@@ -332,7 +332,7 @@ async function farmadocInit(el) {
               topmatches.forEach(el=>{
                 if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "#33e894"){
                   document.getElementById("buttonrowclear").remove()
-                  document.getElementById(chatid).querySelector("div:last-child").remove()
+                  // document.getElementById(chatid).querySelector("div:last-child").remove()
                   resolve(el.intent)
                   clearInterval(waitforCoice)
                 }
