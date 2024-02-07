@@ -460,7 +460,7 @@ async function farmadocInit(el) {
               reject("no matches");
             }
           } */
-        })
+        //})
         //get best match
         /* console.log(objres)
         let vals = objres.map((a) => a.probability);
