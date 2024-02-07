@@ -312,8 +312,8 @@ async function farmadocInit(el) {
         });
 
         //get best match
+        console.log(objres)
         let vals = objres.map((a) => a.probability);
-        console.log(vals)
         let maxval = Math.max(...vals);
 
         //return best match
