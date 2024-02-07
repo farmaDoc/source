@@ -348,12 +348,13 @@ async function farmadocInit(el) {
               }
               let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
               if(curD.data.createdBy != "system"){
-                totbtns++
+                totbtns = totbtns+1
                 document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
                 document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
                   this.style.backgroundColor = "white";
                 });
               }
+              console.log(totbtns)
               if(totbtns == 0){
                 reject("no matches")
               }
