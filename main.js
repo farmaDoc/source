@@ -329,10 +329,10 @@ async function farmadocInit(el) {
         function waitUntilIntervalCleared(topmatch) {
           return new Promise(resolve => {
             const waitforCoice = setInterval(() => {
-              topmatches.forEach(el=>{
+              topmatch.forEach(el=>{
                 if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "white"){
                   document.getElementById("buttonrowclear").remove()
-                  // document.getElementById(chatid).querySelector("div:last-child").remove()
+                  document.getElementById(chatid).querySelector("div:last-child").remove()
                   resolve(el.intent)
                   clearInterval(waitforCoice)
                 }
