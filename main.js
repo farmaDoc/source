@@ -10,6 +10,7 @@ async function farmadocInit(el) {
   let lastDomanda = false;
   let uid;
   let inventoryLoaded = false;
+  let chosenInt = ""
 
   let urlServer = "https://source.farmadoc.it/"
   /* let urlServer = "http://localhost:8888/"; */
@@ -311,13 +312,25 @@ async function farmadocInit(el) {
           objres.push(objdoc);
         });
 
+        let objsort = objres.sort((a, b) => b.probability - a.probability);
+        let topmatches = objsort.slice(0, 3);
+        addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
+
+        topmatches.forEach(el=>{
+          document.getElementById(chatid).insertAdjacentHTML("afterbegin", `<span onclick='chosenInt = "${el.intent}"'>${el.intent}</span>`);
+        })
+
+        setInterval(() => {
+          console.log(chosenInt)
+        }, 100);
+
         //get best match
-        console.log(objres)
+        /* console.log(objres)
         let vals = objres.map((a) => a.probability);
-        let maxval = Math.max(...vals);
+        let maxval = Math.max(...vals); */
 
         //return best match
-        if (maxval > 0.6) {
+        /* if (maxval > 0.6) {
           let matchingId = objres.find(
             (item) => item.probability == maxval
           ).intent;
@@ -362,7 +375,7 @@ async function farmadocInit(el) {
           } else {
             reject("no matches");
           }
-        }
+        } */
       });
     });
   }
