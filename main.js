@@ -324,7 +324,7 @@ async function farmadocInit(el) {
           return new Promise(resolve => {
             const waitforCoice = setInterval(() => {
               topmatches.forEach(el=>{
-                if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor = "yellow"){
+                if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "yellow"){
                   resolve(el.intent)
                   clearInterval(waitforCoice)
                 }
