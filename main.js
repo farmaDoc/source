@@ -315,12 +315,7 @@ async function farmadocInit(el) {
         addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
 
         topmatches.forEach(el=>{
-          let curDoc = intents.find(
-            (item) => item.ref["@ref"].id == choseInt
-          )
-          console.log(curDoc.data)
-          let html = `<button id="farmadoc-int-choice-${el.intent}" class="pulsanteDiram" style="cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curDoc.data.name}</button>`
-          document.getElementById(chatid).insertAdjacentHTML("afterbegin", html);
+          document.getElementById(chatid).insertAdjacentHTML("afterbegin", `<span id="farmadoc-int-choice-${el.intent}"'>${el.intent}</span>`);
           document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
             this.style.backgroundColor = "yellow";
           });
