@@ -317,12 +317,11 @@ async function farmadocInit(el) {
         addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
 
         topmatches.forEach(el=>{
-          document.getElementById(chatid).insertAdjacentHTML("afterbegin", `<span onclick='chosenInt = "${el.intent}"'>${el.intent}</span>`);
+          document.getElementById(chatid).insertAdjacentHTML("afterbegin", `<span id="farmadoc-int-choice-${el.intent}"'>${el.intent}</span>`);
+          document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
+            this.style.backgroundColor = "yellow";
+          });
         })
-
-        setInterval(() => {
-          console.log(chosenInt)
-        }, 100);
 
         //get best match
         /* console.log(objres)
