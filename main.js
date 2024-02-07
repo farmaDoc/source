@@ -332,24 +332,24 @@ async function farmadocInit(el) {
               topmatch.forEach(el=>{
                 if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "white"){
                   document.getElementById("buttonrowclear").remove()
-                  document.getElementById(chatid).querySelector('span').remove()
+                  document.getElementById(chatid).getElementsByTagName('span')[0].remove()
                   resolve(el.intent)
                   clearInterval(waitforCoice)
                 }
               })
-            }, 100);
+            }, 250);
           });
         }
         
         waitUntilIntervalCleared(topmatches).then(choseInt=>{
-          let vals = objres.map((a) => a.probability);
+          /* let vals = objres.map((a) => a.probability);
           let maxval = Math.max(...vals);
-          if (maxval > 0.6) {
+          if (maxval > 0.6) { */
             let matchDoc = intents.find(
               (item) => item.ref["@ref"].id == choseInt
             )
             resolve(matchDoc);
-          } else {
+          /* } else {
             if (sessionData.lastOptions.length > 0) {
               sessionData.lastOptions.forEach((branch, index) => {
                 branch.forEach((option, optionIndex) => {
@@ -386,7 +386,7 @@ async function farmadocInit(el) {
             } else {
               reject("no matches");
             }
-          }
+          } */
         })
         //get best match
         /* console.log(objres)
