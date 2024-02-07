@@ -314,7 +314,7 @@ async function farmadocInit(el) {
         let maxval = Math.max(...vals);
         console.log(maxval)
         if (maxval > 0.2) {
-          if(maxval > 0.85){
+          if(maxval > 0.8){
             let matchDoc = intents.find(
               (item) => item.ref["@ref"].id == choseInt
             )
