@@ -357,6 +357,7 @@ async function farmadocInit(el) {
             })
             console.log(totbtns)
             if(totbtns == 0){
+              document.getElementById(chatid).getElementsByTagName('span')[0].remove()
               reject("no matches")
             }
             function waitUntilIntervalCleared(topmatch) {
