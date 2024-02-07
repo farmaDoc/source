@@ -319,55 +319,109 @@ async function farmadocInit(el) {
             objsort = objsort.splice(index,1)
           }
         })
-        let topmatches = objsort.slice(0, 3);
-        addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
 
-        let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row; margin-top: 15px;"></div>`
-        document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
-        topmatches.reverse()
-        topmatches.forEach((el,index)=>{
-          let curD = intents.find(
-            (item) => item.ref["@ref"].id == el.intent
-          )
-          let opacity = 1
-          if(index == 2 ){
-            opacity = 1
-          }else{
-            if(index == 1){
-              opacity = 0.75
-            }else{
-              opacity = 0.6
-            }
-          }
-          let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
-          document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
-          document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
-            this.style.backgroundColor = "white";
-          });
-        })
-        function waitUntilIntervalCleared(topmatch) {
-          return new Promise(resolve => {
-            const waitforCoice = setInterval(() => {
-              topmatch.forEach(el=>{
-                if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "white"){
-                  document.getElementById("buttonrowclear").remove()
-                  document.getElementById(chatid).getElementsByTagName('span')[0].remove()
-                  resolve(el.intent)
-                  clearInterval(waitforCoice)
-                }
-              })
-            }, 250);
-          });
-        }
-        
-        waitUntilIntervalCleared(topmatches).then(choseInt=>{
-          /* let vals = objres.map((a) => a.probability);
-          let maxval = Math.max(...vals);
-          if (maxval > 0.6) { */
+        let vals = objres.map((a) => a.probability);
+        let maxval = Math.max(...vals);
+        if (maxval > 0.2) {
+          if(maxval > 0.85){
             let matchDoc = intents.find(
               (item) => item.ref["@ref"].id == choseInt
             )
             resolve(matchDoc);
+          }else{
+            let topmatches = objsort.slice(0, 3);
+            addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
+
+            let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row; margin-top: 15px;"></div>`
+            document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
+            topmatches.reverse()
+            topmatches.forEach((el,index)=>{
+              let curD = intents.find(
+                (item) => item.ref["@ref"].id == el.intent
+              )
+              let opacity = 1
+              if(index == 2 ){
+                opacity = 1
+              }else{
+                if(index == 1){
+                  opacity = 0.75
+                }else{
+                  opacity = 0.6
+                }
+              }
+              let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
+              document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
+              document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
+                this.style.backgroundColor = "white";
+              });
+            })
+            function waitUntilIntervalCleared(topmatch) {
+              return new Promise(resolve => {
+                const waitforCoice = setInterval(() => {
+                  topmatch.forEach(el=>{
+                    if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "white"){
+                      document.getElementById("buttonrowclear").remove()
+                      document.getElementById(chatid).getElementsByTagName('span')[0].remove()
+                      resolve(el.intent)
+                      clearInterval(waitforCoice)
+                    }
+                  })
+                }, 250);
+              });
+            }
+            waitUntilIntervalCleared(topmatches).then(choseInt=>{
+              let matchDoc = intents.find(
+                (item) => item.ref["@ref"].id == choseInt
+              )
+              resolve(matchDoc);
+            })
+          }
+        }else{
+          if (sessionData.lastOptions.length > 0) {
+            sessionData.lastOptions.forEach((branch, index) => {
+              branch.forEach((option, optionIndex) => {
+                if (
+                  natural.PorterStemmerIt.stem(input.toLowerCase()).includes(
+                    natural.PorterStemmerIt.stem(option)
+                  )
+                ) {
+                  let oldBranch = sessionData.lastBranch;
+                  oldBranch[index] = option;
+
+                  remediesList = defaultIntents.find(
+                    (element) => element.id == sessionData.lastId
+                  ).remedies;
+                  remediesList.forEach((remedy) => {
+                    if (
+                      JSON.stringify(remedy.suitableFor.sort()) ==
+                      JSON.stringify(oldBranch.sort())
+                    ) {
+                      addRes(remedy.items, true);
+                      reject("ignore");
+                    }
+                  });
+                } else {
+                  if (
+                    optionIndex == branch.length - 1 &&
+                    index == sessionData.lastOptions.length - 1
+                  ) {
+                    reject("no matches");
+                  }
+                }
+              });
+            });
+          } else {
+            reject("no matches");
+          }
+        }
+        //waitUntilIntervalCleared(topmatches).then(choseInt=>{
+          /* let vals = objres.map((a) => a.probability);
+          let maxval = Math.max(...vals);
+          if (maxval > 0.6) { */
+            /* let matchDoc = intents.find(
+              (item) => item.ref["@ref"].id == choseInt
+            )
+            resolve(matchDoc); */
           /* } else {
             if (sessionData.lastOptions.length > 0) {
               sessionData.lastOptions.forEach((branch, index) => {
