@@ -314,12 +314,14 @@ async function farmadocInit(el) {
         let topmatches = objsort.slice(0, 3);
         addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
 
+        let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row;"></div>`
+        document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
         topmatches.forEach(el=>{
           let curD = intents.find(
             (item) => item.ref["@ref"].id == el.intent
           )
           let htmlC = `<button class="pulsanteDiram" id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
-          document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlC);
+          document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
           document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
             this.style.backgroundColor = "yellow";
           });
@@ -329,6 +331,7 @@ async function farmadocInit(el) {
             const waitforCoice = setInterval(() => {
               topmatches.forEach(el=>{
                 if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "yellow"){
+                  document.getElementById("buttonrowclear").remove()
                   resolve(el.intent)
                   clearInterval(waitforCoice)
                 }
