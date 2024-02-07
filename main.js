@@ -320,17 +320,17 @@ async function farmadocInit(el) {
           let curD = intents.find(
             (item) => item.ref["@ref"].id == el.intent
           )
-          let htmlC = `<button class="pulsanteDiram" id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
+          let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
           document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
           document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
-            this.style.backgroundColor = "#33e894";
+            this.style.backgroundColor = "white";
           });
         })
         function waitUntilIntervalCleared(topmatch) {
           return new Promise(resolve => {
             const waitforCoice = setInterval(() => {
               topmatches.forEach(el=>{
-                if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "#33e894"){
+                if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "white"){
                   document.getElementById("buttonrowclear").remove()
                   // document.getElementById(chatid).querySelector("div:last-child").remove()
                   resolve(el.intent)
