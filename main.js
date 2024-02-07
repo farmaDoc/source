@@ -322,7 +322,7 @@ async function farmadocInit(el) {
             (item) => item.ref["@ref"].id == el.intent
           )
           let opacity = 1
-          if(index == 0 ){
+          if(index == 2 ){
             opacity = 1
           }else{
             if(index == 1){
