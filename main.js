@@ -326,7 +326,7 @@ async function farmadocInit(el) {
             opacity = 1
           }else{
             if(index == 1){
-              opacity = 0.8
+              opacity = 0.75
             }else{
               opacity = 0.6
             }
