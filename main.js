@@ -640,6 +640,8 @@ async function farmadocInit(el) {
           sendStat(rimedioFound.prodTrov, currisp, uid)
         }
 
+        console.log(rimedioFound)
+        console.log(Object.keys(rimedioFound))
         if (Object.keys(rimedioFound).length !== 0) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
             getDrugsInfo(rimedioFound.prodTrov).then((respDrug) => {
