@@ -22,37 +22,54 @@ exports.handler = async (event, context) => {
     )
   ).then(res => {
 
-    let doc = {
-      authorised: true, res: res.data, uid: res.ref
+    let newDoc = res.data
+    if(res.data.calls){
+      res.data.calls.push(Date.now())
+    }else{
+      res.data["calls"] = [Date.now()]
     }
 
-    if(event.headers.origin.includes("farmadoc.it")){
-      doc["demo"] = true
-    }
+    return client.query(
+      q.Update(
+        q.Ref(q.Collection('your_collection_name'), 'document_id'),
+        {
+          data: newDoc
+        }
+      )
+    ).then(e=>{
 
-    console.log(doc)
-
-    if (event.headers.origin.includes(res.data.domain)) {
-    // if(true) {
-      return {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': "*",
-          'Access-Control-Allow-Headers': "Content-Type",
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(doc)
+      let doc = {
+        authorised: true, res: res.data, uid: res.ref
       }
-    } else {
-      return {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': "*",
-          'Access-Control-Allow-Headers': "Content-Type",
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ authorised: false })
+  
+      if(event.headers.origin.includes("farmadoc.it")){
+        doc["demo"] = true
       }
-    }
+  
+      console.log(doc)
+  
+      if (event.headers.origin.includes(res.data.domain)) {
+      // if(true) {
+        return {
+          statusCode: 200,
+          headers: {
+            'Access-Control-Allow-Origin': "*",
+            'Access-Control-Allow-Headers': "Content-Type",
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(doc)
+        }
+      } else {
+        return {
+          statusCode: 200,
+          headers: {
+            'Access-Control-Allow-Origin': "*",
+            'Access-Control-Allow-Headers': "Content-Type",
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ authorised: false })
+        }
+      }
+    })
   })
 }
