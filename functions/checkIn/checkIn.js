@@ -30,7 +30,7 @@ exports.handler = async (event, context) => {
     }
     return client.query(
       q.Update(
-        q.Ref(q.Collection('user'), res.ref.id),
+        q.Ref(q.Collection('User'), res.ref.id),
         {
           data: newDoc
         }
