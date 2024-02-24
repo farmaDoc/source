@@ -28,10 +28,10 @@ exports.handler = async (event, context) => {
     }else{
       res.data["calls"] = [Date.now()]
     }
-
+    console.log(res.ref)
     return client.query(
       q.Update(
-        q.Ref(q.Collection('users'), res.ref),
+        q.Ref(q.Collection('users'), res.ref.id),
         {
           data: newDoc
         }
