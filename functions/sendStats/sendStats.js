@@ -14,7 +14,55 @@ exports.handler = async (event, context) => {
         farma: el[1],
         int: el[0]
     }})
-    let og = []
+    return client.query(
+        q.Get(q.Ref(q.Collection('User'), uid))
+    ).then(res=>{
+        console.log(res)
+        if(res.data.reqs){
+            return client.query(
+                q.Update(q.Ref(q.Collection('User'), Uid), {
+                    data: {
+                        reqs: q.Append(
+                            finels,
+                            q.Select(
+                                ["data", "reqs"],
+                                q.Get(q.Ref(q.Collection('drugs'), farma))
+                            )
+                        )
+                    }
+                })
+            ).then(()=>{
+                return{
+                    statusCode: 200,
+                    headers: {
+                        'Access-Control-Allow-Origin': "*",
+                        'Access-Control-Allow-Headers': "Content-Type",
+                        'Content-Type': 'application/json'
+                    },
+                    body: "Success"
+                }
+            })
+        }else{
+            return client.query(
+                q.Update(q.Ref(q.Collection('drugs'), farma), {
+                    data: {
+                        reqs: finels
+                    }
+                })
+            ).then(()=>{
+                return{
+                    statusCode: 200,
+                    headers: {
+                        'Access-Control-Allow-Origin': "*",
+                        'Access-Control-Allow-Headers': "Content-Type",
+                        'Content-Type': 'application/json'
+                    },
+                    body: "Success"
+                }
+            })
+        }
+    })
+    /* let og = []
     try{
         let pres = await q.Select(
             ["data", "reqs"],
@@ -36,7 +84,7 @@ exports.handler = async (event, context) => {
         })
     )
     
-    console.log(finRes)
+    console.log(finRes) */
 
     /* let promises = []
     els.forEach(el=>{
@@ -61,7 +109,7 @@ exports.handler = async (event, context) => {
     })
     const result = await Promise.all(promises)
     console.log(result) */
-    return{
+    /* return{
         statusCode: 200,
         headers: {
             'Access-Control-Allow-Origin': "*",
@@ -69,7 +117,7 @@ exports.handler = async (event, context) => {
             'Content-Type': 'application/json'
         },
         body: "Success"
-    }
+    } */
     /* return client.query(
         q.Get(q.Ref(q.Collection('drugs'), farma))
     ).then(res=>{
