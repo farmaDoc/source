@@ -670,12 +670,6 @@ async function farmadocInit(el) {
         if (rimedioTrovato.length) {
           rimedioFound = { prodTrov: rimedioTrovato[0].prodotto, rispNota: rimedioTrovato[0].note };
           /* sendStat(rimedioFound.prodTrov, currisp, uid) */
-          let storedValue = []
-          if(localStorage.getItem('farmadoc-reqs')){
-            storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
-          }
-          storedValue[storedValue.length-1][1] = rimedioFound?.prodTrov
-          localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
         }
         if (Object.keys(rimedioFound).length !== 0) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
@@ -684,6 +678,13 @@ async function farmadocInit(el) {
                 msg: calculateQty(respDrug?.remedy?.qty).msg,
                 color: calculateQty(respDrug?.remedy?.qty).status,
               };
+              /* let storedValue = []
+              if(localStorage.getItem('farmadoc-reqs')){
+                storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
+              }
+              storedValue[storedValue.length-1][1] = respDrug?.prodTrov
+              localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue)); */
+              console.log(respDrug)
               addRes(
                 `Il prodotto suggerito in questo caso è ${respDrug?.remedy?.name}`,
                 true,
