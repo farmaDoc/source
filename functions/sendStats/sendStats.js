@@ -9,6 +9,7 @@ const client = new faunadb.Client({
 exports.handler = async (event, context) => {
     let uid = event.queryStringParameters.uid
     let els = JSON.parse(event.queryStringParameters.obj)
+    console.log(els)
     const finels = els.map(el=>{return{
         ts: el[2],
         farma: el[1],
