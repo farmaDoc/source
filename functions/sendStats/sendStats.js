@@ -31,7 +31,8 @@ exports.handler = async (event, context) => {
             )
         })
     })
-    await Promise.all(promises)
+    const result = await Promise.all(promises)
+    console.log(result)
     return{
         statusCode: 200,
         headers: {
