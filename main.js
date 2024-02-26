@@ -333,13 +333,18 @@ async function farmadocInit(el) {
           }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
             let topmatches = objsort.slice(0, 3);
-            topmatches = topmatches.filter(e=>e.probability > 0.05).filter(e=>{
-              let pres = intents.find(
-                (item) => item.ref["@ref"].id == e.intent
-              )
-              return pres.data.createdBy != "system"
-            }) // Threshold
-            if(topmatches.length < 2){
+            topmatches = topmatches.filter(e=>e.probability > 0.05) // Threshold
+            if(topmatches.length > 1){
+              topmatches = topmatches.filter(e=>{
+                let pres = intents.find(
+                  (item) => item.ref["@ref"].id == e.intent
+                )
+                return pres.data.createdBy != "system"
+              })
+            }
+            if(topmatches.length == 1){
+              document.getElementById("buttonrowclear").remove()
+              document.getElementById(chatid).getElementsByTagName('span')[0].remove()
               let match = intents.find(
                 (item) => item.ref["@ref"].id == topmatches[0].intent
               );
