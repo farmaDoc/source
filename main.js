@@ -368,8 +368,10 @@ async function farmadocInit(el) {
               document.getElementById("buttonrowclear").remove()
               document.getElementById(chatid).getElementsByTagName('span')[0].remove()
               reject("no matches");
+            }else{
+              addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
             }
-            addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
+            
 
             let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row; margin-top: 15px;"></div>`
             document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
