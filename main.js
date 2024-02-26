@@ -684,7 +684,7 @@ async function farmadocInit(el) {
               }
               storedValue[storedValue.length-1][1] = respDrug?.prodTrov
               localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue)); */
-              console.log(respDrug)
+              console.log(rimedioFound)
               addRes(
                 `Il prodotto suggerito in questo caso è ${respDrug?.remedy?.name}`,
                 true,
