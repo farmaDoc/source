@@ -27,7 +27,7 @@ async function farmadocInit(el) {
       return res.json();
     })
     .catch((error) => {
-      console.log(error);
+      //console.log(error);
     });
 
   let ServData = result?.res?.serv
@@ -51,7 +51,7 @@ async function farmadocInit(el) {
       return res.json();
     })
     .catch((error) => {
-      console.log(error);
+      //console.log(error);
     });
 
   usrIntents = usrIntents.res;
@@ -71,7 +71,7 @@ async function farmadocInit(el) {
       return res.json();
     })
     .catch((error) => {
-      console.log(error);
+      //console.log(error);
     });
 
   async function getInventory() {
@@ -312,7 +312,7 @@ async function farmadocInit(el) {
 
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
-        console.log(maxval)
+        //console.log(maxval)
         if (maxval > 0.2) {
           if(maxval > 0.8){
             let matchingId = objres.find(
@@ -321,7 +321,7 @@ async function farmadocInit(el) {
             let matchDoc = intents.find(
               (item) => item.ref["@ref"].id == matchingId
             );
-            console.log(matchDoc)
+            //console.log(matchDoc)
             resolve(matchDoc);
           }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
@@ -346,7 +346,8 @@ async function farmadocInit(el) {
                   opacity = 0.6
                 }
               }
-              let htmlC = `<button id="farmadoc-int-choice-${el.intent} (${el.probability})"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
+              console.log(el)
+              let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
               if(curD.data.createdBy != "system"){
                 totbtns = totbtns+1
                 document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
@@ -632,9 +633,9 @@ async function farmadocInit(el) {
       const checkRimedioDiram = () => {
         rimediSimple = rimedi.map(x => ({ remFor: x.for.toString(), prodotto: x.res, note: x.note }));
         rimedioTrovato = rimediSimple.filter((x) => x.remFor === risposteBranch.toString());
-        console.log(risposteBranch)
-        console.log(rimediSimple)
-        console.log(rimedioTrovato)
+        //console.log(risposteBranch)
+        //console.log(rimediSimple)
+        //console.log(rimedioTrovato)
 
         let rimedioFound;
 
@@ -810,7 +811,7 @@ async function farmadocInit(el) {
           ask(defaultIntents);
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
           if (err != "ignore") {
             root = [];
             sessionData.confusionStage++;
