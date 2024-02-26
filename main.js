@@ -240,7 +240,7 @@ async function farmadocInit(el) {
     if(JSON.parse(localStorage.getItem("farmadoc-reqs"))?.length > 4){
       let st = JSON.parse(localStorage.getItem("farmadoc-reqs"))
       sendStat(st.splice(st.length-1,1))
-      localStorage.setItem("farmadoc-reqs",[st[st.length-1]])
+      localStorage.setItem("farmadoc-reqs",JSON.stringify([st[st.length-1]]))
     }
   }, 1000);
 
