@@ -320,7 +320,7 @@ async function farmadocInit(el) {
 
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
-        //console.log(maxval)
+        console.log(maxval)
         if (maxval > 0.2) {
           if(maxval > 1){
             let matchingId = objres.find(
@@ -361,7 +361,7 @@ async function farmadocInit(el) {
                   opacity = 0.6
                 }
               }
-              console.log(el)
+              //console.log(el)
               let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title} (${(el.probability*100).toFixed(2)}%)</button>`
               if(curD.data.createdBy != "system"){
                 totbtns = totbtns+1
@@ -371,11 +371,11 @@ async function farmadocInit(el) {
                 });
               }
             })
-            if(totbtns < 2){
+            /* if(totbtns < 2 ){
               document.getElementById("buttonrowclear").remove()
               document.getElementById(chatid).getElementsByTagName('span')[0].remove()
               reject("no matches")
-            }
+            } */
             function waitUntilIntervalCleared(topmatch) {
               return new Promise(resolve => {
                 const waitforCoice = setInterval(() => {
