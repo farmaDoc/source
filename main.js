@@ -1,11 +1,10 @@
 async function farmadocInit(el) {
 
   setInterval(() => {
-    if(JSON.parse(localStorage.getItem("farmadoc-reqs")?.length > 4)){
-      console.log("lol")
+    if(JSON.parse(localStorage.getItem("farmadoc-reqs"))?.length > 4){
       localStorage.setItem("farmadoc-reqs","[]")
     }
-  }, 100);
+  }, 1000);
 
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
@@ -321,7 +320,7 @@ async function farmadocInit(el) {
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
         console.log(objres.sort((a,b)=>b.probability-a.probability))
-        if (maxval > 0.2) {
+        if (maxval > 0.05) {
           if(maxval > 1){
             let matchingId = objres.find(
               (item) => item.probability == maxval
@@ -334,7 +333,7 @@ async function farmadocInit(el) {
           }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
             let topmatches = objsort.slice(0, 3);
-            topmatches = topmatches.filter(e=>e.probability > 0.1) // Threshold
+            topmatches = topmatches.filter(e=>e.probability > 0.05) // Threshold
             if(topmatches.length < 2){
               let match = intents.find(
                 (item) => item.ref["@ref"].id == topmatches[0].intent
