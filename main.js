@@ -1,4 +1,12 @@
 async function farmadocInit(el) {
+
+  setInterval(() => {
+    if(JSON.parse(localStorage.getItem("farmadoc-reqs")?.length > 4)){
+      console.log("lol")
+      localStorage.setItem("farmadoc-reqs","[]")
+    }
+  }, 100);
+
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
   let domandaBranch;
