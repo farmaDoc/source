@@ -44,7 +44,7 @@ exports.handler = async (event, context) => {
             })
         }else{
             return client.query(
-                q.Update(q.Ref(q.Collection('drugs'), farma), {
+                q.Update(q.Ref(q.Collection('User'), uid), {
                     data: {
                         reqs: finels
                     }
