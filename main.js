@@ -240,7 +240,7 @@ async function farmadocInit(el) {
     if(JSON.parse(localStorage.getItem("farmadoc-reqs"))?.length > 4){
       let st = JSON.parse(localStorage.getItem("farmadoc-reqs"))
       sendStat(st.splice(st.length-1,1))
-      localStorage.setItem("farmadoc-reqs",st[st.length-1])
+      localStorage.setItem("farmadoc-reqs",[st[st.length-1]])
     }
   }, 1000);
 
@@ -356,50 +356,47 @@ async function farmadocInit(el) {
                 return pres.data.createdBy != "system"
               })
             }
-            if(topmatches.length == 1){
-              document.getElementById("buttonrowclear")?.remove()
-              document.getElementById(chatid).getElementsByTagName('span')[0]?.remove()
+            if(topmatches.length == 1)
               let match = intents.find(
                 (item) => item.ref["@ref"].id == topmatches[0].intent
               );
               resolve(match);
             }
             console.log(topmatches.length)
-            if(topmatches.length == 0){
+            if(topmatches.length < 2 ){
               reject("no matches");
             }else{
               addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
+              let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row; margin-top: 15px;"></div>`
+              document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
+              topmatches.reverse()
+              let totbtns = 0
+              topmatches.forEach((el,index)=>{
+                let curD = intents.find(
+                  (item) => item.ref["@ref"].id == el.intent
+                )
+                let opacity = 1
+                if(index == 2 ){
+                  opacity = 1
+                }else{
+                  if(index == 1){
+                    opacity = 0.75
+                  }else{
+                    opacity = 0.6
+                  }
+                }
+                //console.log(el)
+                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title} (${(el.probability*100).toFixed(2)}%)</button>`
+                //if(curD.data.createdBy != "system"){
+                  totbtns = totbtns+1
+                  document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
+                  document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
+                    this.style.backgroundColor = "white";
+                  });
+                //}
+              })
             }
             
-
-            let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row; margin-top: 15px;"></div>`
-            document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
-            topmatches.reverse()
-            let totbtns = 0
-            topmatches.forEach((el,index)=>{
-              let curD = intents.find(
-                (item) => item.ref["@ref"].id == el.intent
-              )
-              let opacity = 1
-              if(index == 2 ){
-                opacity = 1
-              }else{
-                if(index == 1){
-                  opacity = 0.75
-                }else{
-                  opacity = 0.6
-                }
-              }
-              //console.log(el)
-              let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title} (${(el.probability*100).toFixed(2)}%)</button>`
-              //if(curD.data.createdBy != "system"){
-                totbtns = totbtns+1
-                document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
-                document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
-                  this.style.backgroundColor = "white";
-                });
-              //}
-            })
             /* if(totbtns < 2 ){
               document.getElementById("buttonrowclear").remove()
               document.getElementById(chatid).getElementsByTagName('span')[0].remove()
