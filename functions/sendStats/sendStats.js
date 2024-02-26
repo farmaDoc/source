@@ -21,7 +21,7 @@ exports.handler = async (event, context) => {
                     finels,
                     q.Select(
                         ["data", "reqs"],
-                        q.Get(q.Ref(q.Collection('drugs'), farma))
+                        q.Get(q.Ref(q.Collection('User'), uid))
                     )
                 )
             }
