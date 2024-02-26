@@ -356,12 +356,13 @@ async function farmadocInit(el) {
                 return pres.data.createdBy != "system"
               })
             }
-            if(topmatches.length == 1)
+            if(topmatches.length == 1){
               let match = intents.find(
                 (item) => item.ref["@ref"].id == topmatches[0].intent
-              );
+              )
               resolve(match);
             }
+          }
             console.log(topmatches.length)
             if(topmatches.length < 2 ){
               reject("no matches");
@@ -427,7 +428,7 @@ async function farmadocInit(el) {
               )
               resolve(matchDoc);
             })
-          }
+        }
         }else{
           if (sessionData.lastOptions.length > 0) {
             sessionData.lastOptions.forEach((branch, index) => {
