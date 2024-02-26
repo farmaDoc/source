@@ -365,8 +365,6 @@ async function farmadocInit(el) {
             }
             console.log(topmatches.length)
             if(topmatches.length == 0){
-              document.getElementById("buttonrowclear").remove()
-              document.getElementById(chatid).getElementsByTagName('span')[0].remove()
               reject("no matches");
             }else{
               addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
