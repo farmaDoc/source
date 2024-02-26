@@ -328,7 +328,10 @@ async function farmadocInit(el) {
             let topmatches = objsort.slice(0, 3);
             topmatches = topmatches.filter(e=>e.probability > 0.1) // Threshold
             if(topmatches.length < 2){
-              resolve(topmatches[0].intent);
+              let match = intents.find(
+                (item) => item.ref["@ref"].id == topmatches[0].intent
+              );
+              resolve(match);
             }
             addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
 
