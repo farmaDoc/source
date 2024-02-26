@@ -714,6 +714,12 @@ async function farmadocInit(el) {
     getMsg().then((input) => {
       detectIntent(input, intents)
         .then((res) => {
+          let storedValue = []
+          if(localStorage.getItem('farmadoc-reqs')){
+            storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
+          }
+          storedValue.push([res.ref["@ref"].id,0])
+          localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
           currisp = res.ref["@ref"].id
           rimedi = res?.data?.rems;
           tempDiramsData = res?.data?.dirams;
@@ -746,11 +752,14 @@ async function farmadocInit(el) {
             if (rimedi[0] !== undefined && !regex.test(rimedi[0])) {
               addRes(rimedi[0], false);
             } else if (rimedi[0] !== undefined && regex.test(rimedi[0])) {
+              storedValue[storedValue.length-1][1] = rimedi[0]
+              localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
               getDrugsInfo(rimedi[0]).then((respDrug) => {
                 let qtyBar = {
                   msg: calculateQty(respDrug?.remedy?.qty).msg,
                   color: calculateQty(respDrug?.remedy?.qty).status,
                 };
+                
                 addRes(
                   `<span>Il prodotto suggerito in questo caso è<br/><strong>${respDrug?.remedy?.name}</strong><br/>${qtyBar.msg}</span>`,
                   true,
