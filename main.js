@@ -645,7 +645,7 @@ async function farmadocInit(el) {
           if(localStorage.getItem('farmadoc-reqs')){
             storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
           }
-          storedValue[storedValue.length-1][1] = rimedioFound.prodTrov
+          storedValue[storedValue.length-1][1] = currisp
           localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
         }
         if (Object.keys(rimedioFound).length !== 0) {
