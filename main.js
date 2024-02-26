@@ -226,7 +226,7 @@ async function farmadocInit(el) {
 
   async function sendStat(obj) {
     await fetch(
-      urlServer + ".netlify/functions/sendStats?obj="+JSON.stringify(obj),
+      urlServer + ".netlify/functions/sendStats?uid="+uid+"&obj="+JSON.stringify(obj),
       {
         method: "GET",
         mode: "cors",

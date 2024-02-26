@@ -7,10 +7,28 @@ const client = new faunadb.Client({
 });
 
 exports.handler = async (event, context) => {
-
+    let uid = event.queryStringParameters.uid
     let els = JSON.parse(event.queryStringParameters.obj)
+    const finels = els.map(el=>{return{
+        ts: el[2],
+        farma: el[1],
+        int: el[0]
+    }})
+    await client.query(
+        q.Update(q.Ref(q.Collection('User'), uid), {
+            data: {
+                reqs: q.Append(
+                    finels,
+                    q.Select(
+                        ["data", "reqs"],
+                        q.Get(q.Ref(q.Collection('drugs'), farma))
+                    )
+                )
+            }
+        })
+    )
 
-    let promises = []
+    /* let promises = []
     els.forEach(el=>{
         promises.push(async function(){
             return await client.query(
@@ -32,7 +50,7 @@ exports.handler = async (event, context) => {
         })
     })
     const result = await Promise.all(promises)
-    console.log(result)
+    console.log(result) */
     return{
         statusCode: 200,
         headers: {
