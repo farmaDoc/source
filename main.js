@@ -362,7 +362,6 @@ async function farmadocInit(el) {
               )
               resolve(match);
             }
-          }
             console.log(topmatches.length)
             if(topmatches.length < 2 ){
               reject("no matches");
@@ -428,6 +427,7 @@ async function farmadocInit(el) {
               )
               resolve(matchDoc);
             })
+          }
         }else{
           if (sessionData.lastOptions.length > 0) {
             sessionData.lastOptions.forEach((branch, index) => {
