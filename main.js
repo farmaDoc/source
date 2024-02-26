@@ -326,7 +326,10 @@ async function farmadocInit(el) {
           }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
             let topmatches = objsort.slice(0, 3);
-            topmatches = topmatches.filter(e=>e.probability > 0.2) // Threshold
+            topmatches = topmatches.filter(e=>e.probability > 0.1) // Threshold
+            if(topmatches.length < 2){
+              resolve(matchDoc);
+            }
             addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
 
             let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row; margin-top: 15px;"></div>`
