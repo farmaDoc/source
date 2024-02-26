@@ -8,8 +8,8 @@ const client = new faunadb.Client({
 
 exports.handler = async (event, context) => {
     const { httpMethod } = event;
-
-    if (httpMethod === 'OPTIONS') {
+    console.log(httpMethod)
+    if (httpMethod != 'OPTIONS') {
         return {
             statusCode: 200,
             headers: {
