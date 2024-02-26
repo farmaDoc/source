@@ -641,6 +641,12 @@ async function farmadocInit(el) {
         if (rimedioTrovato.length) {
           rimedioFound = { prodTrov: rimedioTrovato[0].prodotto, rispNota: rimedioTrovato[0].note };
           /* sendStat(rimedioFound.prodTrov, currisp, uid) */
+          let storedValue = []
+          if(localStorage.getItem('farmadoc-reqs')){
+            storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
+          }
+          storedValue[storedValue.length-1][1] = rimedioFound.prodTrov
+          localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
         }
         if (Object.keys(rimedioFound).length !== 0) {
           if (rimedioFound.prodTrov && rimedioFound.prodTrov !== '') {
@@ -649,12 +655,6 @@ async function farmadocInit(el) {
                 msg: calculateQty(respDrug?.remedy?.qty).msg,
                 color: calculateQty(respDrug?.remedy?.qty).status,
               };
-              let storedValue = []
-              if(localStorage.getItem('farmadoc-reqs')){
-                storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
-              }
-              storedValue[storedValue.length-1][1] = rimedi[0]
-              localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
               addRes(
                 `Il prodotto suggerito in questo caso è ${respDrug?.remedy?.name}`,
                 true,
@@ -754,8 +754,6 @@ async function farmadocInit(el) {
             if (rimedi[0] !== undefined && !regex.test(rimedi[0])) {
               addRes(rimedi[0], false);
             } else if (rimedi[0] !== undefined && regex.test(rimedi[0])) {
-              storedValue[storedValue.length-1][1] = rimedi[0]
-              localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
               getDrugsInfo(rimedi[0]).then((respDrug) => {
                 let qtyBar = {
                   msg: calculateQty(respDrug?.remedy?.qty).msg,
