@@ -428,7 +428,6 @@ async function farmadocInit(el) {
               )
               resolve(matchDoc);
             })
-        }
         }else{
           if (sessionData.lastOptions.length > 0) {
             sessionData.lastOptions.forEach((branch, index) => {
