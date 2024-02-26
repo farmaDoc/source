@@ -25,7 +25,7 @@ exports.handler = async (event, context) => {
         console.log(err)
     }
     
-    await client.query(
+    const finRes = await client.query(
         q.Update(q.Ref(q.Collection('User'), uid), {
             data: {
                 reqs: q.Append(
@@ -35,6 +35,8 @@ exports.handler = async (event, context) => {
             }
         })
     )
+    
+    console.log(finRes)
 
     /* let promises = []
     els.forEach(el=>{

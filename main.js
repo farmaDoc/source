@@ -410,9 +410,9 @@ async function farmadocInit(el) {
                       (item) => item.ref["@ref"].id == el.intent
                     )
                     if(curD.data.createdBy != "system"){
-                      if(document.getElementById("farmadoc-int-choice-"+el.intent).style.backgroundColor == "white"){
-                        document.getElementById("buttonrowclear").remove()
-                        document.getElementById(chatid).getElementsByTagName('span')[0].remove()
+                      if(document.getElementById("farmadoc-int-choice-"+el.intent)?.style.backgroundColor == "white"){
+                        document.getElementById("buttonrowclear")?.remove()
+                        document.getElementById(chatid).getElementsByTagName('span')[0]?.remove()
                         resolve(el.intent)
                         clearInterval(waitforCoice)
                       }
