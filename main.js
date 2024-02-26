@@ -357,8 +357,8 @@ async function farmadocInit(el) {
               })
             }
             if(topmatches.length == 1){
-              document.getElementById("buttonrowclear").remove()
-              document.getElementById(chatid).getElementsByTagName('span')[0].remove()
+              document.getElementById("buttonrowclear")?.remove()
+              document.getElementById(chatid).getElementsByTagName('span')[0]?.remove()
               let match = intents.find(
                 (item) => item.ref["@ref"].id == topmatches[0].intent
               );
