@@ -350,6 +350,7 @@ async function farmadocInit(el) {
               );
               resolve(match);
             }
+            console.log(topmatches)
             if(topmatches.length == 0){
               reject("no matches");
             }
