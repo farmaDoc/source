@@ -333,7 +333,6 @@ async function farmadocInit(el) {
 
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
-        console.log(objres.sort((a,b)=>b.probability-a.probability))
         if (maxval > 0.05) {
           if(maxval > 1){
             let matchingId = objres.find(
@@ -362,7 +361,6 @@ async function farmadocInit(el) {
               )
               resolve(match);
             }
-            console.log(topmatches.length)
             if(topmatches.length < 2 ){
               reject("no matches");
             }else{
@@ -678,13 +676,12 @@ async function farmadocInit(el) {
                 msg: calculateQty(respDrug?.remedy?.qty).msg,
                 color: calculateQty(respDrug?.remedy?.qty).status,
               };
-              /* let storedValue = []
+              let storedValue = []
               if(localStorage.getItem('farmadoc-reqs')){
                 storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
               }
-              storedValue[storedValue.length-1][1] = respDrug?.prodTrov
-              localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue)); */
-              console.log(rimedioFound)
+              storedValue[storedValue.length-1][1] = rimedioFound?.prodTrov
+              localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
               addRes(
                 `Il prodotto suggerito in questo caso è ${respDrug?.remedy?.name}`,
                 true,
