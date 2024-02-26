@@ -20,7 +20,7 @@ exports.handler = async (event, context) => {
         console.log(res)
         if(res.data.reqs){
             return client.query(
-                q.Update(q.Ref(q.Collection('User'), Uid), {
+                q.Update(q.Ref(q.Collection('User'), uid), {
                     data: {
                         reqs: q.Append(
                             finels,
