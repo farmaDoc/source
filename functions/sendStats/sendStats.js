@@ -7,61 +7,75 @@ const client = new faunadb.Client({
 });
 
 exports.handler = async (event, context) => {
-    let uid = event.queryStringParameters.uid
-    let els = JSON.parse(event.queryStringParameters.obj)
-    const finels = els.map(el=>{return{
-        ts: el[2],
-        farma: el[1],
-        int: el[0]
-    }})
-    return client.query(
-        q.Get(q.Ref(q.Collection('User'), uid))
-    ).then(res=>{
-        console.log(res)
-        if(res.data.reqs){
-            return client.query(
-                q.Update(q.Ref(q.Collection('User'), uid), {
-                    data: {
-                        reqs: q.Append(
-                            finels,
-                            q.Select(
-                                ["data", "reqs"],
-                                q.Get(q.Ref(q.Collection('User'), uid))
-                            )
-                        )
-                    }
-                })
-            ).then(()=>{
-                return{
-                    statusCode: 200,
-                    headers: {
-                        'Access-Control-Allow-Origin': "*",
-                        'Access-Control-Allow-Headers': "Content-Type",
-                        'Content-Type': 'application/json'
-                    },
-                    body: "Success"
-                }
-            })
-        }else{
-            return client.query(
-                q.Update(q.Ref(q.Collection('User'), uid), {
-                    data: {
-                        reqs: finels
-                    }
-                })
-            ).then(()=>{
-                return{
-                    statusCode: 200,
-                    headers: {
-                        'Access-Control-Allow-Origin': "*",
-                        'Access-Control-Allow-Headers': "Content-Type",
-                        'Content-Type': 'application/json'
-                    },
-                    body: "Success"
-                }
-            })
+    const { httpMethod } = event;
+
+    if (httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': "*",
+                'Access-Control-Allow-Headers': "Content-Type",
+                'Content-Type': 'application/json'
+            },
+            body: "Success"
         }
-    })
+    }else{
+        let uid = event.queryStringParameters.uid
+        let els = JSON.parse(event.queryStringParameters.obj)
+        const finels = els.map(el=>{return{
+            ts: el[2],
+            farma: el[1],
+            int: el[0]
+        }})
+        return client.query(
+            q.Get(q.Ref(q.Collection('User'), uid))
+        ).then(res=>{
+            console.log(res)
+            if(res.data.reqs){
+                return client.query(
+                    q.Update(q.Ref(q.Collection('User'), uid), {
+                        data: {
+                            reqs: q.Append(
+                                finels,
+                                q.Select(
+                                    ["data", "reqs"],
+                                    q.Get(q.Ref(q.Collection('User'), uid))
+                                )
+                            )
+                        }
+                    })
+                ).then(()=>{
+                    return{
+                        statusCode: 200,
+                        headers: {
+                            'Access-Control-Allow-Origin': "*",
+                            'Access-Control-Allow-Headers': "Content-Type",
+                            'Content-Type': 'application/json'
+                        },
+                        body: "Success"
+                    }
+                })
+            }else{
+                return client.query(
+                    q.Update(q.Ref(q.Collection('User'), uid), {
+                        data: {
+                            reqs: finels
+                        }
+                    })
+                ).then(()=>{
+                    return{
+                        statusCode: 200,
+                        headers: {
+                            'Access-Control-Allow-Origin': "*",
+                            'Access-Control-Allow-Headers': "Content-Type",
+                            'Content-Type': 'application/json'
+                        },
+                        body: "Success"
+                    }
+                })
+            }
+        })
+    }
     /* let og = []
     try{
         let pres = await q.Select(
