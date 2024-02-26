@@ -350,6 +350,9 @@ async function farmadocInit(el) {
               );
               resolve(match);
             }
+            if(topmatches.length == 0){
+              reject("no matches");
+            }
             addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
 
             let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row; margin-top: 15px;"></div>`
