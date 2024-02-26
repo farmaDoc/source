@@ -356,6 +356,7 @@ async function farmadocInit(el) {
               }
             })
             if(totbtns < 2){
+              document.getElementById("buttonrowclear").remove()
               document.getElementById(chatid).getElementsByTagName('span')[0].remove()
               reject("no matches")
             }
