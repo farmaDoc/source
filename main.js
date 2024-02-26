@@ -314,7 +314,7 @@ async function farmadocInit(el) {
         let maxval = Math.max(...vals);
         //console.log(maxval)
         if (maxval > 0.2) {
-          if(maxval > 0.8){
+          if(maxval > 1){
             let matchingId = objres.find(
               (item) => item.probability == maxval
             ).intent;
