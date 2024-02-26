@@ -1,11 +1,5 @@
 async function farmadocInit(el) {
 
-  setInterval(() => {
-    if(JSON.parse(localStorage.getItem("farmadoc-reqs"))?.length > 4){
-      localStorage.setItem("farmadoc-reqs","[]")
-    }
-  }, 1000);
-
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
   let domandaBranch;
@@ -229,6 +223,25 @@ async function farmadocInit(el) {
       document.getElementById(minimizeel).innerHTML = "—";
     }
   });
+
+  async function sendStat(obj) {
+    await fetch(
+      urlServer + ".netlify/functions/sendStats?obj="+JSON.stringify(obj),
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+    )
+  }
+  setInterval(() => {
+    if(JSON.parse(localStorage.getItem("farmadoc-reqs"))?.length > 4){
+      sendStat(JSON.parse(localStorage.getItem("farmadoc-reqs")))
+      localStorage.setItem("farmadoc-reqs","[]")
+    }
+  }, 1000);
 
   // +++++++++++++++++++++++++++++++++ //
   // BASIC FUNCTIONS                   //
@@ -573,19 +586,6 @@ async function farmadocInit(el) {
     }
   };
 
-  async function sendStat(drugid, intid, uid) {
-    await fetch(
-      urlServer + ".netlify/functions/sendStats?farma=" + drugid + "&int=" + intid + "&uid=" + uid,
-      {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      }
-    )
-  }
-
   async function getDrugsInfo(id) {
     const respo = await fetch(
       urlServer + ".netlify/functions/getDrugs?id=" + id,
@@ -749,7 +749,7 @@ async function farmadocInit(el) {
           if(localStorage.getItem('farmadoc-reqs')){
             storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
           }
-          storedValue.push([res.ref["@ref"].id,0])
+          storedValue.push([res.ref["@ref"].id,0,Date.now()])
           localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
           currisp = res.ref["@ref"].id
           rimedi = res?.data?.rems;
