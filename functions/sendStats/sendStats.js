@@ -14,15 +14,23 @@ exports.handler = async (event, context) => {
         farma: el[1],
         int: el[0]
     }})
+    let og = []
+    try{
+        let pres = await q.Select(
+            ["data", "reqs"],
+            q.Get(q.Ref(q.Collection('User'), uid))
+        )
+        og = pres
+    }catch(err){
+        console.log(err)
+    }
+    
     await client.query(
         q.Update(q.Ref(q.Collection('User'), uid), {
             data: {
                 reqs: q.Append(
                     finels,
-                    q.Select(
-                        ["data", "reqs"],
-                        q.Get(q.Ref(q.Collection('User'), uid))
-                    )
+                    og
                 )
             }
         })
