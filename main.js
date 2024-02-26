@@ -355,8 +355,7 @@ async function farmadocInit(el) {
                 });
               }
             })
-            console.log(totbtns)
-            if(totbtns == 0){
+            if(totbtns < 2){
               document.getElementById(chatid).getElementsByTagName('span')[0].remove()
               reject("no matches")
             }
