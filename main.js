@@ -322,7 +322,7 @@ async function farmadocInit(el) {
     return new Promise((resolve, reject) => {
       const net = new NeuralNetwork();
       createCorpus(intents).then((corpus) => {
-        console.log(JSON.stringify(corpus))
+        //console.log(JSON.stringify(corpus))
         net.train(corpus);
         let tokens = tokenizer.tokenize(input); //tokenize input
         //create corpus from input
@@ -332,7 +332,7 @@ async function farmadocInit(el) {
         });
 
         let result = net.run(transformedInput); //analyze input
-
+        console.log(result)
         //transform result
         let objres = [];
         Object.keys(result).forEach((key) => {
