@@ -287,6 +287,17 @@ async function farmadocInit(el) {
       try {
         console.log(input)
         input.forEach((el, index) => {
+          if(el.data.createdBy != "system"){
+            let tokens = tokenizer.tokenize(el.data.title)
+            let doc = {
+              input: {},
+              output: { [el?.ref["@ref"].id]: 1 },
+            };
+            tokens.forEach((tok) => {
+              doc.input[natural.PorterStemmerIt.stem(tok)] = 1;
+            });
+            corpus.push(doc);
+          }
           el.data?.phrases?.forEach((phrase) => {
             let tokens = tokenizer.tokenize(phrase.value);
             let doc = {
