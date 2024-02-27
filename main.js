@@ -322,6 +322,7 @@ async function farmadocInit(el) {
     return new Promise((resolve, reject) => {
       const net = new NeuralNetwork();
       createCorpus(intents).then((corpus) => {
+        console.log(corpus)
         net.train(corpus);
         let tokens = tokenizer.tokenize(input); //tokenize input
         //create corpus from input
@@ -344,7 +345,7 @@ async function farmadocInit(el) {
 
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
-        console.log(objres.sort((a,b) => b.probability-a.probability))
+        //console.log(objres.sort((a,b) => b.probability-a.probability))
         if (maxval > 0.05) {
           if(maxval > 1){
             let matchingId = objres.find(
