@@ -285,7 +285,6 @@ async function farmadocInit(el) {
     return new Promise((resolve, reject) => {
       let corpus = [];
       try {
-        console.log(input)
         input.forEach((el, index) => {
           if(el.data.createdBy != "system"){
             let tokens = tokenizer.tokenize(el.data.title)
@@ -345,6 +344,7 @@ async function farmadocInit(el) {
 
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
+        console.log(objres.sort((a,b) => b.probability-a.probability))
         if (maxval > 0.05) {
           if(maxval > 1){
             let matchingId = objres.find(
