@@ -1,6 +1,8 @@
 async function farmadocInit(el) {
-  alert("lol")
-  try{
+  window.onerror = function(msg, url, linenumber) {
+    alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+    return true;
+  }
 
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
@@ -1130,8 +1132,5 @@ async function farmadocInit(el) {
     document.getElementById(chatid).style.flexDirection = "unset";
     document.getElementById(chatid).innerHTML =
       "<p style='color: grey'>Questo sito internet non è autorizzato per usare la chat di Farmadoc</p>";
-  }
-  }catch(err){
-    alert(err)
   }
 }
