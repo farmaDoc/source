@@ -1,5 +1,7 @@
 async function farmadocInit(el) {
 
+  try{
+
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
   let domandaBranch;
@@ -1128,5 +1130,8 @@ async function farmadocInit(el) {
     document.getElementById(chatid).style.flexDirection = "unset";
     document.getElementById(chatid).innerHTML =
       "<p style='color: grey'>Questo sito internet non è autorizzato per usare la chat di Farmadoc</p>";
+  }
+  }catch(err){
+    alert(err)
   }
 }
