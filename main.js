@@ -285,6 +285,7 @@ async function farmadocInit(el) {
     return new Promise((resolve, reject) => {
       let corpus = [];
       try {
+        console.log(input)
         input.forEach((el, index) => {
           el.data?.phrases?.forEach((phrase) => {
             let tokens = tokenizer.tokenize(phrase.value);
