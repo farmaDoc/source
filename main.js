@@ -1,5 +1,5 @@
 async function farmadocInit(el) {
-
+  alert("lol")
   try{
 
   let regex = /^[0-9]{0,25}$/;
