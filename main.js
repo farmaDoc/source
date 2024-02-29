@@ -358,12 +358,21 @@ async function farmadocInit(el) {
           });
           return count;
         }
+        function showCommonElements(arr1, arr2) {
+          let count = [];
+          arr1.forEach(element => {
+              if (arr2.includes(element)) {
+                  count.push(element)
+              }
+          });
+          return count;
+        }
         console.log(objres.map(e=>{
           let matchDoc = intents.find(
             (item) => item.ref["@ref"].id == e.intent
           )
           let phr = matchDoc.data.phrases.map(v=>v.value.split(/\W+/).filter(word => word !== '')).flat()
-          return [e.intent,countCommonElements(phr,inputphr)]
+          return [e.intent,countCommonElements(phr,inputphr),showCommonElements(phr,inputphr)]
         }).sort((a,b)=>b[1]-a[1]))
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
