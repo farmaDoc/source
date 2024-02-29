@@ -323,7 +323,8 @@ async function farmadocInit(el) {
   }
 
   function detectIntent(input, intents) {
-    console.log(StopwordsIt())
+    const stopwords = new StopwordsIt();
+    console.log(stopwords)
     return new Promise((resolve, reject) => {
       const net = new NeuralNetwork();
       createCorpus(intents).then((corpus) => {
