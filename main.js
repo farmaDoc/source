@@ -378,6 +378,17 @@ async function farmadocInit(el) {
               )
               resolve(match);
             }
+            const calculateVariance = (values) => {
+              const average = calculateMean(values);
+              const squareDiffs = values.map((value) => {
+                  const diff = value - average;
+                  return diff * diff;
+              });
+              const variance = calculateMean(squareDiffs);
+              return variance;
+            };
+            console.log(topmatches.map(e=>e.probability))
+            console.log(calculateVariance(topmatches.map(e=>e.probability)))
             if(topmatches.length < 2 ){
               reject("no matches");
             }else{
