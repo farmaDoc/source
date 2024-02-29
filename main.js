@@ -363,7 +363,7 @@ async function farmadocInit(el) {
           }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
             console.log(objsort)
-            topmatches = objsort.filter(e=>e.probability > 0.1) // Threshold
+            topmatches = objsort.filter(e=>e.probability > 0.01) // Threshold
             if(topmatches.length > 1){
               topmatches = topmatches.filter(e=>{
                 let pres = intents.find(
