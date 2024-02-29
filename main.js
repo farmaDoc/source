@@ -362,6 +362,7 @@ async function farmadocInit(el) {
             resolve(matchDoc);
           }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
+            console.log(objsort)
             topmatches = objsort.filter(e=>e.probability > 0.1) // Threshold
             if(topmatches.length > 1){
               topmatches = topmatches.filter(e=>{
