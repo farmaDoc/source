@@ -357,13 +357,13 @@ async function farmadocInit(el) {
           });
           return count;
         }
-        let intphr = objres.map(e=>{
+        console.log(objres.map(e=>{
           let matchDoc = intents.find(
             (item) => item.ref["@ref"].id == e.intent
           )
           let phr = matchDoc.data.phrases.map(v=>v.value.split(/\W+/).filter(word => word !== '')).flat()
-          console.log(countCommonElements(phr,inputphr))
-        })
+          return [e.intent,countCommonElements(phr,inputphr)]
+        }).sort((a,b)=>b[1]-a[1]))
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
         if (maxval > 0.3) {
