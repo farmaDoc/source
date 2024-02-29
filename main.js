@@ -382,7 +382,7 @@ async function farmadocInit(el) {
             resolve(matchDoc);
           }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
-            console.log(objsort)
+            //console.log(objsort)
             topmatches = objsort.filter(e=>e.probability > 0.01) // Threshold
             const calculateMean = (values) => {
               const mean = (values.reduce((sum, current) => sum + current)) / values.length;
@@ -432,7 +432,7 @@ async function farmadocInit(el) {
                   (item) => item.ref["@ref"].id == el.intent
                 )
                 //console.log(el)
-                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; opacity: ${el.probability+0.3};margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
+                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; opacity: ${el.probability+0.5};margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
                 //if(curD.data.createdBy != "system"){
                   totbtns = totbtns+1
                   document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
