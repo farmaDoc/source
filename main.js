@@ -347,7 +347,7 @@ async function farmadocInit(el) {
           };
           objres.push(objdoc);
         });
-        console.log(objres)
+        //console.log(objres)
         let inputphr = input.toLowerCase().split(/\W+/).filter(word => word !== '' && !stopwords.includes(word))
         function showCommonElements(arr1, arr2) {
           let count = [];
@@ -397,11 +397,11 @@ async function farmadocInit(el) {
               const variance = calculateMean(squareDiffs);
               return variance;
             };
-            console.log(topmatches.map(e=>e.probability))
-            console.log(Math.max(...topmatches.map(e=>e.probability)))
+            //console.log(topmatches.map(e=>e.probability))
+            //console.log(Math.max(...topmatches.map(e=>e.probability)))
             console.log(calculateVariance(topmatches.map(e=>e.probability)))
-            console.log(Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability)))
-            console.log(topmatches.filter(e=>e.probability > Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
+            //console.log(Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability)))
+            //console.log(topmatches.filter(e=>e.probability > Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
             if(calculateVariance(topmatches.map(e=>e.probability))>0.1){
               topmatches = topmatches.filter(e=>e.probability > (Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
             }
