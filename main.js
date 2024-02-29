@@ -365,7 +365,7 @@ async function farmadocInit(el) {
           let phr = matchDoc.data.phrases.map(v=>v.value.split(/\W+/).filter(word => word !== '')).flat()
           let common = showCommonElements(phr,inputphr).length
           let fin = e
-          fin.probability = fin.probability+(common/20)
+          fin.probability = fin.probability+(fin.probability*(common/10))
           return fin
         }).sort((a,b)=>b[1]-a[1])
         let vals = objres.map((a) => a.probability);
