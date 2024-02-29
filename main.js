@@ -364,20 +364,6 @@ async function farmadocInit(el) {
             let objsort = objres.sort((a, b) => b.probability - a.probability);
             console.log(objsort)
             topmatches = objsort.filter(e=>e.probability > 0.01) // Threshold
-            if(topmatches.length > 1){
-              topmatches = topmatches.filter(e=>{
-                let pres = intents.find(
-                  (item) => item.ref["@ref"].id == e.intent
-                )
-                return pres.data.createdBy != "system"
-              })
-            }
-            if(topmatches.length == 1){
-              let match = intents.find(
-                (item) => item.ref["@ref"].id == topmatches[0].intent
-              )
-              resolve(match);
-            }
             const calculateMean = (values) => {
               const mean = (values.reduce((sum, current) => sum + current)) / values.length;
               return mean;
@@ -398,6 +384,20 @@ async function farmadocInit(el) {
             console.log(topmatches.filter(e=>e.probability > Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
             if(calculateVariance(topmatches.map(e=>e.probability))>0.1){
               topmatches = topmatches.filter(e=>e.probability > (Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
+            }
+            if(topmatches.length > 1){
+              topmatches = topmatches.filter(e=>{
+                let pres = intents.find(
+                  (item) => item.ref["@ref"].id == e.intent
+                )
+                return pres.data.createdBy != "system"
+              })
+            }
+            if(topmatches.length == 1){
+              let match = intents.find(
+                (item) => item.ref["@ref"].id == topmatches[0].intent
+              )
+              resolve(match);
             }
             if(topmatches.length < 2 ){
               reject("no matches");
