@@ -402,7 +402,7 @@ async function farmadocInit(el) {
             console.log(calculateVariance(topmatches.map(e=>e.probability)))
             //console.log(Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability)))
             //console.log(topmatches.filter(e=>e.probability > Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
-            if(calculateVariance(topmatches.map(e=>e.probability))>0.1){
+            if(calculateVariance(topmatches.map(e=>e.probability))>0.75){
               topmatches = topmatches.filter(e=>e.probability > (Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
             }
             if(topmatches.length > 1){
