@@ -378,6 +378,10 @@ async function farmadocInit(el) {
               )
               resolve(match);
             }
+            const calculateMean = (values) => {
+              const mean = (values.reduce((sum, current) => sum + current)) / values.length;
+              return mean;
+            };
             const calculateVariance = (values) => {
               const average = calculateMean(values);
               const squareDiffs = values.map((value) => {
