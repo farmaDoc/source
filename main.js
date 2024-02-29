@@ -346,10 +346,15 @@ async function farmadocInit(el) {
           };
           objres.push(objdoc);
         });
-
+        console.log(objres)
+        console.log(input)
+        /* objres.map(e=>{
+          let matchDoc = intents.find(
+            (item) => item.ref["@ref"].id == matchingId
+          );
+        }) */
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
-        //console.log(objres.sort((a,b) => b.probability-a.probability))
         if (maxval > 0.3) {
           if(maxval > 0.95){
             let matchingId = objres.find(
