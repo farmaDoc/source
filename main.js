@@ -352,7 +352,7 @@ async function farmadocInit(el) {
           let matchDoc = intents.find(
             (item) => item.ref["@ref"].id == e.intent
           )
-          console.log(matchDoc.phrases.map(v=>v.value.split(/\W+/).filter(word => word !== '')).flat())
+          console.log(matchDoc.data.phrases.map(v=>v.value.split(/\W+/).filter(word => word !== '')).flat())
         })
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
