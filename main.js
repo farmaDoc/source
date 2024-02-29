@@ -347,12 +347,13 @@ async function farmadocInit(el) {
           objres.push(objdoc);
         });
         console.log(objres)
-        console.log(input)
-        /* objres.map(e=>{
+        console.log(input.split(/\W+/).filter(word => word !== ''))
+        objres.map(e=>{
           let matchDoc = intents.find(
-            (item) => item.ref["@ref"].id == matchingId
-          );
-        }) */
+            (item) => item.ref["@ref"].id == e.intent
+          )
+          console.log(matchDoc.phrases.map(v=>v.value.split(/\W+/).filter(word => word !== '')).flat())
+        })
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
         if (maxval > 0.3) {
