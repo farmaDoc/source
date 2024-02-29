@@ -411,18 +411,8 @@ async function farmadocInit(el) {
                 let curD = intents.find(
                   (item) => item.ref["@ref"].id == el.intent
                 )
-                let opacity = 1
-                if(index == 2 ){
-                  opacity = 1
-                }else{
-                  if(index == 1){
-                    opacity = 0.75
-                  }else{
-                    opacity = 0.6
-                  }
-                }
                 //console.log(el)
-                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
+                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
                 //if(curD.data.createdBy != "system"){
                   totbtns = totbtns+1
                   document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
