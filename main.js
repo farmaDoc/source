@@ -350,7 +350,7 @@ async function farmadocInit(el) {
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
         //console.log(objres.sort((a,b) => b.probability-a.probability))
-        if (maxval > 0.05) {
+        if (maxval > 0.3) {
           if(maxval > 1){
             let matchingId = objres.find(
               (item) => item.probability == maxval
@@ -362,8 +362,7 @@ async function farmadocInit(el) {
             resolve(matchDoc);
           }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
-            let topmatches = objsort.slice(0, 3);
-            topmatches = topmatches.filter(e=>e.probability > 0.05) // Threshold
+            topmatches = objsort.filter(e=>e.probability > 0.1) // Threshold
             if(topmatches.length > 1){
               topmatches = topmatches.filter(e=>{
                 let pres = intents.find(
@@ -401,7 +400,7 @@ async function farmadocInit(el) {
                   }
                 }
                 //console.log(el)
-                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title} (${(el.probability*100).toFixed(2)}%)</button>`
+                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="opacity: ${opacity};cursor: pointer; margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
                 //if(curD.data.createdBy != "system"){
                   totbtns = totbtns+1
                   document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
