@@ -434,10 +434,15 @@ async function farmadocInit(el) {
               })
             }
             if(topmatches.length == 1){
-              let match = intents.find(
-                (item) => item.ref["@ref"].id == topmatches[0].intent
-              )
-              resolve(match);
+              if(topmatches[0].probability > 0.8){
+                let match = intents.find(
+                  (item) => item.ref["@ref"].id == topmatches[0].intent
+                )
+                resolve(match);
+              }else{
+                reject("no matches")
+              }
+              
             }
             if(topmatches.length < 2 ){
               reject("no matches");
