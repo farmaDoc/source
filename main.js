@@ -348,7 +348,7 @@ async function farmadocInit(el) {
           objres.push(objdoc);
         });
         //console.log(objres)
-        let inputphr = input.toLowerCase().split(/\W+/).filter(word => word !== '' && !stopwords.includes(word))
+        /* let inputphr = input.toLowerCase().split(/\W+/).filter(word => word !== '' && !stopwords.includes(word))
         function showCommonElements(arr1, arr2) {
           let count = [];
           arr1.forEach(element => {
@@ -357,8 +357,8 @@ async function farmadocInit(el) {
               }
           });
           return [...new Set(count)];
-        }
-        objres = objres.map(e=>{
+        } */
+        /* objres = objres.map(e=>{
           let matchDoc = intents.find(
             (item) => item.ref["@ref"].id == e.intent
           )
@@ -367,9 +367,10 @@ async function farmadocInit(el) {
           let fin = e
           fin.probability = fin.probability+(fin.probability*(common/10))
           return fin
-        }).sort((a,b)=>b[1]-a[1])
+        }).sort((a,b)=>b[1]-a[1]) */
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
+        console.log(maxval)
         if (maxval > 0.3) {
           if(maxval > 0.95){
             let matchingId = objres.find(
@@ -399,7 +400,6 @@ async function farmadocInit(el) {
             };
             //console.log(topmatches.map(e=>e.probability))
             //console.log(Math.max(...topmatches.map(e=>e.probability)))
-            console.log(calculateVariance(topmatches.map(e=>e.probability)))
             //console.log(Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability)))
             //console.log(topmatches.filter(e=>e.probability > Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
             if(calculateVariance(topmatches.map(e=>e.probability))>0.75){
@@ -450,7 +450,7 @@ async function farmadocInit(el) {
             } */
             function waitUntilIntervalCleared(topmatch) {
               return new Promise(resolve => {
-                const waitforCoice = setInterval(() => {
+                const waitforCoice = setInterval(() =>  {
                   topmatch.forEach(el=>{
                     let curD = intents.find(
                       (item) => item.ref["@ref"].id == el.intent
