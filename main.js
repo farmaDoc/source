@@ -391,8 +391,8 @@ async function farmadocInit(el) {
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
         console.log(maxval)
-        if (maxval > 0.3) {
-          if(maxval > 0.95){
+        if (maxval > 0.4) {
+          if(maxval > 0.90){
             let matchingId = objres.find(
               (item) => item.probability == maxval
             ).intent;
