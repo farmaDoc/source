@@ -9,7 +9,17 @@ const client = new faunadb.Client({
 
 exports.handler = async (event, context) => {
 
-    console.log(event)
+    if(event.httpMethod == "OPTIONS"){
+        return{
+            statusCode: 200,
+            headers: {
+				'Access-Control-Allow-Origin': "*",
+				'Access-Control-Allow-Headers': "Content-Type",
+				'Content-Type': 'application/json'
+			},
+            body: "lol"
+        }
+    }
 
     const payloadx = JSON.parse(event.body)
 
@@ -19,7 +29,7 @@ exports.handler = async (event, context) => {
         user: payloadx.client,
         ts: now,
         msg: `Si è verificato un errore nella chat. Di seguito sono riportati i dettagli:`,
-        ext: `${event}`
+        ext: JSON.stringify(event)
     }
 
     return client.queryWithMetrics(
