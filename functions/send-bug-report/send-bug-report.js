@@ -8,7 +8,7 @@ const client = new faunadb.Client({
 });
 
 exports.handler = async (event, context) => {
-    const payloadx = JSON.parse(JSON.parse(event.body))
+    const payloadx = event.body
 
     const now = Date.now()
 
@@ -32,6 +32,7 @@ exports.handler = async (event, context) => {
 				'Access-Control-Allow-Headers': "Content-Type",
 				'Content-Type': 'application/json'
 			},
+            body: "lol"
         }
     })
 }
