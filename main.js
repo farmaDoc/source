@@ -4,6 +4,9 @@ async function farmadocInit(el) {
     alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
     return true;
   }
+  window.addEventListener('error', function(event) {
+    window.alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+  }, true);
 
   /* window.onerror = function(msg, url, linenumber) {
     window.alert("error detected")
