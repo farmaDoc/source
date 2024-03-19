@@ -1,8 +1,13 @@
 async function farmadocInit(el) {
-
+  
   window.onerror = function(msg, url, linenumber) {
-    alert("error detected")
+    alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
     return true;
+  }
+
+  /* window.onerror = function(msg, url, linenumber) {
+    window.alert("error detected")
+    return true
     fetch(urlServer + ".netlify/functions/send-bug-report",{
       method: "POST",
       body: {
@@ -13,7 +18,7 @@ async function farmadocInit(el) {
         client: uid
       }
     })
-  }
+  } */
 
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
