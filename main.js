@@ -453,6 +453,10 @@ async function farmadocInit(el) {
               document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
               topmatches.reverse()
               let totbtns = 0
+              document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", `<button class="farmadoc-int-btn" id="farmadoc-int-no-choice"' style="cursor: pointer;margin-right: 5px; margin-bottom: 5px; border: none; background-color: #ffb0ab; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">Nessuna delle precedenti</button>`);
+              document.getElementById("farmadoc-int-no-choice").addEventListener('click', function() {
+                this.style.backgroundColor = "white";
+              })
               topmatches.forEach((el,index)=>{
                 let curD = intents.find(
                   (item) => item.ref["@ref"].id == el.intent
@@ -466,10 +470,6 @@ async function farmadocInit(el) {
                   this.style.backgroundColor = "white";
                 });
                 //}
-              })
-              document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", `<button class="farmadoc-int-btn" id="farmadoc-int-no-choice"' style="cursor: pointer;margin-right: 5px; margin-bottom: 5px; border: none; background-color: #ffb0ab; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">Nessuna delle precedenti</button>`);
-              document.getElementById("farmadoc-int-no-choice").addEventListener('click', function() {
-                this.style.backgroundColor = "white";
               })
             }
             
@@ -505,7 +505,8 @@ async function farmadocInit(el) {
             }
             waitUntilIntervalCleared(topmatches).then(choseInt=>{
               Array.from(document.getElementsByClassName("farmadoc-int-btn")).forEach(button=>{
-                button.removeEventListener("click")
+                const clone = button.cloneNode(true);
+                button.parentNode.replaceChild(clone, button);
               })
               if(choseInt == "no"){
                 addRes("Forse i tuoi specifici sintomi non sono ancora nella nostra banca dati, per il momento non posso aiutarti con la tua richiesta.", false);
