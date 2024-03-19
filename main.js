@@ -1235,11 +1235,11 @@ async function farmadocInit(el) {
 }catch(err){
   fetch(urlServer + ".netlify/functions/send-bug-report",{
     method: "POST",
-    body: {
+    body: JSON.stringify({
       message: err,
       navigator: navigator,
       client: uid
-    }
+    })
   })
 }
 }
