@@ -19,7 +19,7 @@ exports.handler = async (event, context) => {
         user: payloadx.client,
         ts: now,
         msg: `Si è verificato un errore nella chat. Di seguito sono riportati i dettagli:`,
-        ext: `${JSON.stringify(event)}`
+        ext: `${event}`
     }
 
     return client.queryWithMetrics(

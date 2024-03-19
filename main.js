@@ -36,7 +36,6 @@ async function farmadocInit(el) {
   /* let urlServer = "http://localhost:8888/"; */
 
   nav = navigator
-  console.log(navigator)
 
   let result = await fetch(
     urlServer + ".netlify/functions/checkIn?key=" + el,
