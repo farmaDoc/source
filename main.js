@@ -33,6 +33,7 @@ async function farmadocInit(el) {
     });
 
     window.onerror = function(msg, url, linenumber) {
+      console.log("error detected")
       fetch(urlServer + ".netlify/functions/send-bug-report",{
         method: "POST",
         body: {
