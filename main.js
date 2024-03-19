@@ -4,6 +4,8 @@ window.onerror = function(msg, url, linenumber) {
 }
 async function farmadocInit(el) {
 
+  try{
+    
   /* window.onerror = function(msg, url, linenumber) {
     window.alert("error detected")
     return true
@@ -1228,4 +1230,5 @@ async function farmadocInit(el) {
     document.getElementById(chatid).innerHTML =
       "<p style='color: grey'>Questo sito internet non è autorizzato per usare la chat di Farmadoc</p>";
   }
+}catch(err)
 }
