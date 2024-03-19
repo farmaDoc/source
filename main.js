@@ -458,19 +458,18 @@ async function farmadocInit(el) {
                   (item) => item.ref["@ref"].id == el.intent
                 )
                 //console.log(el)
-                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; opacity: ${el.probability+0.5};margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
+                let htmlC = `<button class="farmadoc-int-btn" id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; opacity: ${el.probability+0.5};margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
                 //if(curD.data.createdBy != "system"){
                 totbtns = totbtns+1
                 document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
                 document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
                   this.style.backgroundColor = "white";
                 });
-                document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", `<button id="farmadoc-int-no-choice"' style="cursor: pointer;margin-right: 5px; margin-bottom: 5px; border: none; background-color: #ffb0ab; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">Nessuna delle precedenti</button>`);
-                document.getElementById("farmadoc-int-no-choice").addEventListener('click', function() {
-                  this.style.backgroundColor = "white";
-                })
-
                 //}
+              })
+              document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", `<button class="farmadoc-int-btn" id="farmadoc-int-no-choice"' style="cursor: pointer;margin-right: 5px; margin-bottom: 5px; border: none; background-color: #ffb0ab; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">Nessuna delle precedenti</button>`);
+              document.getElementById("farmadoc-int-no-choice").addEventListener('click', function() {
+                this.style.backgroundColor = "white";
               })
             }
             
@@ -496,7 +495,7 @@ async function farmadocInit(el) {
                       }
                       if(document.getElementById("farmadoc-int-no-choice")?.style.backgroundColor == "white"){
                         document.getElementById(msgid).disabled = false;
-                        reject("ignore")
+                        resolve("no")
                         clearInterval(waitforCoice)
                       }
                     }
@@ -505,11 +504,20 @@ async function farmadocInit(el) {
               });
             }
             waitUntilIntervalCleared(topmatches).then(choseInt=>{
-              let matchDoc = intents.find(
-                (item) => item.ref["@ref"].id == choseInt
-              )
-              document.getElementById(msgid).disabled = false;
-              resolve(matchDoc);
+              Array.from(document.getElementsByClassName("farmadoc-int-btn")).forEach(button=>{
+                button.removeEventListener("click")
+              })
+              if(choseInt == "no"){
+                addRes("Forse i tuoi specifici sintomi non sono ancora nella nostra banca dati, per il momento non posso aiutarti con la tua richiesta.", false);
+                reject("ignore")
+              }else{
+                let matchDoc = intents.find(
+                  (item) => item.ref["@ref"].id == choseInt
+                )
+                document.getElementById(msgid).disabled = false;
+                resolve(matchDoc);
+              }
+              
             })
           }
         }else{
