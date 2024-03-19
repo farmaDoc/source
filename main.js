@@ -20,6 +20,7 @@ async function farmadocInit(el) {
     })
   } */
 
+  let nav
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
   let domandaBranch;
@@ -33,6 +34,9 @@ async function farmadocInit(el) {
   let inventoryLoaded = false;
   let urlServer = "https://source.farmadoc.it/"
   /* let urlServer = "http://localhost:8888/"; */
+
+  nav = navigator
+  console.log(navigator)
 
   let result = await fetch(
     urlServer + ".netlify/functions/checkIn?key=" + el,
@@ -1237,7 +1241,7 @@ async function farmadocInit(el) {
     method: "POST",
     body: JSON.stringify({
       message: err,
-      navigator: navigator,
+      navigator: nav,
       client: uid
     }),
     headers: {
