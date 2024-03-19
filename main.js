@@ -55,7 +55,7 @@ async function farmadocInit(el) {
   let userMail = result?.res?.persMailContact;
   let userPhone = result?.res?.phoneContact;
   
-  dkfjgn
+  throw new Error("Thrown from thisThrows()")
   
   let usrIntents = await fetch(
     urlServer + ".netlify/functions/getIntents?createdBy=" +
