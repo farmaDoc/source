@@ -59,7 +59,8 @@ async function farmadocInit(el) {
   let userMail = result?.res?.persMailContact;
   let userPhone = result?.res?.phoneContact;
   
-  console.log(peppe)
+  dkfjgn
+  
   let usrIntents = await fetch(
     urlServer + ".netlify/functions/getIntents?createdBy=" +
     result?.res?.id,
