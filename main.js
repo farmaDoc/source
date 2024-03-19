@@ -391,7 +391,7 @@ async function farmadocInit(el) {
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
         console.log(maxval)
-        if (maxval > 0.4) {
+        if (maxval > 0.35) {
           if(maxval > 0.90){
             let matchingId = objres.find(
               (item) => item.probability == maxval
@@ -460,11 +460,16 @@ async function farmadocInit(el) {
                 //console.log(el)
                 let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; opacity: ${el.probability+0.5};margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
                 //if(curD.data.createdBy != "system"){
-                  totbtns = totbtns+1
-                  document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
-                  document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
-                    this.style.backgroundColor = "white";
-                  });
+                totbtns = totbtns+1
+                document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
+                document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
+                  this.style.backgroundColor = "white";
+                });
+                document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", `<button id="farmadoc-int-no-choice"' style="cursor: pointer;margin-right: 5px; margin-bottom: 5px; border: none; background-color: #ffb0ab; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">Nessuna delle precedenti</button>`);
+                document.getElementById("farmadoc-int-no-choice").addEventListener('click', function() {
+                  this.style.backgroundColor = "white";
+                })
+
                 //}
               })
             }
@@ -483,10 +488,15 @@ async function farmadocInit(el) {
                     )
                     if(curD.data.createdBy != "system"){
                       if(document.getElementById("farmadoc-int-choice-"+el.intent)?.style.backgroundColor == "white"){
-                        document.getElementById("buttonrowclear")?.remove()
-                        document.getElementById(chatid).getElementsByTagName('span')[0]?.remove()
+                        /* document.getElementById("buttonrowclear")?.remove()
+                        document.getElementById(chatid).getElementsByTagName('span')[0]?.remove() */
                         document.getElementById(msgid).disabled = false;
                         resolve(el.intent)
+                        clearInterval(waitforCoice)
+                      }
+                      if(document.getElementById("farmadoc-int-no-choice")?.style.backgroundColor == "white"){
+                        document.getElementById(msgid).disabled = false;
+                        reject("no matches")
                         clearInterval(waitforCoice)
                       }
                     }
