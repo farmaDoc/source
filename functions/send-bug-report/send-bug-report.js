@@ -16,7 +16,7 @@ exports.handler = async (event, context) => {
         user: payloadx.client,
         ts: now,
         msg: `Si è verificato un errore nella chat. Di seguito sono riportati i dettagli:`,
-        ext: `${payloadx.message}\n\n${payloadx.url},\n\n${payloadx.linenumber}\n\n${payloadx.msg}\n\n${payloadx.navigator}`
+        ext: `${payloadx.message}\n\n${payloadx.navigator}`
     }
 
     return client.queryWithMetrics(

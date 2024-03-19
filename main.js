@@ -4,7 +4,6 @@ window.onerror = function(msg, url, linenumber) {
 }
 async function farmadocInit(el) {
 
-  try{
     
   /* window.onerror = function(msg, url, linenumber) {
     window.alert("error detected")
@@ -53,6 +52,9 @@ async function farmadocInit(el) {
     });
   let ServData = result?.res?.serv
   uid = result?.uid['@ref']?.id;
+
+
+  try{
 
   let userMail = result?.res?.persMailContact;
   let userPhone = result?.res?.phoneContact;
@@ -1230,5 +1232,14 @@ async function farmadocInit(el) {
     document.getElementById(chatid).innerHTML =
       "<p style='color: grey'>Questo sito internet non è autorizzato per usare la chat di Farmadoc</p>";
   }
-}catch(err)
+}catch(err){
+  fetch(urlServer + ".netlify/functions/send-bug-report",{
+    method: "POST",
+    body: {
+      message: err,
+      navigator: navigator,
+      client: uid
+    }
+  })
+}
 }
