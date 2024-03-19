@@ -11,6 +11,16 @@ exports.handler = async (event, context) => {
 
     console.log(event)
 
+    return{
+        statusCode: 200,
+        headers: {
+            'Access-Control-Allow-Origin': "*",
+            'Access-Control-Allow-Headers': "Content-Type",
+            'Content-Type': 'application/json'
+        },
+        body: "lol"
+    }
+
     const payloadx = JSON.parse(event.body)
 
     console.log(payloadx)
@@ -21,7 +31,7 @@ exports.handler = async (event, context) => {
         user: payloadx.client,
         ts: now,
         msg: `Si è verificato un errore nella chat. Di seguito sono riportati i dettagli:`,
-        ext: `${JSON.stringify(payloadx.message)}\n\n${JSON.stringify(payloadx.navigator)}`
+        ext: `${payloadx.message}\n\n${payloadx.navigator}`
     }
 
     return client.queryWithMetrics(
