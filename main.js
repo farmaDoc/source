@@ -1,5 +1,18 @@
 async function farmadocInit(el) {
 
+  window.onerror = function(msg, url, linenumber) {
+    console.log("error detected")
+    fetch(urlServer + ".netlify/functions/send-bug-report",{
+      method: "POST",
+      body: {
+        message: msg,
+        url: url,
+        linenumber: linenumber,
+        navigator: navigator,
+        client: uid
+      }
+    })
+  }
 
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
@@ -25,28 +38,12 @@ async function farmadocInit(el) {
       },
     }
   )
-    .then((res) => {
+  .then((res) => {
       return res.json();
     })
     .catch((error) => {
       //console.log(error);
     });
-
-    window.onerror = function(msg, url, linenumber) {
-      console.log("error detected")
-      fetch(urlServer + ".netlify/functions/send-bug-report",{
-        method: "POST",
-        body: {
-          message: msg,
-          url: url,
-          linenumber: linenumber,
-          navigator: navigator,
-          client: result?.uid['@ref']?.id
-        }
-      })
-    }
-
-    console.log(peppe)
   let ServData = result?.res?.serv
   uid = result?.uid['@ref']?.id;
 
