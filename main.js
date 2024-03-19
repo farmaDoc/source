@@ -496,7 +496,7 @@ async function farmadocInit(el) {
                       }
                       if(document.getElementById("farmadoc-int-no-choice")?.style.backgroundColor == "white"){
                         document.getElementById(msgid).disabled = false;
-                        reject("no matches")
+                        reject("ignore")
                         clearInterval(waitforCoice)
                       }
                     }
