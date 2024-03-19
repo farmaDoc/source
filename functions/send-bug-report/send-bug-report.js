@@ -8,6 +8,9 @@ const client = new faunadb.Client({
 });
 
 exports.handler = async (event, context) => {
+
+    console.log(event.body)
+
     const payloadx = JSON.parse(event.body)
 
     console.log(payloadx)
