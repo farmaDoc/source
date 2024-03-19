@@ -1,6 +1,5 @@
 async function farmadocInit(el) {
 
-  console.log(peppe)
 
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
@@ -46,6 +45,7 @@ async function farmadocInit(el) {
       })
     }
 
+    console.log(peppe)
   let ServData = result?.res?.serv
   uid = result?.uid['@ref']?.id;
 
