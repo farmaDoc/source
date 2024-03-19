@@ -455,7 +455,7 @@ async function farmadocInit(el) {
               let totbtns = 0
               document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", `<button class="farmadoc-int-btn" id="farmadoc-int-no-choice"' style="cursor: pointer;margin-right: 5px; margin-bottom: 5px; border: none; background-color: #ffb0ab; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">Nessuna delle precedenti</button>`);
               document.getElementById("farmadoc-int-no-choice").addEventListener('click', function() {
-                this.style.backgroundColor = "white";
+                this.style.backgroundColor = "#33e894";
               })
               topmatches.forEach((el,index)=>{
                 let curD = intents.find(
@@ -467,7 +467,7 @@ async function farmadocInit(el) {
                 totbtns = totbtns+1
                 document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
                 document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
-                  this.style.backgroundColor = "white";
+                  this.style.backgroundColor = "#33e894";
                 });
                 //}
               })
@@ -486,14 +486,14 @@ async function farmadocInit(el) {
                       (item) => item.ref["@ref"].id == el.intent
                     )
                     if(curD.data.createdBy != "system"){
-                      if(document.getElementById("farmadoc-int-choice-"+el.intent)?.style.backgroundColor == "white"){
+                      if(document.getElementById("farmadoc-int-choice-"+el.intent)?.style.backgroundColor == "#33e894"){
                         /* document.getElementById("buttonrowclear")?.remove()
                         document.getElementById(chatid).getElementsByTagName('span')[0]?.remove() */
                         document.getElementById(msgid).disabled = false;
                         resolve(el.intent)
                         clearInterval(waitforCoice)
                       }
-                      if(document.getElementById("farmadoc-int-no-choice")?.style.backgroundColor == "white"){
+                      if(document.getElementById("farmadoc-int-no-choice")?.style.backgroundColor == "#33e894"){
                         document.getElementById(msgid).disabled = false;
                         resolve("no")
                         clearInterval(waitforCoice)
@@ -505,6 +505,7 @@ async function farmadocInit(el) {
             }
             waitUntilIntervalCleared(topmatches).then(choseInt=>{
               Array.from(document.getElementsByClassName("farmadoc-int-btn")).forEach(button=>{
+                button.style.cursor = "text"
                 const clone = button.cloneNode(true);
                 button.parentNode.replaceChild(clone, button);
               })
