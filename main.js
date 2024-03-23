@@ -278,7 +278,7 @@ async function farmadocInit(el) {
                   </div>
                   <div style="margin-top: 20px;">
                     <span>si prega di dettagliare l'errore riscontrato:</span>
-                    <textarea id="feedbackText" rows="10" style="margin: 10px 0; padding: 5px; width: calc(100% - 12px); resize: none;"></textarea>
+                    <textarea id="feedbackText" rows="5" style="margin: 10px 0; padding: 5px; width: calc(100% - 12px); max-height: 120px; resize: none;"></textarea>
                   </div>
                   <button id="sendFb" type="text" disabled style="cursor: pointer; width: 100%; border-radius: 5px; background-color: #33e894; border: none; padding: 10px;">Invia feedback</button>
                 </div>
@@ -340,6 +340,8 @@ async function farmadocInit(el) {
       let feedbackNote = document.getElementById('feedbackText').value;
       createTicket(`Problema: ${feedbackScope} \n
                     Note: ${feedbackNote}`);
+      document.getElementById('feedbackText').value = "";
+      fbCheckboxes.filter(x => x.checked).map(y => y.checked = false);
     }
   })
 
