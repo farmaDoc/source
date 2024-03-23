@@ -1,9 +1,26 @@
+window.onerror = function(msg, url, linenumber) {
+  alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+  return true;
+}
 async function farmadocInit(el) {
+
+    
   /* window.onerror = function(msg, url, linenumber) {
-    alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
-    return true;
+    window.alert("error detected")
+    return true
+    fetch(urlServer + ".netlify/functions/send-bug-report",{
+      method: "POST",
+      body: {
+        message: msg,
+        url: url,
+        linenumber: linenumber,
+        navigator: navigator,
+        client: uid
+      }
+    })
   } */
 
+  let nav
   let regex = /^[0-9]{0,25}$/;
   let opzioni = [];
   let domandaBranch;
@@ -18,6 +35,8 @@ async function farmadocInit(el) {
   let urlServer = "https://source.farmadoc.it/"
   // let urlServer = "http://localhost:8888/";
 
+  nav = navigator
+
   let result = await fetch(
     urlServer + ".netlify/functions/checkIn?key=" + el,
     {
@@ -28,19 +47,21 @@ async function farmadocInit(el) {
       },
     }
   )
-    .then((res) => {
+  .then((res) => {
       return res.json();
     })
     .catch((error) => {
       //console.log(error);
     });
-
   let ServData = result?.res?.serv
   uid = result?.uid['@ref']?.id;
 
+
+  try{
+
   let userMail = result?.res?.persMailContact;
   let userPhone = result?.res?.phoneContact;
-
+  
   let usrIntents = await fetch(
     urlServer + ".netlify/functions/getIntents?createdBy=" +
     result?.res?.id,
@@ -519,8 +540,8 @@ async function farmadocInit(el) {
         let vals = objres.map((a) => a.probability);
         let maxval = Math.max(...vals);
         console.log(maxval)
-        if (maxval > 0.3) {
-          if (maxval > 0.95) {
+        if (maxval > 0.35) {
+          if(maxval > 0.90){
             let matchingId = objres.find(
               (item) => item.probability == maxval
             ).intent;
@@ -581,18 +602,18 @@ async function farmadocInit(el) {
               document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
               topmatches.reverse()
               let totbtns = 0
-              topmatches.forEach((el, index) => {
+              topmatches.forEach((el,index)=>{
                 let curD = intents.find(
                   (item) => item.ref["@ref"].id == el.intent
                 )
                 //console.log(el)
-                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; opacity: ${el.probability + 0.5};margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
+                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; opacity: ${el.probability+0.5};margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
                 //if(curD.data.createdBy != "system"){
-                totbtns = totbtns + 1
-                document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
-                document.getElementById("farmadoc-int-choice-" + el.intent).addEventListener('click', function () {
-                  this.style.backgroundColor = "white";
-                });
+                  totbtns = totbtns+1
+                  document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
+                  document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
+                    this.style.backgroundColor = "white";
+                  });
                 //}
               })
             }
@@ -609,12 +630,17 @@ async function farmadocInit(el) {
                     let curD = intents.find(
                       (item) => item.ref["@ref"].id == el.intent
                     )
-                    if (curD.data.createdBy != "system") {
-                      if (document.getElementById("farmadoc-int-choice-" + el.intent)?.style.backgroundColor == "white") {
+                    if(curD.data.createdBy != "system"){
+                      if(document.getElementById("farmadoc-int-choice-"+el.intent)?.style.backgroundColor == "white"){
                         document.getElementById("buttonrowclear")?.remove()
                         document.getElementById(chatid).getElementsByTagName('span')[0]?.remove()
                         document.getElementById(msgid).disabled = false;
                         resolve(el.intent)
+                        clearInterval(waitforCoice)
+                      }
+                      if(document.getElementById("farmadoc-int-no-choice")?.style.backgroundColor == "#33e894" || document.getElementById("farmadoc-int-no-choice")?.style.backgroundColor == "rgb(51, 232, 148)"){
+                        document.getElementById(msgid).disabled = false;
+                        resolve("no")
                         clearInterval(waitforCoice)
                       }
                     }
@@ -622,7 +648,7 @@ async function farmadocInit(el) {
                 }, 250);
               });
             }
-            waitUntilIntervalCleared(topmatches).then(choseInt => {
+            waitUntilIntervalCleared(topmatches).then(choseInt=>{
               let matchDoc = intents.find(
                 (item) => item.ref["@ref"].id == choseInt
               )
@@ -1320,4 +1346,17 @@ async function farmadocInit(el) {
     document.getElementById(chatid).innerHTML =
       "<p style='color: grey'>Questo sito internet non è autorizzato per usare la chat di Farmadoc</p>";
   }
+}catch(err){
+  fetch(urlServer + ".netlify/functions/send-bug-report",{
+    method: "POST",
+    body: JSON.stringify({
+      message: err,
+      navigator: nav,
+      client: uid
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+}
 }
