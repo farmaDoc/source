@@ -307,8 +307,6 @@ async function farmadocInit(el) {
       let feedbackNote = document.getElementById('feedbackText').value;
       createTicket(`Problema: ${feedbackScope} \n
                     Note: ${feedbackNote}`);
-      document.getElementById('feedbackText').value = "";
-      fbCheckboxes.filter(x => x.checked).map(y => y.checked = false);
     }
   })
 
