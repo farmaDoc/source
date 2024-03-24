@@ -243,7 +243,7 @@ async function farmadocInit(el) {
           <div id="feedback" style="display: none; position: absolute; top: 0; left: 0; background-color: rgba(255,255,255,0.9); height: 100%; width: 100%; border-radius: 9px">
             <div id="questions">
               <div style="padding: 0 20px; display: inline-flex; justify-content: space-between; align-items: center; width: calc(100% - 40px)">
-                <h2>
+                <h2 style="margin-bottom: 10px">
                   Aiuto
                 </h2>
                 <div class="backtochat" style="cursor: pointer; padding: 20px;">X</div>
@@ -254,10 +254,13 @@ async function farmadocInit(el) {
                 <style>
                   .question input[type="checkbox"] {
                     cursor: pointer;
-                    margin-right: 5px
+                    margin: 0 5px 0 0;
                   }
                   .question {
-                    margin-bottom: 10px;
+                    margin-bottom: 5px;
+                  }
+                  .question label {
+                    font-size: 14px;
                   }
                 </style>
                 <div style="display: flex; flex-direction: column; margin-bottom: 20px">
@@ -276,7 +279,7 @@ async function farmadocInit(el) {
                   <div class="question">
                     <input type="checkbox" class="checkQst" value="La chat si blocca e non posso procedere" name="bloccata" /><label for="bloccata">La chat si blocca e non posso procedere</label>
                   </div>
-                  <div style="margin-top: 20px;">
+                  <div style="margin-top: 10px;">
                     <span>si prega di dettagliare l'errore riscontrato:</span>
                     <textarea id="feedbackText" rows="5" style="margin: 10px 0; padding: 5px; width: calc(100% - 12px); max-height: 120px; resize: none;"></textarea>
                   </div>
@@ -286,7 +289,7 @@ async function farmadocInit(el) {
             </div>
             <div id="thankyou">
               <div style="padding: 0 20px; display: inline-flex; justify-content: space-between; align-items: center; width: calc(100% - 40px)">
-                <h2>Aiuto</h2>
+                <h2 style="margin-bottom: 10px">Aiuto</h2>
                 <div class="backtochat" style="cursor: pointer; padding: 20px;">X</div>
               </div>
               <hr style="all: unset; border-top: 1px solid grey; display: block;">
