@@ -1,24 +1,4 @@
-window.onerror = function(msg, url, linenumber) {
-  alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
-  return true;
-}
 async function farmadocInit(el) {
-
-    
-  /* window.onerror = function(msg, url, linenumber) {
-    window.alert("error detected")
-    return true
-    fetch(urlServer + ".netlify/functions/send-bug-report",{
-      method: "POST",
-      body: {
-        message: msg,
-        url: url,
-        linenumber: linenumber,
-        navigator: navigator,
-        client: uid
-      }
-    })
-  } */
 
   let nav
   let regex = /^[0-9]{0,25}$/;
@@ -33,7 +13,6 @@ async function farmadocInit(el) {
   let uid;
   let inventoryLoaded = false;
   let urlServer = "https://source.farmadoc.it/"
-  // let urlServer = "http://localhost:8888/";
 
   nav = navigator
 
@@ -81,7 +60,6 @@ async function farmadocInit(el) {
     });
 
   usrIntents = usrIntents.res;
-  /* console.log("USR INTENTS ", usrIntents); */
 
   let sysIntents = await fetch(
     urlServer + ".netlify/functions/getIntents?createdBy=system",
@@ -138,8 +116,8 @@ async function farmadocInit(el) {
   let width = screen.width < 960 ? "calc(100% - 20px)" : "500px";
 
   let demo = ""
-
-  if (result.demo) {
+  
+  if(result.demo){
     demo = "Demo "
   }
 
@@ -205,31 +183,20 @@ async function farmadocInit(el) {
               </div>
               <hr style="all: unset; border-top: 1px solid grey; display: block;">
               <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
+                
               </div>
             </div>
             <div id="${contentid}">
-              <div style="all: unset; width: 100%;">
+              <div style="all: unset; width: 100%">
               <div id="${chatid}" style="position: relative; height: 400px; padding: 20px; display: flex; flex-direction: column-reverse; align-items: flex-end; box-sizing: border-box; width: 100%; background-color: #eaeaea; overflow-y: auto;">
-                  <div class="help" style="position: absolute; right: 0; top: 0; background-color: #fff; border-left: solid 1px grey; border-bottom: solid 1px grey;">
-                    <a href="#help" id="openFeedback" style="text-decoration: none; font-size: 12px; padding: 2px 5px; display: inline-flex; justify-content: center; align-items: center;">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="height: 15px; width: 15px; margin-right: 5px;">
-                        <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm169.8-90.7c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
-                      </svg>
-                      <span>Aiuto</span>
-                    </a>
-                  </div>
-
-                  <div style="all: unset; display: block; text-align: left; width: 100%; position: relative;  box-sizing: border-box; margin-top: 10px">
-                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
-                      Ciao!
-                    </span><br />
-                    <span style="all: unset; background-color: #33e894; padding: 15px; border-radius: 10px 10px 10px 0; display: inline-block; max-width: 80%; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">
-                      Come posso aiutarti?
-                    </span><br />
-                  </div>
-                </div>
+              <div class="help" style="position: absolute; right: 0; top: 0; background-color: #fff; border-left: solid 1px grey; border-bottom: solid 1px grey;">
+                <a href="#help" id="openFeedback" style="text-decoration: none; font-size: 12px; padding: 2px 5px; display: inline-flex; justify-content: center; align-items: center;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="height: 15px; width: 15px; margin-right: 5px;">
+                    <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm169.8-90.7c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
+                  </svg>
+                  <span>Aiuto</span>
+                </a>
               </div>
-              <hr style="all: unset; border-top: 1px solid grey; display: block;">
               <div style="all: unset; height: 50px; width: 100%; display: flex; position: relative;">
                 <input id="${msgid}" placeholder='Digita il tuo sintomo es. "ho la tosse secca"' type="text" style="all: unset; height: 50px; width: 450px; padding: 20px; box-sizing: border-box;">
                 <div id="${sendid}" style="all: unset; width: 50px; height: 50px; display: inline-block; min-width: 50px; background-color: #33e894; border-radius: 0 0 10px 0; border-left: 1px solid grey; display: flex; align-items: center; text-align: center; cursor: pointer;">
@@ -278,7 +245,7 @@ async function farmadocInit(el) {
                   </div>
                   <div style="margin-top: 20px;">
                     <span>si prega di dettagliare l'errore riscontrato:</span>
-                    <textarea id="feedbackText" rows="5" style="margin: 10px 0; padding: 5px; width: calc(100% - 12px); max-height: 120px; resize: none;"></textarea>
+                    <textarea id="feedbackText" rows="10" style="margin: 10px 0; padding: 5px; width: calc(100% - 12px); resize: none;"></textarea>
                   </div>
                   <button id="sendFb" type="text" disabled style="cursor: pointer; width: 100%; border-radius: 5px; background-color: #33e894; border: none; padding: 10px;">Invia feedback</button>
                 </div>
@@ -299,51 +266,47 @@ async function farmadocInit(el) {
           </div>
         </div>
       `;
-
-
-  async function createTicket(feedback) {
-    const respo = await fetch(
-      urlServer + ".netlify/functions/createTicket?msg=" + feedback,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          'Access-Control-Allow-Origin': "*",
-          'Access-Control-Allow-Headers': "Content-Type",
-          'Content-Type': 'application/json'
-        },
+      async function createTicket(feedback) {
+        const respo = await fetch(
+          urlServer + ".netlify/functions/createTicket?msg=" + feedback,
+          {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              'Access-Control-Allow-Origin': "*",
+              'Access-Control-Allow-Headers': "Content-Type",
+              'Content-Type': 'application/json'
+            },
+          }
+        );
+    
+        const ticketID = await respo.text();
+        return {
+          statusCode: response.status,
+          body: ticketID,
+        };
       }
-    );
-
-    const ticketID = await respo.text();
-    return {
-      statusCode: response.status,
-      body: ticketID,
-    };
-  }
-
-
-  document.addEventListener('click', function (e) {
-    let helpBtn = document.getElementById('sendFb');
-    let fbCheckboxes = [...document.querySelectorAll('.checkQst')]
-
-    if (fbCheckboxes.some(x => x.checked)) {
-      helpBtn.disabled = false;
-    } else {
-      helpBtn.disabled = true;
-    }
-
-    if (e.target == helpBtn) {
-      document.getElementById('questions').style.display = 'none';
-      document.getElementById('thankyou').style.display = 'block';
-      let feedbackScope = fbCheckboxes.filter(x => x.checked)[0].value;
-      let feedbackNote = document.getElementById('feedbackText').value;
-      createTicket(`Problema: ${feedbackScope} \n
-                    Note: ${feedbackNote}`);
-      document.getElementById('feedbackText').value = "";
-      fbCheckboxes.filter(x => x.checked).map(y => y.checked = false);
-    }
-  })
+    
+    
+      document.addEventListener('click', function (e) {
+        let helpBtn = document.getElementById('sendFb');
+        let fbCheckboxes = [...document.querySelectorAll('.checkQst')]
+    
+        if (fbCheckboxes.some(x => x.checked)) {
+          helpBtn.disabled = false;
+        } else {
+          helpBtn.disabled = true;
+        }
+    
+        if (e.target == helpBtn) {
+          document.getElementById('questions').style.display = 'none';
+          document.getElementById('thankyou').style.display = 'block';
+          let feedbackScope = fbCheckboxes.filter(x => x.checked)[0].value;
+          let feedbackNote = document.getElementById('feedbackText').value;
+          createTicket(`Problema: ${feedbackScope} \n
+                        Note: ${feedbackNote}`);
+        }
+      })
 
   document.body.insertAdjacentHTML("beforeend", modal);
   let toggle = false;
@@ -358,6 +321,7 @@ async function farmadocInit(el) {
       document.getElementById(minimizeel).innerHTML = "—";
     }
   });
+
 
   let closeFb = [...document.querySelectorAll(".backtochat")]
   let feedbackWindow = document.getElementById('feedback');
@@ -381,7 +345,7 @@ async function farmadocInit(el) {
 
   async function sendStat(obj) {
     await fetch(
-      urlServer + ".netlify/functions/sendStats?uid=" + uid + "&obj=" + JSON.stringify(obj),
+      urlServer + ".netlify/functions/sendStats?uid="+uid+"&obj="+JSON.stringify(obj),
       {
         method: "GET",
         mode: "cors",
@@ -392,10 +356,10 @@ async function farmadocInit(el) {
     )
   }
   setInterval(() => {
-    if (JSON.parse(localStorage.getItem("farmadoc-reqs"))?.length > 4) {
+    if(JSON.parse(localStorage.getItem("farmadoc-reqs"))?.length > 4){
       let st = JSON.parse(localStorage.getItem("farmadoc-reqs"))
       sendStat(st.slice(0, -1))
-      localStorage.setItem("farmadoc-reqs", JSON.stringify([st[st.length - 1]]))
+      localStorage.setItem("farmadoc-reqs",JSON.stringify([st[st.length-1]]))
     }
   }, 1000);
 
@@ -441,7 +405,7 @@ async function farmadocInit(el) {
       let corpus = [];
       try {
         input.forEach((el, index) => {
-          if (el.data.createdBy != "system") {
+          if(el.data.createdBy != "system"){
             let tokens = tokenizer.tokenize(el.data.title)
             let doc = {
               input: {},
@@ -475,26 +439,26 @@ async function farmadocInit(el) {
 
   function detectIntent(input, intents) {
     const stopwords = ["ad", "fa", "fanno", "faccio", "quando", "al", "allo", "ai", "agli", "all", "agl", "alla", "alle", "con", "col", "coi", "da", "dal", "dallo", "dai", "dagli", "dall", "dagl", "dalla", "dalle", "di", "del", "dello", "dei", "degli", "dell", "degl", "della", "delle", "in", "nel", "nello", "nei", "negli", "nell", "negl", "nella", "nelle", "su", "sul", "sullo", "sui", "sugli", "sull", "sugl", "sulla", "sulle", "per", "tra", "contro", "io", "tu", "lui", "lei", "noi", "voi", "loro", "mio", "mia", "miei", "mie", "tuo", "tua", "tuoi", "tue", "suo", "sua", "suoi", "sue", "nostro", "nostra", "nostri", "nostre", "vostro", "vostra", "vostri", "vostre", "mi", "ti", "ci", "vi", "lo", "la", "li", "le", "gli", "ne", "il", "un", "uno", "una", "ma", "ed", "se", "perché", "anche", "come", "dov", "dove", "che", "chi", "cui", "non", "più", "quale", "quanto", "quanti", "quanta", "quante", "quello", "quelli", "quella", "quelle", "questo", "questi", "questa", "queste", "si", "tutto", "tutti", "a", "c", "e", "i", "l", "o", "ho", "hai", "ha", "abbiamo", "avete", "hanno", "abbia", "abbiate", "abbiano", "avrò", "avrai", "avrà", "avremo", "avrete", "avranno", "avrei", "avresti", "avrebbe", "avremmo", "avreste", "avrebbero", "avevo", "avevi", "aveva", "avevamo", "avevate", "avevano", "ebbi", "avesti", "ebbe", "avemmo", "aveste", "ebbero", "avessi", "avesse", "avessimo", "avessero", "avendo", "avuto", "avuta", "avuti", "avute", "sono", "sei", "è", "siamo", "siete", "sia", "siate", "siano", "sarò", "sarai", "sarà", "saremo", "sarete", "saranno", "sarei", "saresti", "sarebbe", "saremmo", "sareste", "sarebbero", "ero", "eri", "era", "eravamo", "eravate", "erano", "fui", "fosti", "fu", "fummo", "foste", "furono", "fossi", "fosse", "fossimo", "fossero", "essendo", "faccio", "fai", "facciamo", "fanno", "faccia", "facciate", "facciano", "farò", "farai", "farà", "faremo", "farete", "faranno", "farei", "faresti", "farebbe", "faremmo", "fareste", "farebbero", "facevo", "facevi", "faceva", "facevamo", "facevate", "facevano", "feci", "facesti", "fece", "facemmo", "faceste", "fecero", "facessi", "facesse", "facessimo", "facessero", "facendo", "sto", "stai", "sta", "stiamo", "stanno", "stia", "stiate", "stiano", "starò", "starai", "starà", "staremo", "starete", "staranno", "starei", "staresti", "starebbe", "staremmo", "stareste", "starebbero", "stavo", "stavi", "stava", "stavamo", "stavate", "stavano", "stetti", "stesti", "stette", "stemmo", "steste", "stettero", "stessi", "stesse", "stessimo", "stessero", "stando"]
-
+    
     function removeStopwords(inputString) {
       // Convert the input string to lowercase to make the comparison case-insensitive
       inputString = inputString.toLowerCase();
-
+  
       // Split the input string into an array of words
       var words = inputString.split(/\s+/);
-
+  
       // Filter out the stopwords
-      var filteredWords = words.filter(function (word) {
-        return stopwords.indexOf(word) === -1;
+      var filteredWords = words.filter(function(word) {
+          return stopwords.indexOf(word) === -1;
       });
-
+  
       // Join the filtered words back into a string
       var resultString = filteredWords.join(' ');
-
+  
       return resultString;
     }
     input = removeStopwords(input)
-
+    
     return new Promise((resolve, reject) => {
       const net = new NeuralNetwork();
       createCorpus(intents).then((corpus) => {
@@ -552,10 +516,10 @@ async function farmadocInit(el) {
             );
             //console.log(matchDoc)
             resolve(matchDoc);
-          } else {
+          }else{
             let objsort = objres.sort((a, b) => b.probability - a.probability);
             //console.log(objsort)
-            topmatches = objsort.filter(e => e.probability > 0.01) // Threshold
+            topmatches = objsort.filter(e=>e.probability > 0.01) // Threshold
             const calculateMean = (values) => {
               const mean = (values.reduce((sum, current) => sum + current)) / values.length;
               return mean;
@@ -563,8 +527,8 @@ async function farmadocInit(el) {
             const calculateVariance = (values) => {
               const average = calculateMean(values);
               const squareDiffs = values.map((value) => {
-                const diff = value - average;
-                return diff * diff;
+                  const diff = value - average;
+                  return diff * diff;
               });
               const variance = calculateMean(squareDiffs);
               return variance;
@@ -573,53 +537,57 @@ async function farmadocInit(el) {
             //console.log(Math.max(...topmatches.map(e=>e.probability)))
             //console.log(Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability)))
             //console.log(topmatches.filter(e=>e.probability > Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
-            if (calculateVariance(topmatches.map(e => e.probability)) > 0.75) {
-              topmatches = topmatches.filter(e => e.probability > (Math.max(...topmatches.map(e => e.probability)) * calculateVariance(topmatches.map(e => e.probability))))
+            if(calculateVariance(topmatches.map(e=>e.probability))>0.75){
+              topmatches = topmatches.filter(e=>e.probability > (Math.max(...topmatches.map(e=>e.probability))*calculateVariance(topmatches.map(e=>e.probability))))
             }
-            if (topmatches.length > 1) {
-              topmatches = topmatches.filter(e => {
+            if(topmatches.length > 1){
+              topmatches = topmatches.filter(e=>{
                 let pres = intents.find(
                   (item) => item.ref["@ref"].id == e.intent
                 )
                 return pres.data.createdBy != "system"
               })
             }
-            if (topmatches.length == 1) {
-              if (topmatches[0].probability > 0.8) {
+            if(topmatches.length == 1){
+              if(topmatches[0].probability > 0.8){
                 let match = intents.find(
                   (item) => item.ref["@ref"].id == topmatches[0].intent
                 )
                 resolve(match);
-              } else {
+              }else{
                 reject("no matches")
               }
-
+              
             }
-            if (topmatches.length < 2) {
+            if(topmatches.length < 2 ){
               reject("no matches");
-            } else {
+            }else{
               addRes("in base ai tuoi sintomi, potresti avere bisogno di assistenza per:", true, null)
               document.getElementById(msgid).disabled = true;
               let htmlD = `<div id="buttonrowclear" style="display: flex; justify-content:flex-end; flex-wrap: wrap; flex-direction: row; margin-top: 15px;"></div>`
               document.getElementById(chatid).insertAdjacentHTML("afterbegin", htmlD)
               topmatches.reverse()
               let totbtns = 0
+              document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", `<button class="farmadoc-int-btn" id="farmadoc-int-no-choice"' style="cursor: pointer;margin-right: 5px; margin-bottom: 5px; border: none; background-color: #ffb0ab; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">Nessuna delle precedenti</button>`);
+              document.getElementById("farmadoc-int-no-choice").addEventListener('click', function() {
+                this.style.backgroundColor = "#33e894";
+              })
               topmatches.forEach((el,index)=>{
                 let curD = intents.find(
                   (item) => item.ref["@ref"].id == el.intent
                 )
                 //console.log(el)
-                let htmlC = `<button id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; opacity: ${el.probability+0.5};margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
+                let htmlC = `<button class="farmadoc-int-btn" id="farmadoc-int-choice-${el.intent}"' style="cursor: pointer; opacity: ${el.probability+0.5};margin-right: 5px; margin-bottom: 5px; border: none; background-color: #b9b9b9; padding: 10px; border-radius: 10px; display: inline-block; word-wrap: normal; overflow: hidden; position: relative; box-sizing: border-box">${curD.data.title}</button>`
                 //if(curD.data.createdBy != "system"){
-                  totbtns = totbtns+1
-                  document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
-                  document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
-                    this.style.backgroundColor = "white";
-                  });
+                totbtns = totbtns+1
+                document.getElementById("buttonrowclear").insertAdjacentHTML("afterbegin", htmlC);
+                document.getElementById("farmadoc-int-choice-"+el.intent).addEventListener('click', function() {
+                  this.style.backgroundColor = "#33e894";
+                });
                 //}
               })
             }
-
+            
             /* if(totbtns < 2 ){
               document.getElementById("buttonrowclear").remove()
               document.getElementById(chatid).getElementsByTagName('span')[0].remove()
@@ -627,15 +595,15 @@ async function farmadocInit(el) {
             } */
             function waitUntilIntervalCleared(topmatch) {
               return new Promise(resolve => {
-                const waitforCoice = setInterval(() => {
-                  topmatch.forEach(el => {
+                const waitforCoice = setInterval(() =>  {
+                  topmatch.forEach(el=>{
                     let curD = intents.find(
                       (item) => item.ref["@ref"].id == el.intent
                     )
                     if(curD.data.createdBy != "system"){
-                      if(document.getElementById("farmadoc-int-choice-"+el.intent)?.style.backgroundColor == "white"){
-                        document.getElementById("buttonrowclear")?.remove()
-                        document.getElementById(chatid).getElementsByTagName('span')[0]?.remove()
+                      if(document.getElementById("farmadoc-int-choice-"+el.intent)?.style.backgroundColor == "#33e894" || document.getElementById("farmadoc-int-choice-"+el.intent)?.style.backgroundColor ==  "rgb(51, 232, 148)"){
+                        /* document.getElementById("buttonrowclear")?.remove()
+                        document.getElementById(chatid).getElementsByTagName('span')[0]?.remove() */
                         document.getElementById(msgid).disabled = false;
                         resolve(el.intent)
                         clearInterval(waitforCoice)
@@ -651,14 +619,25 @@ async function farmadocInit(el) {
               });
             }
             waitUntilIntervalCleared(topmatches).then(choseInt=>{
-              let matchDoc = intents.find(
-                (item) => item.ref["@ref"].id == choseInt
-              )
-              document.getElementById(msgid).disabled = false;
-              resolve(matchDoc);
+              Array.from(document.getElementsByClassName("farmadoc-int-btn")).forEach(button=>{
+                button.style.cursor = "text"
+                const clone = button.cloneNode(true);
+                button.parentNode.replaceChild(clone, button);
+              })
+              if(choseInt == "no"){
+                addRes("Forse i tuoi specifici sintomi non sono ancora nella nostra banca dati, per il momento non posso aiutarti con la tua richiesta.", false);
+                reject("ignore")
+              }else{
+                let matchDoc = intents.find(
+                  (item) => item.ref["@ref"].id == choseInt
+                )
+                document.getElementById(msgid).disabled = false;
+                resolve(matchDoc);
+              }
+              
             })
           }
-        } else {
+        }else{
           if (sessionData.lastOptions.length > 0) {
             sessionData.lastOptions.forEach((branch, index) => {
               branch.forEach((option, optionIndex) => {
@@ -697,51 +676,51 @@ async function farmadocInit(el) {
           }
         }
         //waitUntilIntervalCleared(topmatches).then(choseInt=>{
-        /* let vals = objres.map((a) => a.probability);
-        let maxval = Math.max(...vals);
-        if (maxval > 0.6) { */
-        /* let matchDoc = intents.find(
-          (item) => item.ref["@ref"].id == choseInt
-        )
-        resolve(matchDoc); */
-        /* } else {
-          if (sessionData.lastOptions.length > 0) {
-            sessionData.lastOptions.forEach((branch, index) => {
-              branch.forEach((option, optionIndex) => {
-                if (
-                  natural.PorterStemmerIt.stem(input.toLowerCase()).includes(
-                    natural.PorterStemmerIt.stem(option)
-                  )
-                ) {
-                  let oldBranch = sessionData.lastBranch;
-                  oldBranch[index] = option;
-   
-                  remediesList = defaultIntents.find(
-                    (element) => element.id == sessionData.lastId
-                  ).remedies;
-                  remediesList.forEach((remedy) => {
-                    if (
-                      JSON.stringify(remedy.suitableFor.sort()) ==
-                      JSON.stringify(oldBranch.sort())
-                    ) {
-                      addRes(remedy.items, true);
-                      reject("ignore");
-                    }
-                  });
-                } else {
+          /* let vals = objres.map((a) => a.probability);
+          let maxval = Math.max(...vals);
+          if (maxval > 0.6) { */
+            /* let matchDoc = intents.find(
+              (item) => item.ref["@ref"].id == choseInt
+            )
+            resolve(matchDoc); */
+          /* } else {
+            if (sessionData.lastOptions.length > 0) {
+              sessionData.lastOptions.forEach((branch, index) => {
+                branch.forEach((option, optionIndex) => {
                   if (
-                    optionIndex == branch.length - 1 &&
-                    index == sessionData.lastOptions.length - 1
+                    natural.PorterStemmerIt.stem(input.toLowerCase()).includes(
+                      natural.PorterStemmerIt.stem(option)
+                    )
                   ) {
-                    reject("no matches");
+                    let oldBranch = sessionData.lastBranch;
+                    oldBranch[index] = option;
+  
+                    remediesList = defaultIntents.find(
+                      (element) => element.id == sessionData.lastId
+                    ).remedies;
+                    remediesList.forEach((remedy) => {
+                      if (
+                        JSON.stringify(remedy.suitableFor.sort()) ==
+                        JSON.stringify(oldBranch.sort())
+                      ) {
+                        addRes(remedy.items, true);
+                        reject("ignore");
+                      }
+                    });
+                  } else {
+                    if (
+                      optionIndex == branch.length - 1 &&
+                      index == sessionData.lastOptions.length - 1
+                    ) {
+                      reject("no matches");
+                    }
                   }
-                }
+                });
               });
-            });
-          } else {
-            reject("no matches");
-          }
-        } */
+            } else {
+              reject("no matches");
+            }
+          } */
         //})
         //get best match
         /* console.log(objres)
@@ -769,7 +748,7 @@ async function farmadocInit(el) {
                 ) {
                   let oldBranch = sessionData.lastBranch;
                   oldBranch[index] = option;
-   
+
                   remediesList = defaultIntents.find(
                     (element) => element.id == sessionData.lastId
                   ).remedies;
@@ -909,10 +888,10 @@ async function farmadocInit(el) {
                 color: calculateQty(respDrug?.remedy?.qty).status,
               };
               let storedValue = []
-              if (localStorage.getItem('farmadoc-reqs')) {
+              if(localStorage.getItem('farmadoc-reqs')){
                 storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
               }
-              storedValue[storedValue.length - 1][1] = rimedioFound?.prodTrov
+              storedValue[storedValue.length-1][1] = rimedioFound?.prodTrov
               localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
               addRes(
                 `Il prodotto suggerito in questo caso è ${respDrug?.remedy?.name}`,
@@ -976,10 +955,10 @@ async function farmadocInit(el) {
       detectIntent(input, intents)
         .then((res) => {
           let storedValue = []
-          if (localStorage.getItem('farmadoc-reqs')) {
+          if(localStorage.getItem('farmadoc-reqs')){
             storedValue = JSON.parse(localStorage.getItem('farmadoc-reqs'))
           }
-          storedValue.push([res.ref["@ref"].id, 0, Date.now()])
+          storedValue.push([res.ref["@ref"].id,0,Date.now()])
           localStorage.setItem('farmadoc-reqs', JSON.stringify(storedValue));
           currisp = res.ref["@ref"].id
           rimedi = res?.data?.rems;
@@ -1018,7 +997,7 @@ async function farmadocInit(el) {
                   msg: calculateQty(respDrug?.remedy?.qty).msg,
                   color: calculateQty(respDrug?.remedy?.qty).status,
                 };
-
+                
                 addRes(
                   `<span>Il prodotto suggerito in questo caso è<br/><strong>${respDrug?.remedy?.name}</strong><br/>${qtyBar.msg}</span>`,
                   true,
