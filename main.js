@@ -266,47 +266,51 @@ async function farmadocInit(el) {
           </div>
         </div>
       `;
-      async function createTicket(feedback) {
-        const respo = await fetch(
-          urlServer + ".netlify/functions/createTicket?msg=" + feedback,
-          {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              'Access-Control-Allow-Origin': "*",
-              'Access-Control-Allow-Headers': "Content-Type",
-              'Content-Type': 'application/json'
-            },
-          }
-        );
-    
-        const ticketID = await respo.text();
-        return {
-          statusCode: response.status,
-          body: ticketID,
-        };
+
+
+  async function createTicket(feedback) {
+    const respo = await fetch(
+      urlServer + ".netlify/functions/createTicket?msg=" + feedback,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          'Access-Control-Allow-Origin': "*",
+          'Access-Control-Allow-Headers': "Content-Type",
+          'Content-Type': 'application/json'
+        },
       }
-    
-    
-      document.addEventListener('click', function (e) {
-        let helpBtn = document.getElementById('sendFb');
-        let fbCheckboxes = [...document.querySelectorAll('.checkQst')]
-    
-        if (fbCheckboxes.some(x => x.checked)) {
-          helpBtn.disabled = false;
-        } else {
-          helpBtn.disabled = true;
-        }
-    
-        if (e.target == helpBtn) {
-          document.getElementById('questions').style.display = 'none';
-          document.getElementById('thankyou').style.display = 'block';
-          let feedbackScope = fbCheckboxes.filter(x => x.checked)[0].value;
-          let feedbackNote = document.getElementById('feedbackText').value;
-          createTicket(`Problema: ${feedbackScope} \n
-                        Note: ${feedbackNote}`);
-        }
-      })
+    );
+
+    const ticketID = await respo.text();
+    return {
+      statusCode: response.status,
+      body: ticketID,
+    };
+  }
+
+
+  document.addEventListener('click', function (e) {
+    let helpBtn = document.getElementById('sendFb');
+    let fbCheckboxes = [...document.querySelectorAll('.checkQst')]
+
+    if (fbCheckboxes.some(x => x.checked)) {
+      helpBtn.disabled = false;
+    } else {
+      helpBtn.disabled = true;
+    }
+
+    if (e.target == helpBtn) {
+      document.getElementById('questions').style.display = 'none';
+      document.getElementById('thankyou').style.display = 'block';
+      let feedbackScope = fbCheckboxes.filter(x => x.checked)[0].value;
+      let feedbackNote = document.getElementById('feedbackText').value;
+      createTicket(`Problema: ${feedbackScope} \n
+                    Note: ${feedbackNote}`);
+      document.getElementById('feedbackText').value = "";
+      fbCheckboxes.filter(x => x.checked).map(y => y.checked = false);
+    }
+  })
 
   document.body.insertAdjacentHTML("beforeend", modal);
   let toggle = false;
