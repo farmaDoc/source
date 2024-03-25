@@ -8,6 +8,20 @@ const client = new faunadb.Client({
 });
 
 exports.handler = async (event, context) => {
+
+    const CORS_HEADERS = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': '*',
+    };
+
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 200,
+            headers: CORS_HEADERS
+        };
+    }
+
     let msg = event.queryStringParameters.msg
     let payload = {
         "chat": [
@@ -20,22 +34,11 @@ exports.handler = async (event, context) => {
         "open": true
     }
 
-    const CORS_HEADERS = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': '*',
-    };
-
-    client.query(
+    return client.query(
         q.Create("supportTickets", { data: payload })
-    )
-
-    if (event.httpMethod === 'OPTIONS') {
-        console.log('OPTIONS ', { CORS_HEADERS });
-        return {
-            statusCode: 200,
-            headers: CORS_HEADERS,
-            body: JSON.stringify({ message: 'Successful preflight call.' }),
-        };
-    }
+    ).then(res=>{
+        return{
+            statusCode: 200
+        }
+    })
 }
