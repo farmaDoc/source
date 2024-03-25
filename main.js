@@ -305,18 +305,13 @@ async function farmadocInit(el) {
 
 
   async function createTicket(feedback) {
-    const respo = await fetch(
-      urlServer + ".netlify/functions/createTicket?msg=" + feedback,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          'Access-Control-Allow-Origin': "*",
-          'Access-Control-Allow-Headers': "Content-Type",
-          'Content-Type': 'application/json'
-        },
+
+    const respo = await fetch(urlServer + ".netlify/functions/createTicket?msg=" + feedback,{
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
       }
-    );
+    })
 
     const ticketID = await respo.text();
     return {
