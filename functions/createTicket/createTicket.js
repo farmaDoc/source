@@ -38,7 +38,8 @@ exports.handler = async (event, context) => {
         q.Create("supportTickets", { data: payload })
     ).then(res=>{
         return{
-            statusCode: 200
+            statusCode: 200,
+            headers: CORS_HEADERS
         }
     })
 }
