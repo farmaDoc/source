@@ -9,17 +9,16 @@ const client = new faunadb.Client({
 
 exports.handler = async (event, context) => {
 
-    const CORS_HEADERS = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': '*',
-    };
-
-    if (event.httpMethod === 'OPTIONS') {
-        return {
+    if(event.httpMethod == "OPTIONS"){
+        return{
             statusCode: 200,
-            headers: CORS_HEADERS
-        };
+            headers: {
+				'Access-Control-Allow-Origin': "*",
+				'Access-Control-Allow-Headers': "Content-Type",
+				'Content-Type': 'application/json'
+			},
+            body: "lol"
+        }
     }
 
     let msg = event.queryStringParameters.msg
@@ -33,13 +32,20 @@ exports.handler = async (event, context) => {
         "user": "60ba7c61-719c-4316-86ea-8023710765a0",
         "open": true
     }
-
     return client.query(
-        q.Create("supportTickets", { data: payload })
+        q.Create(
+            q.Collection('supportTickets'),
+            { data: payload }
+        )
     ).then(res=>{
         return{
             statusCode: 200,
-            headers: CORS_HEADERS
+            headers: {
+				'Access-Control-Allow-Origin': "*",
+				'Access-Control-Allow-Headers': "Content-Type",
+				'Content-Type': 'application/json'
+			},
+            body: "lol"
         }
     })
 }
