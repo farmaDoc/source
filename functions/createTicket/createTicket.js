@@ -22,11 +22,13 @@ exports.handler = async (event, context) => {
     }
 
     let msg = event.queryStringParameters.msg
+    let now = Date.now();
     let payload = {
         "chat": [
             {
                 "type": "sent",
-                "msg": `${msg}`
+                "msg": `${msg}`,
+                "ts": now
             }
         ],
         "user": "60ba7c61-719c-4316-86ea-8023710765a0",
